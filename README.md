@@ -89,31 +89,50 @@ npm run format:check     # Check code formatting
 ## 📁 Project Structure
 
 ```
-src/
-├── components/          # Reusable components
-│   ├── layout/         # Layout components
-│   ├── ui/             # UI components
-│   └── uploads/        # Upload components
-├── libs/               # Libraries & utilities
-│   ├── api/           # API clients
-│   │   └── mock/      # Mock data
-│   ├── store/         # State management
-│   ├── utils/         # Utilities
-│   └── validation/    # Zod schemas
-├── routes/            # Page components
-│   ├── assets/
-│   ├── audit/
-│   ├── auth/
-│   ├── dashboard/
-│   ├── depreciation/
-│   ├── inventory/
-│   ├── loans/
-│   └── reports/
-├── styles/            # Global styles
-├── test/              # Test utilities
-├── App.tsx            # Main app component
-└── main.tsx           # Entry point
+simanis/
+├── src/                    # Frontend source code
+│   ├── routes/            # Feature pages (by domain)
+│   │   ├── auth/         # Authentication
+│   │   ├── assets/       # Asset management
+│   │   ├── categories/   # Categories
+│   │   ├── loans/        # Loans
+│   │   ├── inventory/    # Inventory with QR
+│   │   ├── dashboard/    # Dashboard
+│   │   ├── depreciation/ # Depreciation
+│   │   ├── reports/      # Reports
+│   │   ├── audit/        # Audit trail
+│   │   └── profile/      # User profile
+│   │
+│   ├── components/        # Shared UI components
+│   │   ├── table/        # DataTable
+│   │   ├── filters/      # FilterBar
+│   │   ├── uploads/      # FileUpload
+│   │   ├── layout/       # AppLayout, ProtectedRoute
+│   │   └── ui/           # Base UI components
+│   │
+│   ├── libs/             # Core libraries
+│   │   ├── api/         # API client & endpoints
+│   │   │   └── mock/    # Mock data
+│   │   ├── auth/        # Auth & permissions
+│   │   ├── hooks/       # Custom hooks
+│   │   ├── store/       # Zustand stores
+│   │   ├── ui/          # UI utilities
+│   │   ├── utils/       # General utilities
+│   │   └── validation/  # Zod schemas
+│   │
+│   ├── constants/        # App constants
+│   ├── styles/           # Global styles
+│   └── test/             # Test utilities
+│
+├── backend/              # Backend API (future)
+│   └── README.md        # Backend planning
+│
+├── public/              # Static assets
+├── ARCHITECTURE.md      # Architecture documentation
+└── README.md           # This file
 ```
+
+📖 **Detailed Architecture:** See [ARCHITECTURE.md](./ARCHITECTURE.md) for complete architecture documentation.
 
 ## 🧪 Testing
 
@@ -132,10 +151,11 @@ npm run test:coverage
 
 ## 📚 Documentation
 
-- [API Requirements](./API_REQUIREMENTS.md) - Backend API specification
-- [Testing Guide](./TESTING_GUIDE.md) - Testing documentation
-- [Collaboration Guide](./COLLABORATION.md) - Git workflow
-- [Structure](./STRUKTUR_FRONTEND.md) - Folder structure
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Complete architecture & best practices ⭐
+- [API Requirements](./project-docs/API_REQUIREMENTS.md) - Backend API specification
+- [Testing Guide](./project-docs/TESTING_GUIDE.md) - Testing documentation
+- [Collaboration Guide](./project-docs/COLLABORATION.md) - Git workflow
+- [Structure](./project-docs/STRUKTUR_FRONTEND.md) - Folder structure (legacy)
 
 ## 🔧 Development
 
