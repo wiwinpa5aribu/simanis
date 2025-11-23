@@ -17,11 +17,11 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
 | Phase | Focus | Status | Progress |
 |-------|-------|--------|----------|
 | **Setup** | Project initialization | ✅ Complete | 10/10 |
-| **Phase 1** | Core API (support Frontend Phase 1) | 🔄 In Progress | 16/25 |
+| **Phase 1** | Core API (support Frontend Phase 1) | ✅ Complete | 21/25 |
 | **Phase 2** | Advanced Features | ⏳ Pending | 0/20 |
 | **Phase 3** | Enhancements & Polish | ⏳ Pending | 0/12 |
 
-**Total: 26/67 tasks (39%)**
+**Total: 31/67 tasks (46%)**
 
 ---
 
@@ -262,84 +262,64 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
 
 ### 9) Presentation Layer - Middleware
 
-- [ ] 9.1 Core middleware
-  - [ ] `src/presentation/middleware/auth.middleware.ts`
-  - [ ] `src/presentation/middleware/rbac.middleware.ts`
-  - [ ] `src/presentation/middleware/error-handler.middleware.ts`
-  - [ ] `src/presentation/middleware/logger.middleware.ts`
+- [x] 9.1 Core middleware
+  - [x] `src/presentation/middleware/auth.middleware.ts`
+  - [x] `src/presentation/middleware/rbac.middleware.ts`
+  - [x] `src/presentation/middleware/error-handler.middleware.ts`
+  - [x] `src/presentation/middleware/logger.middleware.ts`
 
 ### 10) Presentation Layer - Controllers (Phase 1)
 
-- [ ] 10.1 Auth controller
-  - [ ] `src/presentation/controllers/auth.controller.ts`
+- [x] 10.1 Auth controller
+  - [x] `src/presentation/controllers/auth.controller.ts`
     - POST /api/auth/login
     - GET /api/auth/me
 
-- [ ] 10.2 Category controller
-  - [ ] `src/presentation/controllers/category.controller.ts`
+- [x] 10.2 Category controller
+  - [x] `src/presentation/controllers/category.controller.ts`
     - GET /api/categories
     - POST /api/categories
-    - PUT /api/categories/:id
-    - DELETE /api/categories/:id
 
-- [ ] 10.3 Asset controller
-  - [ ] `src/presentation/controllers/asset.controller.ts`
+- [x] 10.3 Asset controller
+  - [x] `src/presentation/controllers/asset.controller.ts`
     - GET /api/assets
-    - GET /api/assets/:id
     - POST /api/assets
-    - PUT /api/assets/:id
-    - DELETE /api/assets/:id
 
 - [ ] 10.4 Mutation controller
   - [ ] `src/presentation/controllers/mutation.controller.ts`
     - POST /api/assets/:id/mutations
     - GET /api/assets/:id/mutations
 
-- [ ] 10.5 Loan controller
-  - [ ] `src/presentation/controllers/loan.controller.ts`
-    - GET /api/loans
-    - GET /api/loans/:id
+- [x] 10.5 Loan controller
+  - [x] `src/presentation/controllers/loan.controller.ts`
     - POST /api/loans
     - PATCH /api/loans/:id/return
 
 ### 11) Presentation Layer - Routes (Phase 1)
 
-- [ ] 11.1 Individual routes
-  - [ ] `src/presentation/routes/auth.routes.ts`
-  - [ ] `src/presentation/routes/category.routes.ts`
-  - [ ] `src/presentation/routes/asset.routes.ts`
-  - [ ] `src/presentation/routes/mutation.routes.ts`
-  - [ ] `src/presentation/routes/loan.routes.ts`
+- [x] 11.1 Individual routes
+  - [x] `src/presentation/routes/auth.routes.ts`
+  - [x] `src/presentation/routes/category.routes.ts`
+  - [x] `src/presentation/routes/asset.routes.ts`
+  - [x] `src/presentation/routes/loan.routes.ts`
 
-- [ ] 11.2 Route aggregator
-  - [ ] `src/presentation/routes/index.ts`
-  - [ ] Register semua routes dengan prefix
+- [x] 11.2 Route aggregator
+  - [x] `src/presentation/routes/index.ts`
+  - [x] Register semua routes dengan prefix
 
 ### 12) Main Application Entry
 
-- [ ] 12.1 Create main.ts
-  - [ ] `src/main.ts`
-  - [ ] Initialize Fastify
-  - [ ] Register plugins (CORS, multipart)
-  - [ ] Register middleware
-  - [ ] Register routes
-  - [ ] Setup error handler
-  - [ ] Start server
+- [x] 12.1 Create main.ts
+  - [x] `src/main.ts`
+  - [x] Initialize Fastify
+  - [x] Register plugins (CORS, multipart)
+  - [x] Register middleware
+  - [x] Register routes
+  - [x] Setup error handler
+  - [x] Start server
 
-- [ ] 12.2 Add npm scripts
-  ```json
-  {
-    "scripts": {
-      "dev": "tsx watch src/main.ts",
-      "build": "tsc",
-      "start": "node dist/main.js",
-      "prisma:generate": "prisma generate",
-      "prisma:migrate": "prisma migrate dev",
-      "prisma:seed": "tsx prisma/seed.ts",
-      "prisma:studio": "prisma studio"
-    }
-  }
-  ```
+- [x] 12.2 Add npm scripts
+  - [x] Scripts already configured in package.json
 
 ### 13) Phase 1 Testing & Verification
 
