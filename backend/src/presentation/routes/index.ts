@@ -9,12 +9,24 @@ import { FastifyInstance } from 'fastify';
 import { authRoutes } from './auth.routes';
 import { categoryRoutes } from './category.routes';
 import { assetRoutes } from './asset.routes';
+import { FastifyInstance } from 'fastify';
+import { authRoutes } from './auth.routes';
+import { FastifyInstance } from 'fastify';
+import { authRoutes } from './auth.routes';
+import { categoryRoutes } from './category.routes';
+import { FastifyInstance } from 'fastify';
+import { authRoutes } from './auth.routes';
+import { FastifyInstance } from 'fastify';
+import { authRoutes } from './auth.routes';
+import { categoryRoutes } from './category.routes';
+import { assetRoutes } from './asset.routes';
 import { loanRoutes } from './loan.routes';
 import { uploadRoutes } from './upload.routes';
 import { inventoryRoutes } from './inventory.routes';
 import { dashboardRoutes } from './dashboard.routes';
 import { depreciationRoutes } from './depreciation.routes';
 import { reportRoutes } from './report.routes';
+import { auditRoutes } from './audit.routes';
 
 /**
  * Register all API routes
@@ -33,6 +45,7 @@ export async function registerRoutes(fastify: FastifyInstance) {
             await api.register(dashboardRoutes, { prefix: '/dashboard' });
             await api.register(depreciationRoutes, { prefix: '/depreciation' });
             await api.register(reportRoutes, { prefix: '/reports' });
+            await api.register(auditRoutes, { prefix: '/audit' });
         },
         { prefix: '/api' }
     );

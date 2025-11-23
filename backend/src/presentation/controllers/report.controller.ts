@@ -1,7 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { PrismaClient } from '@prisma/client';
 import { GenerateKibReportUseCase } from '../../application/use-cases/reports/generate-kib-report.use-case';
-import { ValidationError } from '../../shared/errors/validation-error';
 
 const prisma = new PrismaClient();
 
