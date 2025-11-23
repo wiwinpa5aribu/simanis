@@ -17,11 +17,11 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
 | Phase | Focus | Status | Progress |
 |-------|-------|--------|----------|
 | **Setup** | Project initialization | ✅ Complete | 10/10 |
-| **Phase 1** | Core API (support Frontend Phase 1) | 🔄 In Progress | 8/25 |
+| **Phase 1** | Core API (support Frontend Phase 1) | 🔄 In Progress | 11/25 |
 | **Phase 2** | Advanced Features | ⏳ Pending | 0/20 |
 | **Phase 3** | Enhancements & Polish | ⏳ Pending | 0/12 |
 
-**Total: 18/67 tasks (27%)**
+**Total: 21/67 tasks (31%)**
 
 ---
 
@@ -169,29 +169,29 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
 
 ### 4) Infrastructure Layer - Core Services
 
-- [ ] 4.1 Crypto services
-  - [ ] `src/infrastructure/crypto/password.service.ts`
+- [x] 4.1 Crypto services
+  - [x] `src/infrastructure/crypto/password.service.ts`
     - Implement hash (Argon2)
     - Implement verify
-  - [ ] `src/infrastructure/crypto/jwt.service.ts`
+  - [x] `src/infrastructure/crypto/jwt.service.ts`
     - Implement sign
     - Implement verify
 
-- [ ] 4.2 Database repositories (implementations)
-  - [ ] `src/infrastructure/database/repositories/user.repository.impl.ts`
-  - [ ] `src/infrastructure/database/repositories/category.repository.impl.ts`
-  - [ ] `src/infrastructure/database/repositories/asset.repository.impl.ts`
-  - [ ] `src/infrastructure/database/repositories/loan.repository.impl.ts`
-  - [ ] `src/infrastructure/database/repositories/audit.repository.impl.ts`
+- [x] 4.2 Database repositories (implementations)
+  - [x] `src/infrastructure/database/repositories/user.repository.impl.ts`
+  - [x] `src/infrastructure/database/repositories/category.repository.impl.ts`
+  - [x] `src/infrastructure/database/repositories/asset.repository.impl.ts`
+  - [x] `src/infrastructure/database/repositories/loan.repository.impl.ts`
+  - [x] `src/infrastructure/database/repositories/audit.repository.impl.ts`
 
 ### 5) Domain Layer
 
-- [ ] 5.1 Repository interfaces
-  - [ ] `src/domain/repositories/user.repository.ts`
-  - [ ] `src/domain/repositories/category.repository.ts`
-  - [ ] `src/domain/repositories/asset.repository.ts`
-  - [ ] `src/domain/repositories/loan.repository.ts`
-  - [ ] `src/domain/repositories/audit.repository.ts`
+- [x] 5.1 Repository interfaces
+  - [x] `src/domain/repositories/user.repository.ts`
+  - [x] `src/domain/repositories/category.repository.ts`
+  - [x] `src/domain/repositories/asset.repository.ts`
+  - [x] `src/domain/repositories/loan.repository.ts`
+  - [x] `src/domain/repositories/audit.repository.ts`
 
 - [ ] 5.2 Entities (optional, bisa langsung pakai Prisma types)
   - [ ] `src/domain/entities/user.entity.ts`
