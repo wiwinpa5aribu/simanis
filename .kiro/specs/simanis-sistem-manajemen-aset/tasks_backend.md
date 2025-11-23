@@ -17,11 +17,11 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
 | Phase | Focus | Status | Progress |
 |-------|-------|--------|----------|
 | **Setup** | Project initialization | ✅ Complete | 10/10 |
-| **Phase 1** | Core API (support Frontend Phase 1) | ⏳ Pending | 0/25 |
+| **Phase 1** | Core API (support Frontend Phase 1) | 🔄 In Progress | 8/25 |
 | **Phase 2** | Advanced Features | ⏳ Pending | 0/20 |
 | **Phase 3** | Enhancements & Polish | ⏳ Pending | 0/12 |
 
-**Total: 10/67 tasks (15%)**
+**Total: 18/67 tasks (27%)**
 
 ---
 
@@ -124,49 +124,48 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
 
 ### 2) Database Setup
 
-- [ ] 2.1 Create Prisma schema
-  - [ ] Copy complete schema dari `design_backend.md` ke `prisma/schema.prisma`
-  - [ ] Sesuaikan `datasource db` (postgresql atau mysql)
+- [x] 2.1 Create Prisma schema
+  - [x] Copy complete schema dari `design_backend.md` ke `prisma/schema.prisma`
+  - [x] Sesuaikan `datasource db` (MySQL)
 
-- [ ] 2.2 Run first migration
-  - [ ] `npx prisma migrate dev --name init`
-  - [ ] Verify migration berhasil
+- [x] 2.2 Run first migration
+  - [x] `npx prisma migrate dev --name init`
+  - [x] Verify migration berhasil
 
-- [ ] 2.3 Generate Prisma Client
-  - [ ] `npx prisma generate`
+- [x] 2.3 Generate Prisma Client
+  - [x] `npx prisma generate`
 
-- [ ] 2.4 Create seed file
-  - [ ] `prisma/seed.ts`
-  - [ ] Seed roles: Kepsek, Wakasek Sarpras, Bendahara BOS, Operator, Guru
-  - [ ] Seed test users (1 per role)
-  - [ ] Seed sample categories (Elektronik, Furniture, dll)
-  - [ ] Run: `npx prisma db seed`
+- [x] 2.4 Create seed file
+  - [x] `prisma/seed.ts`
+  - [x] Seed roles: Kepsek, Wakasek Sarpras, Bendahara BOS, Operator, Guru
+  - [x] Seed test users (1 per role)
+  - [x] Seed sample categories (Elektronik, Furniture, dll)
+  - [x] Run: `npx prisma db seed`
 
 ### 3) Shared Layer (Foundation)
 
-- [ ] 3.1 Config loader
-  - [ ] Implement `src/shared/config/index.ts`
-  - [ ] Validate env vars dengan Zod
-  - [ ] Export config object
+- [x] 3.1 Config loader
+  - [x] Implement `src/shared/config/index.ts`
+  - [x] Validate env vars dengan Zod
+  - [x] Export config object
 
-- [ ] 3.2 Logger setup
-  - [ ] Implement `src/shared/logger/winston.logger.ts`
-  - [ ] Configure Winston (JSON format, file + console transports)
-  - [ ] Test logging di berbagai level
+- [x] 3.2 Logger setup
+  - [x] Implement `src/shared/logger/winston.logger.ts`
+  - [x] Configure Winston (JSON format, file + console transports)
+  - [x] Test logging di berbagai level
 
-- [ ] 3.3 Custom error classes
-  - [ ] `src/shared/errors/app-error.ts` (base)
-  - [ ] `src/shared/errors/validation-error.ts`
-  - [ ] `src/shared/errors/not-found-error.ts`
-  - [ ] `src/shared/errors/unauthorized-error.ts`
-  - [ ] `src/shared/errors/forbidden-error.ts`
-  - [ ] `src/shared/errors/conflict-error.ts`
+- [x] 3.3 Custom error classes
+  - [x] `src/shared/errors/app-error.ts` (base)
+  - [x] `src/shared/errors/validation-error.ts`
+  - [x] `src/shared/errors/not-found-error.ts`
+  - [x] `src/shared/errors/unauthorized-error.ts`
+  - [x] `src/shared/errors/forbidden-error.ts`
+  - [x] `src/shared/errors/conflict-error.ts`
 
-- [ ] 3.4 Utility functions
-  - [ ] `src/shared/utils/qr-code.utils.ts` (generate QR code string)
-  - [ ] `src/shared/utils/pagination.utils.ts` (pagination helpers)
-  - [ ] `src/shared/utils/response.utils.ts` (standard response format)
-  - [ ] `src/shared/utils/date.utils.ts` (date helpers jika diperlukan)
+- [x] 3.4 Utility functions
+  - [x] `src/shared/utils/qr-code.utils.ts` (generate QR code string)
+  - [x] `src/shared/utils/pagination.utils.ts` (pagination helpers)
+  - [x] `src/shared/utils/response.utils.ts` (standard response format)
 
 ### 4) Infrastructure Layer - Core Services
 
