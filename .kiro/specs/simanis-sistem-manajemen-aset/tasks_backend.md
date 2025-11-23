@@ -17,11 +17,11 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
 | Phase | Focus | Status | Progress |
 |-------|-------|--------|----------|
 | **Setup** | Project initialization | ✅ Complete | 10/10 |
-| **Phase 1** | Core API (support Frontend Phase 1) | 🔄 In Progress | 11/25 |
+| **Phase 1** | Core API (support Frontend Phase 1) | 🔄 In Progress | 16/25 |
 | **Phase 2** | Advanced Features | ⏳ Pending | 0/20 |
 | **Phase 3** | Enhancements & Polish | ⏳ Pending | 0/12 |
 
-**Total: 21/67 tasks (31%)**
+**Total: 26/67 tasks (39%)**
 
 ---
 
@@ -204,49 +204,49 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
 
 ### 6) Application Layer - Validators
 
-- [ ] 6.1 Zod schemas
-  - [ ] `src/application/validators/auth.validators.ts`
+- [x] 6.1 Zod schemas
+  - [x] `src/application/validators/auth.validators.ts`
     - loginSchema
-  - [ ] `src/application/validators/asset.validators.ts`
+  - [x] `src/application/validators/asset.validators.ts`
     - createAssetSchema
     - updateAssetSchema
-  - [ ] `src/application/validators/category.validators.ts`
+  - [x] `src/application/validators/category.validators.ts`
     - createCategorySchema
     - updateCategorySchema
-  - [ ] `src/application/validators/loan.validators.ts`
+  - [x] `src/application/validators/loan.validators.ts`
     - createLoanSchema
     - returnLoanSchema
-  - [ ] `src/application/validators/mutation.validators.ts`
+  - [x] `src/application/validators/mutation.validators.ts`
     - createMutationSchema
-  - [ ] `src/application/validators/common.validators.ts`
+  - [x] `src/application/validators/common.validators.ts`
     - paginationSchema
 
 ### 7) Application Layer - DTOs
 
-- [ ] 7.1 DTO types
-  - [ ] `src/application/dto/auth.dto.ts`
-  - [ ] `src/application/dto/asset.dto.ts`
-  - [ ] `src/application/dto/category.dto.ts`
-  - [ ] `src/application/dto/loan.dto.ts`
-  - [ ] `src/application/dto/mutation.dto.ts`
-  - [ ] `src/application/dto/pagination.dto.ts`
+- [x] 7.1 DTO types
+  - [x] `src/application/dto/auth.dto.ts`
+  - [x] `src/application/dto/asset.dto.ts`
+  - [x] `src/application/dto/category.dto.ts`
+  - [x] `src/application/dto/loan.dto.ts`
+  - [x] `src/application/dto/mutation.dto.ts`
+  - [x] `src/application/dto/pagination.dto.ts`
 
 ### 8) Application Layer - Use Cases (Phase 1)
 
-- [ ] 8.1 Auth use cases
-  - [ ] `src/application/use-cases/auth/login.use-case.ts`
-  - [ ] `src/application/use-cases/auth/get-current-user.use-case.ts`
+- [x] 8.1 Auth use cases
+  - [x] `src/application/use-cases/auth/login.use-case.ts`
+  - [x] `src/application/use-cases/auth/get-current-user.use-case.ts`
 
-- [ ] 8.2 Category use cases
-  - [ ] `src/application/use-cases/categories/get-categories.use-case.ts`
-  - [ ] `src/application/use-cases/categories/create-category.use-case.ts`
+- [x] 8.2 Category use cases
+  - [x] `src/application/use-cases/categories/get-categories.use-case.ts`
+  - [x] `src/application/use-cases/categories/create-category.use-case.ts`
   - [ ] `src/application/use-cases/categories/update-category.use-case.ts`
   - [ ] `src/application/use-cases/categories/delete-category.use-case.ts`
 
-- [ ] 8.3 Asset use cases
-  - [ ] `src/application/use-cases/assets/get-assets.use-case.ts` (with pagination)
+- [/] 8.3 Asset use cases
+  - [x] `src/application/use-cases/assets/get-assets.use-case.ts` (with pagination)
   - [ ] `src/application/use-cases/assets/get-asset-by-id.use-case.ts`
-  - [ ] `src/application/use-cases/assets/create-asset.use-case.ts`
+  - [x] `src/application/use-cases/assets/create-asset.use-case.ts`
   - [ ] `src/application/use-cases/assets/update-asset.use-case.ts`
   - [ ] `src/application/use-cases/assets/delete-asset.use-case.ts` (soft delete)
 
@@ -254,11 +254,11 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
   - [ ] `src/application/use-cases/mutations/create-mutation.use-case.ts`
   - [ ] `src/application/use-cases/mutations/get-mutations.use-case.ts`
 
-- [ ] 8.5 Loan use cases
+- [/] 8.5 Loan use cases
   - [ ] `src/application/use-cases/loans/get-loans.use-case.ts`
   - [ ] `src/application/use-cases/loans/get-loan-by-id.use-case.ts`
-  - [ ] `src/application/use-cases/loans/create-loan.use-case.ts`
-  - [ ] `src/application/use-cases/loans/return-loan.use-case.ts`
+  - [x] `src/application/use-cases/loans/create-loan.use-case.ts`
+  - [x] `src/application/use-cases/loans/return-loan.use-case.ts`
 
 ### 9) Presentation Layer - Middleware
 
