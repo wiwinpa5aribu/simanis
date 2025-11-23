@@ -34,4 +34,5 @@ logs/
 Thumbs.db
 
 # Prisma
-prisma/migrations/
+# Keep migrations tracked, only ignore temp files
+

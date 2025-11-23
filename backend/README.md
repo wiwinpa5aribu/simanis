@@ -1,153 +1,265 @@
-# Backend SIMANIS
+# SIMANIS Backend
 
-## 📋 Status: Belum Diimplementasi
+Backend API server untuk SIMANIS (Sistem Manajemen Aset Sekolah) menggunakan Node.js, TypeScript, Fastify, dan Prisma ORM.
 
-Folder ini disiapkan untuk pengembangan backend API SIMANIS di masa depan.
+## Tech Stack
 
----
+- **Runtime:** Node.js 18+ / 20+
+- **Language:** TypeScript
+- **Framework:** Fastify
+- **Database:** MySQL 8.0 (Laragon)
+- **ORM:** Prisma
+- **Validation:** Zod
+- **Authentication:** JWT
+- **Password Hashing:** Argon2
+- **Logging:** Winston
+- **Background Jobs:** BullMQ + Redis (future)
+- **File Storage:** Cloudflare R2 (future)
 
-## 🎯 Rencana Backend
+## Prerequisites
 
-### Tech Stack (Rencana)
-- **Node.js + Express** atau **NestJS**
-- **TypeScript**
-- **PostgreSQL** atau **MySQL**
-- **Prisma ORM**
-- **JWT Authentication**
+- Node.js 18 LTS atau 20 LTS
+- Laragon (MySQL 8.0)
+- npm atau yarn
 
-### API Endpoints (Rencana)
+## Installation
 
-#### Authentication
-- `POST /api/auth/login` - Login user
-- `POST /api/auth/logout` - Logout user
-- `GET /api/auth/me` - Get current user
+### 1. Clone repository
 
-#### Assets
-- `GET /api/assets` - Get all assets (with pagination & filters)
-- `GET /api/assets/:id` - Get asset by ID
-- `POST /api/assets` - Create new asset
-- `PUT /api/assets/:id` - Update asset
-- `DELETE /api/assets/:id` - Delete asset
-- `GET /api/assets/code/:code` - Get asset by code (for QR scanner)
-- `POST /api/assets/:id/photo` - Upload asset photo
+```bash
+cd d:\simanis\backend
+```
 
-#### Categories
-- `GET /api/categories` - Get all categories
-- `POST /api/categories` - Create category
-- `PUT /api/categories/:id` - Update category
-- `DELETE /api/categories/:id` - Delete category
+### 2. Install dependencies
 
-#### Loans
-- `GET /api/loans` - Get all loans
-- `POST /api/loans` - Create loan
-- `POST /api/loans/:id/return` - Mark loan as returned
+```bash
+npm install
+```
 
-#### Inventory
-- `GET /api/inventory` - Get inventory records
-- `POST /api/inventory` - Create inventory record
+### 3. Setup environment variables
 
-#### Dashboard
-- `GET /api/dashboard/stats` - Get dashboard statistics
-- `GET /api/dashboard/activities` - Get recent activities
+```bash
+# Copy .env.example ke .env
+copy .env.example .env
 
-#### Reports
-- `POST /api/reports/kib` - Generate KIB report
-- `GET /api/reports/:id/download` - Download report
+# Edit .env dan sesuaikan nilai-nilainya
+# Minimal yang perlu diubah:
+# - JWT_SECRET (generate random string min 32 karakter)
+# - DATABASE_URL (sesuai dengan Laragon MySQL)
+```
 
-#### Audit
-- `GET /api/audit-logs` - Get audit logs (with filters)
+### 4. Start Laragon MySQL
 
-#### Depreciation
-- `GET /api/depreciations` - Get depreciation records
+- Buka Laragon
+- Start MySQL service
+- Verify MySQL running di port 3306
 
----
+### 5. Setup database
 
-## 📁 Struktur Folder (Rencana)
+```bash
+# Generate Prisma Client
+npx prisma generate
+
+# Run migrations
+npx prisma migrate dev
+
+# (Optional) Seed database dengan sample data
+npx prisma db seed
+```
+
+## Development
+
+### Start development server
+
+```bash
+npm run dev
+```
+
+Server akan berjalan di `http://localhost:3000`
+
+### Available Scripts
+
+```bash
+npm run dev          # Start development server dengan hot reload
+npm run build        # Build untuk production
+npm start            # Start production server
+npm run lint         # Run ESLint
+npm run format       # Format code dengan Prettier
+
+# Prisma commands
+npm run prisma:generate  # Generate Prisma Client
+npm run prisma:migrate   # Run database migrations
+npm run prisma:studio    # Open Prisma Studio (database GUI)
+npm run prisma:seed      # Seed database
+```
+
+## Project Structure
 
 ```
 backend/
 ├── src/
-│   ├── controllers/    # Request handlers
-│   ├── services/       # Business logic
-│   ├── repositories/   # Database access
-│   ├── models/         # Data models (Prisma)
-│   ├── middlewares/    # Auth, validation, etc.
-│   ├── routes/         # API routes
-│   ├── utils/          # Utilities
-│   └── config/         # Configuration
+│   ├── domain/              # Domain layer (business logic)
+│   │   ├── entities/
+│   │   ├── value-objects/
+│   │   └── repositories/
+│   │
+│   ├── application/         # Application layer (use cases)
+│   │   ├── use-cases/
+│   │   ├── dto/
+│   │   └── validators/
+│   │
+│   ├── infrastructure/      # Infrastructure layer (technical)
+│   │   ├── database/
+│   │   ├── storage/
+│   │   ├── queue/
+│   │   └── crypto/
+│   │
+│   ├── presentation/        # Presentation layer (API)
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   └── routes/
+│   │
+│   ├── shared/              # Shared utilities
+│   │   ├── config/
+│   │   ├── logger/
+│   │   ├── errors/
+│   │   └── utils/
+│   │
+│   └── main.ts              # Application entry point
+│
 ├── prisma/
-│   └── schema.prisma   # Database schema
-├── tests/              # Unit & integration tests
-├── package.json
-└── tsconfig.json
+│   ├── schema.prisma        # Database schema
+│   ├── migrations/          # Migration files
+│   └── seed.ts              # Database seeding
+│
+├── tests/                   # Tests (future)
+├── logs/                    # Application logs
+├── .env                     # Environment variables (gitignored)
+├── .env.example             # Environment template
+├── tsconfig.json            # TypeScript config
+└── package.json
 ```
 
----
+## API Endpoints
 
-## 🔐 Security Considerations
-
-- JWT token dengan expiry
-- Password hashing (bcrypt)
-- Input validation (Zod)
-- SQL injection prevention (Prisma)
-- CORS configuration
-- Rate limiting
-- File upload validation
-
----
-
-## 📝 Database Schema (Rencana)
-
-### Users
-- id, username, email, password, name, role, created_at, updated_at
-
-### Assets
-- id, kode_aset, nama_barang, category_id, kondisi, merk, spesifikasi, tahun_perolehan, harga, sumber_dana, photo_url, created_at, updated_at
+### Authentication
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user
 
 ### Categories
-- id, name, created_at, updated_at
+- `GET /api/categories` - List categories
+- `POST /api/categories` - Create category
+- `PUT /api/categories/:id` - Update category
+- `DELETE /api/categories/:id` - Delete category
+
+### Assets
+- `GET /api/assets` - List assets (with pagination & filters)
+- `GET /api/assets/:id` - Get asset detail
+- `POST /api/assets` - Create new asset
+- `PUT /api/assets/:id` - Update asset
+- `DELETE /api/assets/:id` - Delete asset (soft delete)
+
+### Mutations
+- `POST /api/assets/:id/mutations` - Create asset mutation
+- `GET /api/assets/:id/mutations` - Get mutation history
 
 ### Loans
-- id, asset_id, borrower_name, loan_date, return_date, status, notes, created_at, updated_at
+- `GET /api/loans` - List loans
+- `GET /api/loans/:id` - Get loan detail
+- `POST /api/loans` - Create loan
+- `PATCH /api/loans/:id/return` - Return loan
 
-### Inventory
-- id, asset_id, photo_url, note, created_by, created_at, updated_at
+### Dashboard (Future)
+- `GET /api/dashboard/stats` - Dashboard statistics
+- `GET /api/dashboard/activities` - Recent activities
 
-### Audit Logs
-- id, entity_type, entity_id, user_id, action, timestamp, field_changed, old_values, new_values
+### Inventory (Future)
+- `POST /api/inventory` - Create inventory check
+- `GET /api/inventory` - List inventory checks
 
-### Depreciations
-- id, asset_id, calculation_date, depreciation_value, book_value, created_at
+### Depreciation (Future)
+- `GET /api/depreciations` - List depreciation entries
 
----
+### Reports (Future)
+- `POST /api/reports/kib` - Generate KIB report
+- `GET /api/reports/kib/:jobId/status` - Check report status
+- `GET /api/reports/kib/:jobId/download` - Download report
 
-## 🚀 Getting Started (Nanti)
+### Audit Trail (Future)
+- `GET /api/audit-logs` - List audit logs
 
-```bash
-# Install dependencies
-cd backend
-npm install
+## Environment Variables
 
-# Setup database
-npx prisma migrate dev
+See `.env.example` for all available environment variables.
 
-# Run development server
-npm run dev
+**Required:**
+- `DATABASE_URL` - MySQL connection string
+- `JWT_SECRET` - Secret key untuk JWT (min 32 characters)
 
-# Run tests
-npm test
+**Optional:**
+- `PORT` - Server port (default: 3000)
+- `NODE_ENV` - Environment (development/production)
+- `CORS_ORIGIN` - Frontend URL untuk CORS
+- `LOG_LEVEL` - Logging level (debug/info/warn/error)
+
+## Database Schema
+
+Database menggunakan 15 tables:
+- `users`, `roles`, `user_roles` - User management & RBAC
+- `asset_categories` - Asset categories
+- `buildings`, `floors`, `rooms` - Location hierarchy
+- `assets` - Main assets table
+- `asset_mutations` - Asset location changes
+- `loans`, `loan_items` - Loan management
+- `inventory_checks` - Inventory records
+- `depreciation_entries` - Monthly depreciation
+- `asset_documents` - Document attachments
+- `asset_deletions` - Deletion records
+- `audit_logs` - Audit trail
+
+## Development Guidelines
+
+### Code Style
+- Use TypeScript strict mode
+- No `any` types
+- Follow ESLint rules
+- Format with Prettier before commit
+
+### Naming Conventions
+- Files: kebab-case (e.g., `user.repository.ts`)
+- Classes: PascalCase (e.g., `UserRepository`)
+- Functions: camelCase (e.g., `getUserById`)
+- Constants: UPPER_SNAKE_CASE (e.g., `MAX_FILE_SIZE`)
+
+### Commit Messages
+Follow conventional commits:
+```
+feat(scope): description    # New feature
+fix(scope): description     # Bug fix
+chore(scope): description   # Maintenance
+docs(scope): description    # Documentation
 ```
 
----
+## Troubleshooting
 
-## 📚 Resources
+### Prisma Client not found
+```bash
+npx prisma generate
+```
 
-- [NestJS Documentation](https://docs.nestjs.com/)
-- [Prisma Documentation](https://www.prisma.io/docs/)
-- [Express.js Documentation](https://expressjs.com/)
+### Database connection error
+- Check Laragon MySQL is running
+- Verify `DATABASE_URL` in `.env`
+- Test connection: `npx prisma studio`
 
----
+### Port already in use
+- Change `PORT` in `.env`
+- Or kill process using port 3000
 
-**Status:** 🔴 Not Started  
-**Priority:** High  
-**Estimated Time:** 4-6 weeks
+## License
+
+MIT
+
+## Contact
+
+Backend Developer Team - SIMANIS Project
