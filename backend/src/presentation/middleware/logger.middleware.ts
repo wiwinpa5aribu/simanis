@@ -8,7 +8,7 @@ import { logger } from '../../shared/logger/winston.logger';
 export async function loggerMiddleware(request: FastifyRequest, reply: FastifyReply) {
     const start = Date.now();
 
-    reply.addHook('onSend', async () => {
+    reply.raw.on('finish', () => {
         const duration = Date.now() - start;
 
         logger.info('Request completed', {
@@ -16,7 +16,7 @@ export async function loggerMiddleware(request: FastifyRequest, reply: FastifyRe
             url: request.url,
             statusCode: reply.statusCode,
             duration: `${duration}ms`,
-            userId: request.user?.id,
+            userId: request.user?.userId,
             ip: request.ip,
         });
     });
