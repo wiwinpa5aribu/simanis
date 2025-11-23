@@ -19,7 +19,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.490.0",
     "@fastify/cors": "^9.0.0",
