@@ -16,12 +16,12 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
 
 | Phase | Focus | Status | Progress |
 |-------|-------|--------|----------|
-| **Setup** | Project initialization | ⏳ Pending | 0/10 |
+| **Setup** | Project initialization | ✅ Complete | 10/10 |
 | **Phase 1** | Core API (support Frontend Phase 1) | ⏳ Pending | 0/25 |
 | **Phase 2** | Advanced Features | ⏳ Pending | 0/20 |
 | **Phase 3** | Enhancements & Polish | ⏳ Pending | 0/12 |
 
-**Total: 0/67 tasks**
+**Total: 10/67 tasks (15%)**
 
 ---
 
@@ -85,7 +85,7 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
   - [x] Create `.prettierrc`
   - [x] Add scripts ke `package.json`
 
-- [ ] 1.6 Create folder structure
+- [x] 1.6 Create folder structure
   ```bash
   mkdir -p src/{domain,application,infrastructure,presentation,shared}
   mkdir -p src/domain/{entities,value-objects,repositories}
@@ -98,23 +98,23 @@ Dokumen ini menurunkan `requirements_backend.md` dan `design_backend.md` menjadi
   mkdir -p logs
   ```
 
-- [ ] 1.7 Environment variables
-  - [ ] Create `.env.example`
-  - [ ] Create `.env` (gitignored)
-  - [ ] Implement `src/shared/config/index.ts` dengan Zod validation
+- [x] 1.7 Environment variables
+  - [x] Create `.env.example`
+  - [x] Create `.env` (gitignored)
+  - [x] Implement `src/shared/config/index.ts` dengan Zod validation
 
-- [ ] 1.8 Setup Docker Compose
-  - [ ] Create `docker-compose.yml` (PostgreSQL + Redis)
-  - [ ] Test: `docker-compose up -d`
+- [x] 1.8 Setup Docker Compose
+  - [x] SKIPPED (using Laragon MySQL instead)
+  - [x] Database: simanis_dev created in Laragon
 
-- [ ] 1.9 Setup Git
-  - [ ] Create `.gitignore`
-  - [ ] Initial commit: "chore: initial backend setup"
+- [x] 1.9 Setup Git
+  - [x] Create `.gitignore`
+  - [x] Initial commit: "chore(backend): initial backend setup with Prisma and config"
 
-- [ ] 1.10 Create README.md
-  - [ ] Installation instructions
-  - [ ] Development setup
-  - [ ] Environment variables documentation
+- [x] 1.10 Create README.md
+  - [x] Installation instructions
+  - [x] Development setup
+  - [x] Environment variables documentation
 
 ---
 

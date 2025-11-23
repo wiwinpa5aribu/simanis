@@ -9,4 +9,4 @@ Backend:
     └── uploadthing / Cloudflare R2 (storage foto)
 
 Database:
-└── PostgreSQL
+└── MySQL
