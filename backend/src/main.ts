@@ -2,11 +2,14 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
+import path from 'path';
 import { config } from './shared/config';
 import { logger } from './shared/logger/winston.logger';
 import { errorHandler } from './presentation/middleware/error-handler.middleware';
 import { loggerMiddleware } from './presentation/middleware/logger.middleware';
 import { registerRoutes } from './presentation/routes';
+import { initializeJobs } from './infrastructure/jobs';
 
 async function bootstrap() {
     // Create Fastify instance
@@ -27,9 +30,14 @@ async function bootstrap() {
             },
         });
 
+        import path from 'path';
+        import fastifyStatic from '@fastify/static';
+
+        // ... inside bootstrap function ...
+
         // Serve static files from uploads directory (for local storage)
-        await fastify.register(require('@fastify/static'), {
-            root: require('path').join(process.cwd(), 'uploads'),
+        await fastify.register(fastifyStatic, {
+            root: path.join(process.cwd(), 'uploads'),
             prefix: '/uploads/',
         });
 
@@ -46,6 +54,9 @@ async function bootstrap() {
         fastify.get('/health', async () => {
             return { status: 'ok', timestamp: new Date().toISOString() };
         });
+
+        // Initialize background jobs
+        await initializeJobs();
 
         // Start server
         const port = config.port;
