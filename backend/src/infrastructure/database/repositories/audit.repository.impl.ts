@@ -24,8 +24,10 @@ export class AuditRepositoryImpl implements IAuditRepository {
         entityId?: number;
         userId?: number;
         action?: string;
+        startDate?: Date;
+        endDate?: Date;
     }) {
-        const { page, pageSize, entityType, entityId, userId, action } = params;
+        const { page, pageSize, entityType, entityId, userId, action, startDate, endDate } = params;
         const skip = calculateSkip(page, pageSize);
 
         const where: any = {};
@@ -34,6 +36,12 @@ export class AuditRepositoryImpl implements IAuditRepository {
         if (entityId) where.entityId = entityId;
         if (userId) where.userId = userId;
         if (action) where.action = action;
+        if (startDate && endDate) {
+            where.timestamp = {
+                gte: startDate,
+                lte: endDate,
+            };
+        }
 
         const [logs, total] = await Promise.all([
             this.prisma.auditLog.findMany({
@@ -41,6 +49,7 @@ export class AuditRepositoryImpl implements IAuditRepository {
                 skip,
                 take: pageSize,
                 orderBy: { timestamp: 'desc' },
+                include: { user: true },
             }),
             this.prisma.auditLog.count({ where }),
         ]);

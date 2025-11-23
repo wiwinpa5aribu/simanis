@@ -1,4 +1,17 @@
-import { AuditLog } from '@prisma/client';
+import { AuditLog, User } from '@prisma/client';
+
+export interface AuditLogFilters {
+  page: number;
+  pageSize: number;
+  entityType?: string;
+  entityId?: number;
+  userId?: number;
+  action?: string;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+export type AuditLogWithUser = AuditLog & { user?: User | null };
 
 export interface IAuditRepository {
   /**
@@ -15,12 +28,5 @@ export interface IAuditRepository {
   /**
    * Find audit logs with pagination and filters
    */
-  findAll(params: {
-    page: number;
-    pageSize: number;
-    entityType?: string;
-    entityId?: number;
-    userId?: number;
-    action?: string;
-  }): Promise<{ logs: AuditLog[]; total: number }>;
+  findAll(params: AuditLogFilters): Promise<{ logs: AuditLogWithUser[]; total: number }>;
 }

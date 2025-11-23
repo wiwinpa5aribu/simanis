@@ -1,8 +1,20 @@
-import { IAuditRepository, AuditLogFilters } from '../../../domain/repositories/audit.repository';
+import { IAuditRepository, AuditLogFilters, AuditLogWithUser } from '../../../domain/repositories/audit.repository';
 import { calculatePagination } from '../../../shared/utils/pagination.utils';
 
 export interface AuditLogListDto {
-    logs: any[];
+    logs: {
+        id: number;
+        entityType: string;
+        entityId: number;
+        action: string;
+        timestamp: Date;
+        details: any;
+        user: {
+            id: number;
+            name: string;
+            username: string;
+        } | null;
+    }[];
     meta: {
         page: number;
         pageSize: number;
@@ -32,15 +44,13 @@ export class GetAuditLogsUseCase {
 
         const meta = calculatePagination(total, page, pageSize);
 
-        // Map logs to DTO if needed, or just return as is
-        // For now, returning as is but ensuring user info is included (repository handles include)
-        const logsDto = logs.map((log) => ({
+        const logsDto = logs.map((log: AuditLogWithUser) => ({
             id: log.id,
             entityType: log.entityType,
             entityId: log.entityId,
             action: log.action,
             timestamp: log.timestamp,
-            details: log.fieldChanged, // Map fieldChanged to details for frontend consistency
+            details: log.fieldChanged,
             user: log.user
                 ? {
                     id: log.user.id,
