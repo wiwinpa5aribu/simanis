@@ -3,6 +3,7 @@ import { authRoutes } from './auth.routes';
 import { categoryRoutes } from './category.routes';
 import { assetRoutes } from './asset.routes';
 import { loanRoutes } from './loan.routes';
+import { uploadRoutes } from './upload.routes';
 
 /**
  * Register all API routes
@@ -16,6 +17,7 @@ export async function registerRoutes(fastify: FastifyInstance) {
             await api.register(categoryRoutes, { prefix: '/categories' });
             await api.register(assetRoutes, { prefix: '/assets' });
             await api.register(loanRoutes, { prefix: '/loans' });
+            await api.register(uploadRoutes, { prefix: '/upload' });
         },
         { prefix: '/api' }
     );

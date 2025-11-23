@@ -27,6 +27,12 @@ async function bootstrap() {
             },
         });
 
+        // Serve static files from uploads directory (for local storage)
+        await fastify.register(require('@fastify/static'), {
+            root: require('path').join(process.cwd(), 'uploads'),
+            prefix: '/uploads/',
+        });
+
         // Register global middleware
         fastify.addHook('preHandler', loggerMiddleware);
 
