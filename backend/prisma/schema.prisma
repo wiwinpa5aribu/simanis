@@ -191,6 +191,7 @@ model InventoryCheck {
     checkedAt     DateTime @default(now()) @map("checked_at")
     photoUrl      String?  @map("photo_url") @db.Text
     qrCodeScanned String?  @map("qr_code_scanned") @db.VarChar(128)
+    kondisi       String   @db.VarChar(20) // Added to track condition at check time
     note          String?  @db.Text
 
     asset   Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
