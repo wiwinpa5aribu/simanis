@@ -9,6 +9,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     css: true,
+    exclude: ['**/node_modules/**', '**/dist/**', '**/.trunk/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -19,7 +20,14 @@ export default defineConfig({
         '**/*.config.*',
         '**/mockData',
         'dist/',
+        '**/__tests__/**',
       ],
+      thresholds: {
+        statements: 50,
+        branches: 50,
+        functions: 50,
+        lines: 50,
+      },
     },
   },
   resolve: {

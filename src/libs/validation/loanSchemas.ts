@@ -25,3 +25,34 @@ export interface Loan {
   created_at?: string
   updated_at?: string
 }
+
+// Tipe data Detail Peminjaman dengan informasi lengkap
+export interface LoanItem {
+  assetId: number
+  conditionBefore: string
+  conditionAfter: string | null
+  asset: {
+    id: number
+    kodeAset: string
+    namaBarang: string
+    merk: string
+    kondisi: string
+  }
+}
+
+export interface LoanDetail {
+  id: number
+  requestedBy: number
+  tanggalPinjam: string
+  tanggalKembali: string | null
+  tujuanPinjam: string
+  status: 'Dipinjam' | 'Dikembalikan' | 'Terlambat'
+  catatan: string | null
+  requester: {
+    id: number
+    name: string
+    username: string
+    email: string
+  }
+  items: LoanItem[]
+}

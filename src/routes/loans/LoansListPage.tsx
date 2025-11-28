@@ -63,7 +63,7 @@ export function LoansListPage() {
       showSuccessToast('Aset berhasil ditandai dikembalikan.')
     },
     onError: (error) => {
-      console.error('Gagal mengembalikan aset:', error)
+      logger.error('LoansListPage', 'Gagal mengembalikan aset', error)
       showErrorToast('Gagal memproses pengembalian.')
     },
   })
@@ -75,7 +75,7 @@ export function LoansListPage() {
       assetId: item.asset_id,
     })
 
-    if (confirm('Tandai aset ini sebagai dikembalikan hari ini?')) {
+    if (window.confirm('Tandai aset ini sebagai dikembalikan hari ini?')) {
       const today = new Date().toISOString().split('T')[0]
       returnMutation.mutate({ id: item.id, date: today })
     }
@@ -89,12 +89,24 @@ export function LoansListPage() {
         (loan.asset_name || '').toLowerCase().includes(searchTerm.toLowerCase())
     ) || []
 
+  // Handle row click to navigate to detail
+  const handleRowClick = (loan: Loan) => {
+    navigate(`/loans/${loan.id}`)
+  }
+
   // Definisi kolom
   const columns: Column<Loan>[] = [
     {
       key: 'borrower_name',
       header: 'Peminjam',
-      cell: (item) => <span className="font-medium">{item.borrower_name}</span>,
+      cell: (item) => (
+        <button
+          onClick={() => handleRowClick(item)}
+          className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
+        >
+          {item.borrower_name}
+        </button>
+      ),
     },
     {
       key: 'asset_name',
@@ -111,11 +123,10 @@ export function LoansListPage() {
       header: 'Status',
       cell: (item) => (
         <span
-          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-            item.status === 'Dikembalikan'
+          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.status === 'Dikembalikan'
               ? 'bg-green-100 text-green-800'
               : 'bg-yellow-100 text-yellow-800'
-          }`}
+            }`}
         >
           {item.status}
         </span>

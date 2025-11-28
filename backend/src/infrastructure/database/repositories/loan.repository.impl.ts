@@ -13,6 +13,7 @@ export class LoanRepositoryImpl implements ILoanRepository {
         const { page, pageSize, status } = params;
         const skip = calculateSkip(page, pageSize);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const where: any = {};
         if (status) {
             where.status = status;

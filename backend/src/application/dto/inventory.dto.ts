@@ -1,5 +1,3 @@
-import { InventoryCheck, Asset, User } from '@prisma/client';
-
 export interface InventoryDto {
     id: number;
     assetId: number;
@@ -27,9 +25,11 @@ export interface InventoryDto {
 export interface InventoryListDto {
     checks: InventoryDto[];
     meta: {
-        total: number;
         page: number;
         pageSize: number;
+        totalItems: number;
         totalPages: number;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
     };
 }

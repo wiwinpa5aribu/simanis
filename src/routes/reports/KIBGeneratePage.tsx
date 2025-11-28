@@ -23,6 +23,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useReportPresetStore } from '@/libs/store/reportPresetStore'
 import { showSuccessToast } from '@/libs/ui/toast'
 import { ASSET_CONDITIONS } from '@/libs/validation/assetSchemas'
+import { logger } from '@/libs/utils/logger'
 
 interface KIBFilters {
   year: string
@@ -78,20 +79,39 @@ export default function KIBGeneratePage() {
 
   const handleDeletePreset = (e: React.MouseEvent, presetId: string) => {
     e.stopPropagation()
-    if (confirm('Hapus preset ini?')) {
+    if (window.confirm('Hapus preset ini?')) {
       removePreset(reportKey, presetId)
       if (selectedPresetId === presetId) setSelectedPresetId('')
       showSuccessToast('Preset dihapus')
     }
   }
 
-  const onSubmit = (data: KIBFilters) => {
-    console.log('Generating KIB with:', data)
-    showSuccessToast('Laporan KIB sedang digenerate...')
-    // Simulasi download
-    setTimeout(() => {
-      showSuccessToast('Download dimulai: Laporan_KIB.pdf')
-    }, 1500)
+  const onSubmit = async (data: KIBFilters) => {
+    try {
+      showSuccessToast('Sedang mengunduh laporan KIB...')
+
+      const { generateAndDownloadKIBReport } = await import('@/libs/api/reports')
+
+      const blob = await generateAndDownloadKIBReport({
+        year: data.year,
+        // Map other filters as needed by backend
+        // category_id: ...
+      })
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `Laporan_KIB_${data.year}.xlsx`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode?.removeChild(link)
+      window.URL.revokeObjectURL(url)
+
+      showSuccessToast('Laporan berhasil diunduh')
+    } catch (error) {
+      logger.error('KIBGeneratePage', 'Download failed', error)
+    }
   }
 
   return (

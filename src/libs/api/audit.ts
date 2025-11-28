@@ -18,9 +18,9 @@ export interface AuditLog {
   user_name?: string
   action: string // Contoh: "create", "update", "delete"
   timestamp: string // ISO timestamp
-  field_changed?: Record<string, any> // JSON object berisi field yang berubah
-  old_values?: Record<string, any> // Nilai lama
-  new_values?: Record<string, any> // Nilai baru
+  field_changed?: Record<string, unknown> // JSON object berisi field yang berubah
+  old_values?: Record<string, unknown> // Nilai lama
+  new_values?: Record<string, unknown> // Nilai baru
 }
 
 // Interface untuk parameter query

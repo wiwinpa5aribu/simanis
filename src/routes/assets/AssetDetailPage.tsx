@@ -130,7 +130,7 @@ export function AssetDetailPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => alert('Fitur Edit akan segera hadir')}
+                onClick={() => navigate(`/assets/${id}/edit`)}
                 className="text-blue-600 bg-blue-50 hover:bg-blue-100 border-blue-200"
               >
                 <Pencil className="w-4 h-4 mr-2" />

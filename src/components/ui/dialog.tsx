@@ -45,6 +45,10 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
       <div
         className="fixed inset-0 bg-black/50"
         onClick={() => onOpenChange(false)}
+        onKeyDown={(e) => e.key === 'Escape' && onOpenChange(false)}
+        role="button"
+        tabIndex={0}
+        aria-label="Close dialog"
       />
       <div className="relative z-50">{children}</div>
     </div>

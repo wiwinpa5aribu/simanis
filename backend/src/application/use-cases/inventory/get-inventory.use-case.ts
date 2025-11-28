@@ -20,7 +20,7 @@ export class GetInventoryUseCase {
         const meta = calculatePagination(total, page, pageSize);
 
         // Map to DTO
-        const checksDto = checks.map((check: any) => ({
+        const checksDto = checks.map((check) => ({
             id: check.id,
             assetId: check.assetId,
             checkerId: check.checkerId,

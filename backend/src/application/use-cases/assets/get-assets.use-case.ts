@@ -10,7 +10,7 @@ export class GetAssetsUseCase {
         page: number;
         pageSize: number;
         filters?: AssetFilters;
-    }): Promise<AssetListDto & { meta: any }> {
+    }): Promise<AssetListDto & { meta: { page: number; pageSize: number; totalItems: number; totalPages: number; hasNextPage: boolean; hasPreviousPage: boolean } }> {
         const { assets, total } = await this.assetRepository.findAll(params);
 
         const meta = calculatePagination(total, params.page, params.pageSize);

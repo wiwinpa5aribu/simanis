@@ -41,7 +41,14 @@ export function DropdownMenu({ children }: DropdownMenuProps) {
 
   return (
     <div ref={menuRef} className="relative inline-block">
-      <div onClick={() => setIsOpen(!isOpen)}>{children}</div>
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={(e) => e.key === 'Enter' && setIsOpen(!isOpen)}
+        role="button"
+        tabIndex={0}
+      >
+        {children}
+      </div>
     </div>
   )
 }

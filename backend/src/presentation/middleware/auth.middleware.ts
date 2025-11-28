@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyRequest } from 'fastify';
 import { jwtService } from '../../infrastructure/crypto/jwt.service';
 import { UnauthorizedError } from '../../shared/errors/unauthorized-error';
 
@@ -17,7 +17,7 @@ declare module 'fastify' {
  * Authentication middleware
  * Verifies JWT token and attaches user to request
  */
-export async function authMiddleware(request: FastifyRequest, reply: FastifyReply) {
+export async function authMiddleware(request: FastifyRequest) {
     try {
         const authHeader = request.headers.authorization;
 

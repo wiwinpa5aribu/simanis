@@ -4,7 +4,7 @@
  */
 
 import { api } from './client'
-import type { LoanFormValues, Loan } from '../validation/loanSchemas'
+import type { LoanFormValues, Loan, LoanDetail } from '../validation/loanSchemas'
 import { logger } from '../utils/logger'
 import { ERROR_MESSAGES } from '../../constants'
 import { getErrorMessage } from '../utils/errorHandling'
@@ -75,6 +75,34 @@ export const createLoan = async (data: LoanFormValues): Promise<Loan> => {
       borrower: data.borrower_name,
     })
     throw new Error(getErrorMessage(error) || ERROR_MESSAGES.VALIDATION_ERROR)
+  }
+}
+
+/**
+ * Get Loan By ID - Mengambil detail peminjaman berdasarkan ID
+ * @param id - ID peminjaman
+ * @returns LoanDetail dengan informasi lengkap
+ * @throws Error jika peminjaman tidak ditemukan
+ */
+export const getLoanById = async (id: number): Promise<LoanDetail> => {
+  try {
+    assertValidId(id, 'getLoanById', 'Loan ID')
+
+    logger.info('Loans API', `Mengambil detail peminjaman dengan ID: ${id}`)
+
+    const response = await api.get<LoanDetail>(`/loans/${id}`)
+
+    if (!isDefined(response.data)) {
+      logger.error('Loans API', 'Empty response data from server')
+      throw new Error('Peminjaman tidak ditemukan')
+    }
+
+    logger.success('Loans API', `Berhasil mengambil detail peminjaman ID: ${id}`)
+
+    return response.data
+  } catch (error: unknown) {
+    logger.error('Loans API', `Gagal mengambil peminjaman dengan ID: ${id}`, error)
+    throw new Error(getErrorMessage(error) || ERROR_MESSAGES.NOT_FOUND)
   }
 }
 

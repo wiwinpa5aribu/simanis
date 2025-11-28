@@ -17,7 +17,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
-import { Loader2, X } from 'lucide-react'
+import { Loader2, X, QrCode } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { updateAsset } from '@/libs/api/assets'
 import { ASSET_CONDITIONS } from '@/libs/validation/assetSchemas'
 import { showSuccessToast } from '@/libs/ui/toast'
@@ -31,6 +32,7 @@ export function AssetBulkActions({
   selectedIds,
   onClearSelection,
 }: AssetBulkActionsProps) {
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
   const [actionType, setActionType] = useState<'condition' | null>(null)
   const [targetCondition, setTargetCondition] = useState<string>('')
@@ -78,6 +80,7 @@ export function AssetBulkActions({
     for (let i = 0; i < selectedIds.length; i++) {
       const id = selectedIds[i]
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await updateAsset(id, updates as any)
         successCount++
       } catch (error) {
@@ -124,7 +127,14 @@ export function AssetBulkActions({
         <Button variant="outline" size="sm" onClick={handleOpenConditionDialog}>
           Ubah Kondisi
         </Button>
-        {/* Add more bulk actions here */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigate('/assets/print-qr', { state: { assetIds: selectedIds } })}
+        >
+          <QrCode className="w-4 h-4 mr-2" />
+          Print QR ({selectedIds.length})
+        </Button>
       </div>
 
       <Button

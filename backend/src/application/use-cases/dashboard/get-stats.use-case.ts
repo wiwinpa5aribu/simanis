@@ -1,11 +1,19 @@
 import { PrismaClient } from '@prisma/client';
 
 export interface DashboardStats {
-    totalAssets: number;
-    totalValue: number;
-    activeLoans: number;
-    assetsByCondition: Record<string, number>;
-    assetsByCategory: Record<string, number>;
+    total_assets: number;
+    total_value: number;
+    active_loans: number;
+    assets_by_condition: {
+        Baik: number;
+        'Rusak Ringan': number;
+        'Rusak Berat': number;
+        Hilang: number;
+    };
+    assets_by_category: {
+        category_name: string;
+        count: number;
+    }[];
 }
 
 export class GetStatsUseCase {
@@ -59,20 +67,35 @@ export class GetStatsUseCase {
 
         const categoryMap = new Map(categories.map((c) => [c.id, c.name]));
 
-        // Format response
+        // Build condition map with defaults
+        const conditionMap: Record<string, number> = {
+            'Baik': 0,
+            'Rusak Ringan': 0,
+            'Rusak Berat': 0,
+            'Hilang': 0,
+        };
+        assetsByCondition.forEach((item) => {
+            conditionMap[item.kondisi] = item._count.id;
+        });
+
+        // Build category array
+        const categoryArray = assetsByCategory.map((item) => ({
+            category_name: item.categoryId ? categoryMap.get(item.categoryId) || 'Lainnya' : 'Tanpa Kategori',
+            count: item._count.id,
+        })).sort((a, b) => b.count - a.count); // Sort by count descending
+
+        // Format response sesuai frontend interface
         return {
-            totalAssets,
-            totalValue: Number(totalValueResult._sum.harga || 0),
-            activeLoans,
-            assetsByCondition: assetsByCondition.reduce((acc, curr) => {
-                acc[curr.kondisi] = curr._count.id;
-                return acc;
-            }, {} as Record<string, number>),
-            assetsByCategory: assetsByCategory.reduce((acc, curr) => {
-                const categoryName = curr.categoryId ? categoryMap.get(curr.categoryId) || 'Unknown' : 'Uncategorized';
-                acc[categoryName] = curr._count.id;
-                return acc;
-            }, {} as Record<string, number>),
+            total_assets: totalAssets,
+            total_value: Number(totalValueResult._sum.harga || 0),
+            active_loans: activeLoans,
+            assets_by_condition: {
+                Baik: conditionMap['Baik'],
+                'Rusak Ringan': conditionMap['Rusak Ringan'],
+                'Rusak Berat': conditionMap['Rusak Berat'],
+                Hilang: conditionMap['Hilang'],
+            },
+            assets_by_category: categoryArray,
         };
     }
 }

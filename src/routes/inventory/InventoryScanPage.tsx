@@ -12,6 +12,7 @@
 import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { logger } from "@/libs/utils/logger";
 
 import { QRScanner } from "./components/QRScanner";
 import { InventoryForm } from "./components/InventoryForm";
@@ -55,8 +56,8 @@ export default function InventoryScanPage() {
       if (scanStartTimeRef.current) {
         const totalTime = apiEndTime - scanStartTimeRef.current;
         setScanTime(totalTime);
-        console.log(`[Performance] Total scan to data: ${totalTime.toFixed(0)}ms`);
-        console.log(`[Performance] API call time: ${apiTime.toFixed(0)}ms`);
+        logger.performance('InventoryScanPage', 'Scan to data', totalTime);
+        logger.performance('InventoryScanPage', 'API call', apiTime);
       }
 
       return result;
@@ -75,7 +76,7 @@ export default function InventoryScanPage() {
   };
 
   const handleScanError = (errorMsg: string) => {
-    console.error("Scan error:", errorMsg);
+    logger.error('InventoryScanPage', 'Scan error', errorMsg);
   };
 
   const handleInventorySuccess = () => {

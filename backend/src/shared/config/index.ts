@@ -80,7 +80,10 @@ export const config = {
     },
 
     cors: {
-        origin: env.CORS_ORIGIN,
+        // Support multiple origins separated by comma
+        origin: env.CORS_ORIGIN.includes(',') 
+            ? env.CORS_ORIGIN.split(',').map(o => o.trim())
+            : env.CORS_ORIGIN,
     },
 
     logging: {

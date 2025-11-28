@@ -14,6 +14,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Html5Qrcode, Html5QrcodeScannerState } from "html5-qrcode";
+import { logger } from "@/libs/utils/logger";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -59,7 +60,7 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
           setManualMode(true);
         }
       } catch (err) {
-        console.error("Error getting cameras:", err);
+        logger.error('QRScanner', 'Error getting cameras', err);
         setError("Gagal mengakses kamera. Silakan gunakan input manual.");
         setManualMode(true);
         if (onError) onError("Gagal mengakses kamera");
@@ -74,7 +75,7 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
         scannerRef.current &&
         scannerRef.current.getState() === Html5QrcodeScannerState.SCANNING
       ) {
-        scannerRef.current.stop().catch(console.error);
+        scannerRef.current.stop().catch((err) => logger.error('QRScanner', 'Error stopping scanner on cleanup', err));
       }
     };
   }, [onError]);
@@ -118,7 +119,7 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
 
       setIsScanning(true);
     } catch (err) {
-      console.error("Error starting scanner:", err);
+      logger.error('QRScanner', 'Error starting scanner', err);
       const errorMsg =
         err instanceof Error ? err.message : "Gagal memulai scanner";
       setError(errorMsg);
@@ -143,7 +144,7 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
         await scannerRef.current.stop();
         setIsScanning(false);
       } catch (err) {
-        console.error("Error stopping scanner:", err);
+        logger.error('QRScanner', 'Error stopping scanner', err);
       }
     }
   };
@@ -199,8 +200,9 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
           {/* Pilih Kamera (jika ada lebih dari 1) */}
           {cameras.length > 1 && !isScanning && (
             <div className="space-y-2">
-              <Label>Pilih Kamera</Label>
+              <Label htmlFor="camera-select">Pilih Kamera</Label>
               <select
+                id="camera-select"
                 className="w-full p-2 border rounded-md"
                 value={selectedCamera || ""}
                 onChange={(e) => setSelectedCamera(e.target.value)}

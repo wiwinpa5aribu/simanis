@@ -1,5 +1,4 @@
 import { FastifyError, FastifyRequest, FastifyReply } from 'fastify';
-import { AppError } from '../../shared/errors/app-error';
 import { ValidationError } from '../../shared/errors/validation-error';
 import { NotFoundError } from '../../shared/errors/not-found-error';
 import { UnauthorizedError } from '../../shared/errors/unauthorized-error';

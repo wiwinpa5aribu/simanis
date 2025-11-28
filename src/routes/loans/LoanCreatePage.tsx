@@ -9,6 +9,8 @@ import {
   loanSchema,
   type LoanFormValues,
 } from '../../libs/validation/loanSchemas'
+import { logger } from '../../libs/utils/logger'
+import { showErrorToast } from '../../libs/ui/toast'
 
 // Komponen Halaman Catat Peminjaman
 // Form untuk mencatat peminjaman aset baru
@@ -29,6 +31,7 @@ export function LoanCreatePage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoanFormValues>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(loanSchema) as any, // Bypass potential type mismatch
     defaultValues: {
       loan_date: new Date().toISOString().split('T')[0], // Default hari ini
@@ -43,8 +46,8 @@ export function LoanCreatePage() {
       navigate('/loans')
     },
     onError: (error: unknown) => {
-      console.error('Gagal mencatat peminjaman:', error)
-      alert('Gagal mencatat peminjaman. Pastikan aset tersedia.')
+      logger.error('LoanCreatePage', 'Gagal mencatat peminjaman', error)
+      showErrorToast('Gagal mencatat peminjaman. Pastikan aset tersedia.')
     },
   })
 
@@ -75,14 +78,17 @@ export function LoanCreatePage() {
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
           {/* Aset */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="asset_id"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Aset yang Dipinjam <span className="text-red-500">*</span>
             </label>
             <select
+              id="asset_id"
               {...register('asset_id')}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${
-                errors.asset_id ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${errors.asset_id ? 'border-red-500' : 'border-gray-300'
+                }`}
               disabled={isLoadingAssets}
             >
               <option value="">Pilih Aset...</option>
@@ -101,15 +107,18 @@ export function LoanCreatePage() {
 
           {/* Nama Peminjam */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="borrower_name"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Nama Peminjam <span className="text-red-500">*</span>
             </label>
             <input
+              id="borrower_name"
               type="text"
               {...register('borrower_name')}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
-                errors.borrower_name ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.borrower_name ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="Nama lengkap peminjam"
             />
             {errors.borrower_name && (
@@ -121,15 +130,18 @@ export function LoanCreatePage() {
 
           {/* Tanggal Pinjam */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="loan_date"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Tanggal Pinjam <span className="text-red-500">*</span>
             </label>
             <input
+              id="loan_date"
               type="date"
               {...register('loan_date')}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
-                errors.loan_date ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.loan_date ? 'border-red-500' : 'border-gray-300'
+                }`}
             />
             {errors.loan_date && (
               <p className="mt-1 text-sm text-red-500">
@@ -140,10 +152,14 @@ export function LoanCreatePage() {
 
           {/* Catatan */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="notes"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Catatan / Keperluan (Opsional)
             </label>
             <textarea
+              id="notes"
               {...register('notes')}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"

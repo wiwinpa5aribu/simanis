@@ -1,7 +1,5 @@
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Save, Trash2, Calculator } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useQuery } from '@tanstack/react-query'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -12,14 +10,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import {
   Table,
   TableBody,
   TableCell,
@@ -28,98 +18,38 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useReportPresetStore } from '@/libs/store/reportPresetStore'
-import { showSuccessToast } from '@/libs/ui/toast'
+import { getDepreciationList } from '@/libs/api/depreciation'
+import { formatCurrency } from '@/libs/utils/format'
+import { Loading } from '@/components/ui/loading'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface DepreciationFilters {
   year: string
   category: string
-  method: string
+  month: string
 }
 
 export default function DepreciationListPage() {
-  const [isPresetDialogOpen, setIsPresetDialogOpen] = useState(false)
-  const [presetName, setPresetName] = useState('')
-  const [selectedPresetId, setSelectedPresetId] = useState<string>('')
-
-  const { register, handleSubmit, setValue, watch, reset } =
-    useForm<DepreciationFilters>({
-      defaultValues: {
-        year: new Date().getFullYear().toString(),
-        category: '',
-        method: 'straight_line',
-      },
-    })
+  const { register, watch, setValue } = useForm<DepreciationFilters>({
+    defaultValues: {
+      year: new Date().getFullYear().toString(),
+      category: '',
+      month: (new Date().getMonth() + 1).toString(),
+    },
+  })
 
   const filters = watch()
 
-  // Preset Store
-  const reportKey = 'depreciation-report'
-  const { addPreset, removePreset, getPresets } =
-    useReportPresetStore()
-  const availablePresets = getPresets(reportKey)
-
-  const handleSavePreset = () => {
-    if (!presetName) return
-    addPreset(reportKey, {
-      name: presetName,
-      value: filters as unknown as Record<string, unknown>,
-    })
-    showSuccessToast('Preset filter berhasil disimpan')
-    setPresetName('')
-    setIsPresetDialogOpen(false)
-  }
-
-  const handleLoadPreset = (presetId: string) => {
-    const preset = availablePresets.find((p) => p.id === presetId)
-    if (preset) {
-      reset(preset.value as unknown as DepreciationFilters)
-      setSelectedPresetId(presetId)
-      showSuccessToast(`Preset "${preset.name}" dimuat`)
-    }
-  }
-
-  const handleDeletePreset = (e: React.MouseEvent, presetId: string) => {
-    e.stopPropagation()
-    if (confirm('Hapus preset ini?')) {
-      removePreset(reportKey, presetId)
-      if (selectedPresetId === presetId) setSelectedPresetId('')
-      showSuccessToast('Preset dihapus')
-    }
-  }
-
-  const onSubmit = (data: DepreciationFilters) => {
-    console.log('Calculating depreciation with:', data)
-    showSuccessToast('Menghitung penyusutan...')
-  }
-
-  // Mock Data
-  const mockDepreciationData = [
-    {
-      id: 1,
-      name: 'Laptop Asus ROG',
-      price: 25000000,
-      year: 2023,
-      value: 15000000,
-      depreciation: 5000000,
-    },
-    {
-      id: 2,
-      name: 'Proyektor Epson',
-      price: 8000000,
-      year: 2022,
-      value: 4000000,
-      depreciation: 2000000,
-    },
-    {
-      id: 3,
-      name: 'Meja Guru',
-      price: 1500000,
-      year: 2020,
-      value: 500000,
-      depreciation: 250000,
-    },
-  ]
+  // Fetch data penyusutan
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['depreciation', filters],
+    queryFn: () =>
+      getDepreciationList({
+        year: parseInt(filters.year),
+        month: parseInt(filters.month),
+        category_id: filters.category ? parseInt(filters.category) : undefined,
+      }),
+  })
 
   return (
     <div className="container mx-auto max-w-6xl space-y-6 p-6">
@@ -127,178 +57,109 @@ export default function DepreciationListPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Penyusutan Aset</h1>
           <p className="text-gray-500">
-            Perhitungan penyusutan nilai aset per tahun
+            Laporan penyusutan nilai aset bulanan (View Only)
           </p>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Filter & Konfigurasi</CardTitle>
-
-            <div className="flex items-center gap-2">
-              {availablePresets.length > 0 && (
-                <Select
-                  value={selectedPresetId}
-                  onValueChange={handleLoadPreset}
-                >
-                  <SelectTrigger className="w-[200px]">
-                    <SelectValue placeholder="Pilih Preset..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availablePresets.map((preset) => (
-                      <SelectItem
-                        key={preset.id}
-                        value={preset.id}
-                        className="group"
-                      >
-                        <div className="flex items-center justify-between w-full gap-2">
-                          <span>{preset.name}</span>
-                          <button
-                            onClick={(e) => handleDeletePreset(e, preset.id)}
-                            className="text-gray-400 hover:text-red-500 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-
-              <Dialog open={isPresetDialogOpen} onOpenChange={setIsPresetDialogOpen}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsPresetDialogOpen(true)}
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  Simpan Preset
-                </Button>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Simpan Preset Filter</DialogTitle>
-                    <DialogDescription>
-                      Simpan konfigurasi filter saat ini agar mudah digunakan
-                      kembali nanti.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="py-4">
-                    <Label htmlFor="presetName">Nama Preset</Label>
-                    <Input
-                      id="presetName"
-                      value={presetName}
-                      onChange={(e) => setPresetName(e.target.value)}
-                      placeholder="Contoh: Penyusutan Elektronik 2024"
-                      className="mt-2"
-                    />
-                  </div>
-                  <DialogFooter>
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsPresetDialogOpen(false)}
-                    >
-                      Batal
-                    </Button>
-                    <Button onClick={handleSavePreset} disabled={!presetName}>
-                      Simpan
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
+          <CardTitle>Filter Data</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="year">Tahun Hitung</Label>
-                <Input
-                  id="year"
-                  type="number"
-                  {...register('year')}
-                  placeholder="2024"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="category">Kategori Aset</Label>
-                <Select
-                  value={filters.category}
-                  onValueChange={(val) => setValue('category', val)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Semua Kategori" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Semua Kategori</SelectItem>
-                    <SelectItem value="elektronik">Elektronik</SelectItem>
-                    <SelectItem value="furniture">Furniture</SelectItem>
-                    <SelectItem value="kendaraan">Kendaraan</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="method">Metode Penyusutan</Label>
-                <Select
-                  value={filters.method}
-                  onValueChange={(val) => setValue('method', val)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih Metode" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="straight_line">Garis Lurus</SelectItem>
-                    <SelectItem value="declining_balance">Saldo Menurun</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="year">Tahun</Label>
+              <Input
+                id="year"
+                type="number"
+                {...register('year')}
+                placeholder="2024"
+              />
             </div>
 
-            <div className="flex justify-end gap-2">
-              <Button type="submit">
-                <Calculator className="w-4 h-4 mr-2" />
-                Hitung Penyusutan
-              </Button>
+            <div className="space-y-2">
+              <Label htmlFor="month">Bulan</Label>
+              <Select
+                value={filters.month}
+                onValueChange={(val) => setValue('month', val)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih Bulan" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                    <SelectItem key={m} value={m.toString()}>
+                      {new Date(0, m - 1).toLocaleString('id-ID', {
+                        month: 'long',
+                      })}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          </form>
 
-          {/* Tabel hasil mock */}
-          <div className="mt-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Hasil Perhitungan (Mock)</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nama Aset</TableHead>
-                      <TableHead>Harga</TableHead>
-                      <TableHead>Tahun</TableHead>
-                      <TableHead>Nilai Saat Ini</TableHead>
-                      <TableHead>Penyusutan Tahun Ini</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {mockDepreciationData.map((item) => (
-                      <TableRow key={item.id}>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>Rp {item.price.toLocaleString('id-ID')}</TableCell>
-                        <TableCell>{item.year}</TableCell>
-                        <TableCell>Rp {item.value.toLocaleString('id-ID')}</TableCell>
-                        <TableCell>Rp {item.depreciation.toLocaleString('id-ID')}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+            <div className="space-y-2">
+              <Label htmlFor="category">Kategori (ID)</Label>
+              <Input
+                id="category"
+                {...register('category')}
+                placeholder="ID Kategori (Opsional)"
+              />
+            </div>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Daftar Penyusutan</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="flex justify-center py-8">
+              <Loading />
+            </div>
+          ) : isError ? (
+            <Alert variant="destructive">
+              <AlertDescription>
+                Gagal memuat data penyusutan. Pastikan backend berjalan.
+              </AlertDescription>
+            </Alert>
+          ) : data?.data.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              Tidak ada data penyusutan untuk periode ini.
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Kode Aset</TableHead>
+                  <TableHead>Nama Aset</TableHead>
+                  <TableHead>Kategori</TableHead>
+                  <TableHead className="text-right">Nilai Buku</TableHead>
+                  <TableHead className="text-right">Penyusutan (Bln)</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data?.data.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="font-medium">
+                      {item.asset_code}
+                    </TableCell>
+                    <TableCell>{item.asset_name}</TableCell>
+                    <TableCell>{item.category_name || '-'}</TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(item.book_value)}
+                    </TableCell>
+                    <TableCell className="text-right font-medium text-red-600">
+                      {formatCurrency(item.depreciation_value)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>

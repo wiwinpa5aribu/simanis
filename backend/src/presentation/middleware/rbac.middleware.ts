@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyRequest } from 'fastify';
 import { ForbiddenError } from '../../shared/errors/forbidden-error';
 
 /**
@@ -6,7 +6,7 @@ import { ForbiddenError } from '../../shared/errors/forbidden-error';
  * Checks if user has required role
  */
 export function rbacMiddleware(allowedRoles: string[]) {
-    return async (request: FastifyRequest, reply: FastifyReply) => {
+    return async (request: FastifyRequest) => {
         const user = request.user;
 
         if (!user) {

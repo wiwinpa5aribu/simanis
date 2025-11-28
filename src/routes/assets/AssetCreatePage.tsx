@@ -29,6 +29,7 @@ export function AssetCreatePage() {
     handleSubmit,
     formState: { errors },
   } = useForm<AssetFormValues>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(assetSchema) as any, // Bypass type mismatch for coerced values
     defaultValues: {
       kondisi: 'Baik',

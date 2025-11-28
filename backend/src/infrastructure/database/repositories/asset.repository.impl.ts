@@ -17,6 +17,7 @@ export class AssetRepositoryImpl implements IAssetRepository {
         const { page, pageSize, filters } = params;
         const skip = calculateSkip(page, pageSize);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const where: any = {
             isDeleted: filters?.isDeleted ?? false,
         };
@@ -139,6 +140,7 @@ export class AssetRepositoryImpl implements IAssetRepository {
     }
 
     async count(filters?: AssetFilters): Promise<number> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const where: any = {
             isDeleted: filters?.isDeleted ?? false,
         };

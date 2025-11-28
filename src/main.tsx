@@ -1,6 +1,6 @@
 /**
  * Main Entry Point - Titik masuk utama aplikasi SIMANIS
- * Menginisialisasi React, React Query, dan Router
+ * Menginisialisasi React, React Query, Router, dan Error Tracking
  */
 
 import { StrictMode } from 'react'
@@ -16,6 +16,11 @@ import './styles/index.css'
 import App from './App.tsx'
 import { logEnvironment } from './libs/utils/env'
 import { logger } from './libs/utils/logger'
+import { initSentry } from './libs/sentry'
+import { ErrorBoundary } from './components/ErrorBoundary'
+
+// Initialize Sentry for error tracking (production only)
+initSentry()
 
 // Log environment configuration (development only)
 logEnvironment()
@@ -81,11 +86,13 @@ try {
 
   createRoot(rootElement).render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </QueryClientProvider>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ErrorBoundary>
     </StrictMode>
   )
 

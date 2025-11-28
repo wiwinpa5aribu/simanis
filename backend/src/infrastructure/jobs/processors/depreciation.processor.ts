@@ -1,10 +1,9 @@
-import { Job } from 'bullmq';
 import { PrismaClient } from '@prisma/client';
 import { logger } from '../../shared/logger/winston.logger';
 
 const prisma = new PrismaClient();
 
-export const depreciationProcessor = async (job: Job) => {
+export const depreciationProcessor = async () => {
     logger.info('Starting depreciation calculation job');
 
     try {

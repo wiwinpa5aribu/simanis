@@ -26,7 +26,7 @@ export class LocalStorageService implements IStorageService {
         }
     }
 
-    async upload(file: Buffer, filename: string, mimetype: string): Promise<UploadResult> {
+    async upload(file: Buffer, filename: string): Promise<UploadResult> {
         // Generate unique filename
         const timestamp = Date.now();
         const ext = path.extname(filename);

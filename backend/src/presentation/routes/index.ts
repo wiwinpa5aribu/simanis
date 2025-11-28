@@ -1,23 +1,5 @@
 import { FastifyInstance } from 'fastify';
 import { authRoutes } from './auth.routes';
-import { FastifyInstance } from 'fastify';
-import { authRoutes } from './auth.routes';
-import { categoryRoutes } from './category.routes';
-import { FastifyInstance } from 'fastify';
-import { authRoutes } from './auth.routes';
-import { FastifyInstance } from 'fastify';
-import { authRoutes } from './auth.routes';
-import { categoryRoutes } from './category.routes';
-import { assetRoutes } from './asset.routes';
-import { FastifyInstance } from 'fastify';
-import { authRoutes } from './auth.routes';
-import { FastifyInstance } from 'fastify';
-import { authRoutes } from './auth.routes';
-import { categoryRoutes } from './category.routes';
-import { FastifyInstance } from 'fastify';
-import { authRoutes } from './auth.routes';
-import { FastifyInstance } from 'fastify';
-import { authRoutes } from './auth.routes';
 import { categoryRoutes } from './category.routes';
 import { assetRoutes } from './asset.routes';
 import { loanRoutes } from './loan.routes';
@@ -27,6 +9,10 @@ import { dashboardRoutes } from './dashboard.routes';
 import { depreciationRoutes } from './depreciation.routes';
 import { reportRoutes } from './report.routes';
 import { auditRoutes } from './audit.routes';
+import { roomRoutes, floorRoomRoutes } from './room.routes';
+import { userRoutes } from './user.routes';
+import { buildingRoutes } from './building.routes';
+import { floorRoutes, buildingFloorRoutes } from './floor.routes';
 
 /**
  * Register all API routes
@@ -46,6 +32,12 @@ export async function registerRoutes(fastify: FastifyInstance) {
             await api.register(depreciationRoutes, { prefix: '/depreciation' });
             await api.register(reportRoutes, { prefix: '/reports' });
             await api.register(auditRoutes, { prefix: '/audit' });
+            await api.register(roomRoutes, { prefix: '/rooms' });
+            await api.register(userRoutes, { prefix: '/users' });
+            await api.register(buildingRoutes, { prefix: '/buildings' });
+            await api.register(floorRoutes, { prefix: '/floors' });
+            await api.register(buildingFloorRoutes, { prefix: '/buildings/:buildingId/floors' });
+            await api.register(floorRoomRoutes, { prefix: '/floors/:floorId/rooms' });
         },
         { prefix: '/api' }
     );

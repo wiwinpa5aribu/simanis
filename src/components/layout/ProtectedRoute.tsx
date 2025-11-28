@@ -5,8 +5,12 @@ import { useAuthStore } from '../../libs/store/authStore'
 // Jika user belum login (tidak ada token), redirect ke halaman login
 export function ProtectedRoute() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const checkTokenExpiry = useAuthStore((state) => state.checkTokenExpiry)
 
-  if (!isAuthenticated) {
+  // Check token expiry synchronously
+  const isTokenValid = isAuthenticated ? checkTokenExpiry() : false
+
+  if (!isAuthenticated || !isTokenValid) {
     return <Navigate to="/login" replace />
   }
 

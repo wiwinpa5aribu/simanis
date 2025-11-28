@@ -23,7 +23,7 @@ export const getQueue = (name: string): Queue => {
     return queues[name];
 };
 
-export const createWorker = (name: string, processor: (job: Job) => Promise<any>) => {
+export const createWorker = (name: string, processor: (job: Job) => Promise<unknown>) => {
     const worker = new Worker(name, processor, { connection });
 
     worker.on('completed', (job) => {

@@ -4,7 +4,7 @@
  * Dilengkapi dengan interceptor untuk logging dan error handling
  */
 
-import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
+import axios, { type AxiosError, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios'
 import { useAuthStore } from '../store/authStore'
 import { env } from '../utils/env'
 import { logger } from '../utils/logger'
@@ -64,7 +64,7 @@ api.interceptors.request.use(
  * Menangani response sukses dan error secara global
  */
 api.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse) => {
     // Log response sukses
     logger.apiResponse(
       response.config.method || 'GET',
@@ -72,6 +72,18 @@ api.interceptors.response.use(
       response.status,
       response.data
     )
+
+    // Unwrap backend response format { success: true, data: T, meta?: ... }
+    // Jika response memiliki format wrapper, extract data-nya
+    if (response.data && typeof response.data === 'object' && 'success' in response.data && 'data' in response.data) {
+      // Preserve meta for pagination if exists
+      const meta = response.data.meta
+      response.data = response.data.data
+      if (meta) {
+        // Attach meta to response for pagination handling
+        ;(response as AxiosResponse & { meta?: unknown }).meta = meta
+      }
+    }
 
     return response
   },

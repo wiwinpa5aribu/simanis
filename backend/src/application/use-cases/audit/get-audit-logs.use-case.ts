@@ -8,7 +8,7 @@ export interface AuditLogListDto {
         entityId: number;
         action: string;
         timestamp: Date;
-        details: any;
+        details: Record<string, unknown>;
         user: {
             id: number;
             name: string;

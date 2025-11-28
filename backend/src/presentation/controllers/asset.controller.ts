@@ -3,8 +3,9 @@ import { PrismaClient } from '@prisma/client';
 import { GetAssetsUseCase } from '../../application/use-cases/assets/get-assets.use-case';
 import { CreateAssetUseCase } from '../../application/use-cases/assets/create-asset.use-case';
 import { AssetRepositoryImpl } from '../../infrastructure/database/repositories/asset.repository.impl';
-import { createAssetSchema } from '../../application/validators/asset.validators';
+import { createAssetSchema, updateAssetSchema } from '../../application/validators/asset.validators';
 import { ValidationError } from '../../shared/errors/validation-error';
+import { NotFoundError } from '../../shared/errors/not-found-error';
 import { createSuccessResponse } from '../../shared/utils/response.utils';
 import { sanitizePaginationParams } from '../../shared/utils/pagination.utils';
 
@@ -16,22 +17,19 @@ export class AssetController {
      * GET /api/assets
      */
     static async getAll(request: FastifyRequest, reply: FastifyReply) {
-        const query = request.query as any;
+        const query = request.query as Record<string, string | undefined>;
 
-        // Parse pagination
         const { page, pageSize } = sanitizePaginationParams(
             query.page ? parseInt(query.page) : undefined,
             query.pageSize ? parseInt(query.pageSize) : undefined
         );
 
-        // Parse filters
         const filters = {
             categoryId: query.categoryId ? parseInt(query.categoryId) : undefined,
             kondisi: query.kondisi,
             search: query.search,
         };
 
-        // Execute use case
         const getAssetsUseCase = new GetAssetsUseCase(assetRepository);
         const result = await getAssetsUseCase.execute({ page, pageSize, filters });
 
@@ -42,18 +40,137 @@ export class AssetController {
      * POST /api/assets
      */
     static async create(request: FastifyRequest, reply: FastifyReply) {
-        // Validate input
         const result = createAssetSchema.safeParse(request.body);
         if (!result.success) {
             throw new ValidationError('Input tidak valid', result.error.errors);
         }
 
         const createdBy = request.user!.userId;
-
-        // Execute use case
         const createAssetUseCase = new CreateAssetUseCase(assetRepository);
         const asset = await createAssetUseCase.execute(result.data, createdBy);
 
         return reply.status(201).send(createSuccessResponse(asset));
+    }
+
+
+    /**
+     * GET /api/assets/:id
+     */
+    static async getById(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
+        const { id } = request.params;
+        const asset = await prisma.asset.findUnique({
+            where: { id: parseInt(id) },
+            include: { category: true }
+        });
+
+        if (!asset) {
+            throw new NotFoundError('Aset tidak ditemukan');
+        }
+
+        return reply.status(200).send(createSuccessResponse(asset));
+    }
+
+    /**
+     * GET /api/assets/by-code/:code
+     */
+    static async getByCode(request: FastifyRequest<{ Params: { code: string } }>, reply: FastifyReply) {
+        const { code } = request.params;
+        const asset = await prisma.asset.findUnique({
+            where: { kodeAset: code },
+            include: { category: true }
+        });
+
+        if (!asset) {
+            throw new NotFoundError('Aset tidak ditemukan');
+        }
+
+        return reply.status(200).send(createSuccessResponse(asset));
+    }
+
+    /**
+     * PUT /api/assets/:id
+     */
+    static async update(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
+        const { id } = request.params;
+        
+        const result = updateAssetSchema.safeParse(request.body);
+        if (!result.success) {
+            throw new ValidationError('Input tidak valid', result.error.errors);
+        }
+
+        const existing = await prisma.asset.findUnique({ where: { id: parseInt(id) } });
+        if (!existing) {
+            throw new NotFoundError('Aset tidak ditemukan');
+        }
+
+        const asset = await prisma.asset.update({
+            where: { id: parseInt(id) },
+            data: result.data,
+            include: { category: true }
+        });
+
+        return reply.status(200).send(createSuccessResponse(asset));
+    }
+
+    /**
+     * DELETE /api/assets/:id
+     */
+    static async delete(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
+        const { id } = request.params;
+
+        const existing = await prisma.asset.findUnique({ where: { id: parseInt(id) } });
+        if (!existing) {
+            throw new NotFoundError('Aset tidak ditemukan');
+        }
+
+        await prisma.asset.delete({ where: { id: parseInt(id) } });
+
+        return reply.status(200).send(createSuccessResponse({ message: 'Aset berhasil dihapus' }));
+    }
+
+    /**
+     * GET /api/assets/:id/mutations
+     */
+    static async getMutations(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
+        const { id } = request.params;
+
+        const mutations = await prisma.assetMutation.findMany({
+            where: { assetId: parseInt(id) },
+            include: { fromRoom: true, toRoom: true },
+            orderBy: { mutatedAt: 'desc' }
+        });
+
+        return reply.status(200).send(createSuccessResponse(mutations));
+    }
+
+    /**
+     * POST /api/assets/:id/mutations
+     */
+    static async createMutation(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
+        const { id } = request.params;
+        const { toRoomId, note } = request.body as { toRoomId: number; note?: string };
+
+        const asset = await prisma.asset.findUnique({ where: { id: parseInt(id) } });
+        if (!asset) {
+            throw new NotFoundError('Aset tidak ditemukan');
+        }
+
+        const mutation = await prisma.assetMutation.create({
+            data: {
+                assetId: parseInt(id),
+                fromRoomId: asset.currentRoomId,
+                toRoomId,
+                note
+            },
+            include: { fromRoom: true, toRoom: true }
+        });
+
+        // Update asset location
+        await prisma.asset.update({
+            where: { id: parseInt(id) },
+            data: { currentRoomId: toRoomId }
+        });
+
+        return reply.status(201).send(createSuccessResponse(mutation));
     }
 }

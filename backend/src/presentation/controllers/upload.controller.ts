@@ -1,5 +1,4 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { MultipartFile } from '@fastify/multipart';
 import { LocalStorageService } from '../../infrastructure/storage/local-storage.service';
 import { R2StorageService } from '../../infrastructure/storage/r2-storage.service';
 import { IStorageService } from '../../infrastructure/storage/storage.interface';

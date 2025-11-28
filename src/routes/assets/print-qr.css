@@ -1,0 +1,84 @@
+/* Print-optimized styles for QR Code page */
+
+/* Screen styles */
+.qr-print-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.qr-card {
+  width: 100%;
+  min-height: 180px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Print styles */
+@media print {
+  /* Hide navigation and non-essential elements */
+  nav,
+  header,
+  aside,
+  .sidebar,
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  /* Reset page margins */
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .qr-print-page {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Grid layout for A4 - 4 columns */
+  .qr-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+    width: 100%;
+  }
+
+  /* QR Card print styles */
+  .qr-card {
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    padding: 8px !important;
+    min-height: 160px;
+    background: white !important;
+  }
+
+  .qr-code-container {
+    margin-bottom: 8px;
+  }
+
+  .qr-code {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  /* Text styles for print */
+  .qr-card p {
+    font-size: 10px !important;
+    margin: 2px 0 !important;
+  }
+
+  .qr-card p:first-of-type {
+    font-weight: bold !important;
+    font-size: 11px !important;
+  }
+}

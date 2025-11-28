@@ -1,0 +1,20 @@
+# CODEOWNERS - Define who reviews what
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything
+* @wiwinpa5aribu
+
+# Frontend specific
+/src/ @wiwinpa5aribu
+/public/ @wiwinpa5aribu
+/*.config.* @wiwinpa5aribu
+
+# Backend specific
+/backend/ @wiwinpa5aribu
+
+# Infrastructure & CI/CD
+/.github/ @wiwinpa5aribu
+/docker* @wiwinpa5aribu
+
+# Database schema changes require extra review
+/backend/prisma/ @wiwinpa5aribu

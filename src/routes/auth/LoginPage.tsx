@@ -10,6 +10,7 @@ import {
 } from '../../libs/validation/authSchemas'
 import { useAuthStore } from '../../libs/store/authStore'
 import { getErrorMessage } from '../../libs/utils/errorHandling'
+import { Checkbox } from '../../components/ui/checkbox'
 
 // Komponen Halaman Login
 // Menangani input user, validasi, dan pemanggilan API login
@@ -24,14 +25,19 @@ export function LoginPage() {
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      username: '',
+      password: '',
+      rememberMe: false,
+    },
   })
 
   // Setup Mutation untuk Login API
   const loginMutation = useMutation({
     mutationFn: loginApi,
-    onSuccess: (data) => {
-      // Simpan user & token ke store global
-      setAuth(data.user, data.token)
+    onSuccess: (data, variables) => {
+      // Simpan user & token ke store global dengan rememberMe option
+      setAuth(data.user, data.token, variables.rememberMe)
       // Redirect ke halaman aset
       navigate('/assets')
     },
@@ -50,7 +56,8 @@ export function LoginPage() {
   const handleDemoLogin = () => {
     setAuth(
       { id: '1', username: 'demo', name: 'Demo User', role: 'admin' },
-      'demo-token-123'
+      'demo-token-123',
+      true // Remember me untuk demo
     )
     navigate('/assets')
   }
@@ -132,6 +139,21 @@ export function LoginPage() {
                   {errors.password.message}
                 </p>
               )}
+            </div>
+
+            {/* Remember Me Checkbox */}
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="rememberMe"
+                {...register('rememberMe')}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <label
+                htmlFor="rememberMe"
+                className="text-sm text-gray-700 cursor-pointer select-none"
+              >
+                Ingat Saya
+              </label>
             </div>
 
             {/* Submit Button */}

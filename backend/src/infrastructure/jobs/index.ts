@@ -4,6 +4,8 @@ import { logger } from '../../shared/logger/winston.logger';
 
 export const initializeJobs = async () => {
     try {
+        logger.info('Attempting to initialize background jobs...');
+
         // Initialize queues
         const depreciationQueue = getQueue(QUEUE_NAMES.DEPRECIATION);
 
@@ -23,9 +25,9 @@ export const initializeJobs = async () => {
             }
         );
 
-        logger.info('Background jobs initialized successfully');
+        logger.info('✅ Background jobs initialized successfully');
     } catch (error) {
-        logger.error('Failed to initialize background jobs', { error });
-        // Don't crash the app if Redis is not available, just log error
+        logger.warn('⚠️  Background jobs initialization failed (Redis may not be running). Server will continue without background jobs.', { error: (error as Error).message });
+        // Don't crash the app if Redis is not available, just log warning
     }
 };

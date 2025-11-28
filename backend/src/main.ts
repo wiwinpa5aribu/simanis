@@ -2,8 +2,6 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
-import fastifyStatic from '@fastify/static';
-import path from 'path';
 import { config } from './shared/config';
 import { logger } from './shared/logger/winston.logger';
 import { errorHandler } from './presentation/middleware/error-handler.middleware';
@@ -30,17 +28,6 @@ async function bootstrap() {
             },
         });
 
-        import path from 'path';
-        import fastifyStatic from '@fastify/static';
-
-        // ... inside bootstrap function ...
-
-        // Serve static files from uploads directory (for local storage)
-        await fastify.register(fastifyStatic, {
-            root: path.join(process.cwd(), 'uploads'),
-            prefix: '/uploads/',
-        });
-
         // Register global middleware
         fastify.addHook('preHandler', loggerMiddleware);
 
@@ -52,11 +39,17 @@ async function bootstrap() {
 
         // Health check endpoint
         fastify.get('/health', async () => {
-            return { status: 'ok', timestamp: new Date().toISOString() };
+            return {
+                status: 'ok',
+                timestamp: new Date().toISOString(),
+                uptime: process.uptime(),
+                environment: config.env,
+                version: process.env.npm_package_version || '1.0.0',
+            };
         });
 
-        // Initialize background jobs
-        await initializeJobs();
+        // Initialize background jobs (disabled for testing)
+        // await initializeJobs();
 
         // Start server
         const port = config.port;

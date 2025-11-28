@@ -5,9 +5,10 @@
 
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../libs/store/authStore'
-import { LogOut, Box, Layers, ClipboardList } from 'lucide-react'
+import { LogOut, Box, Layers, ClipboardList, Users } from 'lucide-react'
 import { logger } from '../../libs/utils/logger'
 import { useEffect } from 'react'
+import { OfflineBanner } from './OfflineBanner'
 
 /**
  * AppLayout - Komponen layout utama aplikasi
@@ -77,6 +78,17 @@ export function AppLayout() {
             <ClipboardList className="w-5 h-5" />
             <span>Peminjaman</span>
           </Link>
+
+          {/* Admin-only menu */}
+          {user?.role === 'admin' && (
+            <Link 
+              to="/users" 
+              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-colors"
+            >
+              <Users className="w-5 h-5" />
+              <span>Manajemen User</span>
+            </Link>
+          )}
         </nav>
 
         <div className="p-4 border-t">
@@ -94,6 +106,9 @@ export function AppLayout() {
 
       {/* Konten Utama */}
       <main className="flex-1 flex flex-col overflow-hidden">
+        {/* Offline Banner */}
+        <OfflineBanner />
+        
         {/* Header Mobile / Topbar */}
         <header className="bg-white shadow-sm h-16 flex items-center justify-between px-6 md:justify-end">
           <div className="md:hidden font-bold text-blue-600">SIMANIS</div>

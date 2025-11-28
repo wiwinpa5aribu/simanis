@@ -68,13 +68,10 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
 
     const parsed = dashboardStatsSchema.safeParse(response.data)
     if (!parsed.success) {
-      logger.warning(
-        'Dashboard API',
-        'Response tidak valid, menggunakan mock data',
-        { issues: parsed.error.issues }
-      )
-      const { mockDashboardStats } = await import('./mock/dashboard.mock')
-      return mockDashboardStats
+      logger.error('Dashboard API', 'Response tidak valid', {
+        issues: parsed.error.issues,
+      })
+      throw new Error('Response statistik dashboard tidak valid')
     }
 
     logger.success('Dashboard API', 'Berhasil mengambil statistik dashboard', {
@@ -84,15 +81,8 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
 
     return parsed.data
   } catch (error: unknown) {
-    logger.warning(
-      'Dashboard API',
-      'Gagal mengambil statistik dari backend, menggunakan mock data',
-      { error }
-    )
-
-    // Mock data untuk development (hapus saat backend siap)
-    const { mockDashboardStats } = await import('./mock/dashboard.mock')
-    return mockDashboardStats
+    logger.error('Dashboard API', 'Gagal mengambil statistik dashboard', error)
+    throw error
   }
 }
 
@@ -125,13 +115,10 @@ export const getRecentActivities = async (
 
     const parsed = recentActivitySchema.safeParse(response.data)
     if (!parsed.success) {
-      logger.warning(
-        'Dashboard API',
-        'Response aktivitas tidak valid, menggunakan mock data',
-        { issues: parsed.error.issues }
-      )
-      const { mockRecentActivities } = await import('./mock/dashboard.mock')
-      return mockRecentActivities.slice(0, limit)
+      logger.error('Dashboard API', 'Response aktivitas tidak valid', {
+        issues: parsed.error.issues,
+      })
+      throw new Error('Response aktivitas tidak valid')
     }
 
     logger.success(
@@ -141,14 +128,7 @@ export const getRecentActivities = async (
 
     return parsed.data
   } catch (error: unknown) {
-    logger.warning(
-      'Dashboard API',
-      'Gagal mengambil aktivitas dari backend, menggunakan mock data',
-      { error }
-    )
-
-    // Mock data untuk development (hapus saat backend siap)
-    const { mockRecentActivities } = await import('./mock/dashboard.mock')
-    return mockRecentActivities.slice(0, limit)
+    logger.error('Dashboard API', 'Gagal mengambil aktivitas', error)
+    throw error
   }
 }

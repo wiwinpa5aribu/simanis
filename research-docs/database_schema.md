@@ -16,6 +16,8 @@
 - `asset_documents`
 - `asset_deletions`
 - `audit_logs`
+- `password_reset_tokens`
+- `login_attempts`
 - (opsional) View: `asset_current_location`
 
 ## Definisi Tabel & Kolom
@@ -153,6 +155,25 @@
 - `field_changed` JSON NOT NULL (`model_domain.md:83`)
 - INDEX (`entity_type`, `entity_id`)
 
+### password_reset_tokens
+- `id` INTEGER PK AUTO
+- `user_id` INTEGER FK → `users.id` ON DELETE CASCADE
+- `token` VARCHAR(64) UNIQUE NOT NULL
+- `expires_at` TIMESTAMP NOT NULL
+- `used_at` TIMESTAMP
+- `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+- INDEX (`token`)
+- INDEX (`user_id`)
+
+### login_attempts
+- `id` INTEGER PK AUTO
+- `ip` VARCHAR(45) NOT NULL  — mendukung IPv6
+- `username` VARCHAR(64) NOT NULL
+- `success` BOOLEAN NOT NULL
+- `attempted_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+- INDEX (`ip`, `attempted_at`)
+- INDEX (`username`, `attempted_at`)
+
 ## Relasi & Kunci Asing
 - users (1) → (n) user_roles; roles (1) → (n) user_roles.
 - asset_categories (1) → (n) assets.
@@ -164,6 +185,7 @@
 - assets (1) → (n) asset_documents.
 - assets (1) → (1) asset_deletions (opsional ketika `is_deleted` = TRUE).
 - users (1) → (n) audit_logs.
+- users (1) → (n) password_reset_tokens.
 
 ## Indeks yang Direkomendasikan
 - `assets(kode_aset)`, `assets(qr_code)` UNIQUE untuk pencarian cepat.
@@ -208,6 +230,7 @@ erDiagram
   ASSETS ||--|| ASSET_DELETIONS : may_delete
 
   USERS ||--o{ AUDIT_LOGS : writes
+  USERS ||--o{ PASSWORD_RESET_TOKENS : requests
 
   USERS {
     int id PK
@@ -327,6 +350,21 @@ erDiagram
     string action
     datetime timestamp
     json field_changed
+  }
+  PASSWORD_RESET_TOKENS {
+    int id PK
+    int user_id FK
+    string token
+    datetime expires_at
+    datetime used_at
+    datetime created_at
+  }
+  LOGIN_ATTEMPTS {
+    int id PK
+    string ip
+    string username
+    bool success
+    datetime attempted_at
   }
 ```
 

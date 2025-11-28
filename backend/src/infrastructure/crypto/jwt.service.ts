@@ -54,11 +54,7 @@ export class JwtService {
      * Decode JWT without verification (for debugging)
      */
     decode(token: string): JwtPayload | null {
-        try {
-            return jwt.decode(token) as JwtPayload;
-        } catch (error) {
-            return null;
-        }
+        return jwt.decode(token) as JwtPayload;
     }
 }
 

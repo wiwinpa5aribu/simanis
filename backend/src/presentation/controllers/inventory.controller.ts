@@ -7,6 +7,7 @@ import { AssetRepositoryImpl } from '../../infrastructure/database/repositories/
 import { AuditRepositoryImpl } from '../../infrastructure/database/repositories/audit.repository.impl';
 import { createInventorySchema } from '../../application/validators/inventory.validators';
 import { ValidationError } from '../../shared/errors/validation-error';
+import { NotFoundError } from '../../shared/errors/not-found-error';
 import { createSuccessResponse } from '../../shared/utils/response.utils';
 import { sanitizePaginationParams } from '../../shared/utils/pagination.utils';
 
@@ -51,6 +52,8 @@ export class InventoryController {
             condition?: string;
             startDate?: string;
             endDate?: string;
+            from?: string;
+            to?: string;
         };
 
         // Parse pagination
@@ -59,19 +62,65 @@ export class InventoryController {
             query.pageSize ? parseInt(query.pageSize) : undefined
         );
 
-        // Parse filters
+        // Parse filters - support both startDate/endDate and from/to
         const filters = {
             assetId: query.assetId ? parseInt(query.assetId) : undefined,
             checkerId: query.checkerId ? parseInt(query.checkerId) : undefined,
             condition: query.condition,
-            startDate: query.startDate ? new Date(query.startDate) : undefined,
-            endDate: query.endDate ? new Date(query.endDate) : undefined,
+            startDate: query.startDate
+                ? new Date(query.startDate)
+                : query.from
+                  ? new Date(query.from)
+                  : undefined,
+            endDate: query.endDate
+                ? new Date(query.endDate)
+                : query.to
+                  ? new Date(query.to)
+                  : undefined,
         };
 
         // Execute use case
         const getInventoryUseCase = new GetInventoryUseCase(inventoryRepository);
         const result = await getInventoryUseCase.execute({ page, pageSize, filters });
 
-        return reply.status(200).send(createSuccessResponse(result.checks, result.meta));
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return reply.status(200).send(createSuccessResponse(result.checks, result.meta as any));
+    }
+
+    /**
+     * GET /api/inventory/:id - Get inventory check by ID
+     */
+    static async getById(request: FastifyRequest, reply: FastifyReply) {
+        const { id } = request.params as { id: string };
+        const inventoryId = parseInt(id);
+
+        const inventory = await prisma.inventoryCheck.findUnique({
+            where: { id: inventoryId },
+            include: {
+                asset: {
+                    select: {
+                        id: true,
+                        kodeAset: true,
+                        namaBarang: true,
+                        merk: true,
+                        kondisi: true,
+                        fotoUrl: true,
+                    },
+                },
+                checker: {
+                    select: {
+                        id: true,
+                        name: true,
+                        username: true,
+                    },
+                },
+            },
+        });
+
+        if (!inventory) {
+            throw new NotFoundError('Data inventaris tidak ditemukan');
+        }
+
+        return reply.status(200).send(createSuccessResponse(inventory));
     }
 }

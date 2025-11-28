@@ -5,3 +5,5 @@
 
 export { AssetBulkActions } from './AssetBulkActions'
 export { AssetActivityTimeline } from './AssetActivityTimeline'
+export { AssetEditForm } from './AssetEditForm'
+export { QRCodeCard } from './QRCodeCard'
