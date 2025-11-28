@@ -1,6 +1,6 @@
 /**
  * Test Setup File
- * 
+ *
  * Konfigurasi global untuk testing dengan Vitest
  */
 
@@ -40,4 +40,4 @@ globalThis.IntersectionObserver = class IntersectionObserver {
     return []
   }
   unobserve() {}
-} as any
+} as typeof IntersectionObserver
