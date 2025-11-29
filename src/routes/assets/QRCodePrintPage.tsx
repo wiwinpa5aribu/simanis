@@ -22,9 +22,8 @@ export function QRCodePrintPage() {
     queryFn: getAssets,
   })
 
-  const selectedAssets = allAssets?.filter((asset) =>
-    assetIds.includes(asset.id)
-  ) || []
+  const selectedAssets =
+    allAssets?.filter((asset) => assetIds.includes(asset.id)) || []
 
   const handlePrint = () => {
     window.print()
@@ -45,7 +44,9 @@ export function QRCodePrintPage() {
           </div>
         </div>
         <ErrorAlert message="Tidak ada aset yang dipilih. Silakan pilih aset terlebih dahulu." />
-        <Button onClick={() => navigate('/assets')}>Kembali ke Daftar Aset</Button>
+        <Button onClick={() => navigate('/assets')}>
+          Kembali ke Daftar Aset
+        </Button>
       </div>
     )
   }
@@ -71,8 +72,12 @@ export function QRCodePrintPage() {
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Print QR Code</h1>
-              <p className="text-gray-500">{selectedAssets.length} aset dipilih</p>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Print QR Code
+              </h1>
+              <p className="text-gray-500">
+                {selectedAssets.length} aset dipilih
+              </p>
             </div>
           </div>
           <Button onClick={handlePrint}>

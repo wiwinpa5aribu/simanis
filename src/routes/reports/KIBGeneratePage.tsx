@@ -53,8 +53,7 @@ export default function KIBGeneratePage() {
 
   // Preset Store
   const reportKey = 'kib-report'
-  const { addPreset, removePreset, getPresets } =
-    useReportPresetStore()
+  const { addPreset, removePreset, getPresets } = useReportPresetStore()
   const availablePresets = getPresets(reportKey)
 
   const handleSavePreset = () => {
@@ -90,7 +89,9 @@ export default function KIBGeneratePage() {
     try {
       showSuccessToast('Sedang mengunduh laporan KIB...')
 
-      const { generateAndDownloadKIBReport } = await import('@/libs/api/reports')
+      const { generateAndDownloadKIBReport } = await import(
+        '@/libs/api/reports'
+      )
 
       const blob = await generateAndDownloadKIBReport({
         year: data.year,
@@ -161,7 +162,10 @@ export default function KIBGeneratePage() {
                 </Select>
               )}
 
-              <Dialog open={isPresetDialogOpen} onOpenChange={setIsPresetDialogOpen}>
+              <Dialog
+                open={isPresetDialogOpen}
+                onOpenChange={setIsPresetDialogOpen}
+              >
                 <Button
                   variant="outline"
                   size="sm"

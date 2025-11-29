@@ -102,7 +102,9 @@ export function RecentActivities({
             <div
               key={activity.id}
               onClick={() => handleActivityClick(activity)}
-              onKeyDown={(e) => e.key === 'Enter' && handleActivityClick(activity)}
+              onKeyDown={(e) =>
+                e.key === 'Enter' && handleActivityClick(activity)
+              }
               role={activity.link ? 'button' : undefined}
               tabIndex={activity.link ? 0 : undefined}
               className={`flex gap-3 p-3 rounded-lg transition-colors ${

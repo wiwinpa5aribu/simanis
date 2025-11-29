@@ -124,10 +124,11 @@ export function LoansListPage() {
       header: 'Status',
       cell: (item) => (
         <span
-          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.status === 'Dikembalikan'
+          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+            item.status === 'Dikembalikan'
               ? 'bg-green-100 text-green-800'
               : 'bg-yellow-100 text-yellow-800'
-            }`}
+          }`}
         >
           {item.status}
         </span>

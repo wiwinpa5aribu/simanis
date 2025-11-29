@@ -1,11 +1,11 @@
 /**
  * Halaman Dashboard
- * 
+ *
  * Menampilkan statistik kunci dan aktivitas terbaru sistem SIMANIS
  */
 
-import { useEffect } from "react"
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import {
   Package,
   CheckCircle,
@@ -13,19 +13,19 @@ import {
   XCircle,
   HelpCircle,
   HandCoins,
-} from "lucide-react";
-import { getDashboardStats, getRecentActivities } from "@/libs/api/dashboard";
-import { StatCard } from "./components/StatCard";
-import { RecentActivities } from "./components/RecentActivities";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { logger } from "@/libs/utils/logger";
+} from 'lucide-react'
+import { getDashboardStats, getRecentActivities } from '@/libs/api/dashboard'
+import { StatCard } from './components/StatCard'
+import { RecentActivities } from './components/RecentActivities'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { logger } from '@/libs/utils/logger'
 
 export default function DashboardPage() {
   useEffect(() => {
-    logger.lifecycle("DashboardPage", "mount")
+    logger.lifecycle('DashboardPage', 'mount')
     return () => {
-      logger.lifecycle("DashboardPage", "unmount")
+      logger.lifecycle('DashboardPage', 'unmount')
     }
   }, [])
 
@@ -35,22 +35,19 @@ export default function DashboardPage() {
     isLoading: isLoadingStats,
     isError: isErrorStats,
   } = useQuery({
-    queryKey: ["dashboard", "stats"],
+    queryKey: ['dashboard', 'stats'],
     queryFn: getDashboardStats,
-  });
+  })
 
   // Fetch aktivitas terbaru
-  const {
-    data: activities = [],
-    isLoading: isLoadingActivities,
-  } = useQuery({
-    queryKey: ["dashboard", "activities"],
+  const { data: activities = [], isLoading: isLoadingActivities } = useQuery({
+    queryKey: ['dashboard', 'activities'],
     queryFn: () => getRecentActivities(10),
-  });
+  })
 
   useEffect(() => {
     if (!isLoadingStats && stats) {
-      logger.info("DashboardPage", "Statistik dashboard dimuat", {
+      logger.info('DashboardPage', 'Statistik dashboard dimuat', {
         totalAssets: stats.total_assets,
         activeLoans: stats.active_loans,
       })
@@ -59,7 +56,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!isLoadingActivities && activities) {
-      logger.info("DashboardPage", "Aktivitas terbaru dimuat", {
+      logger.info('DashboardPage', 'Aktivitas terbaru dimuat', {
         count: activities.length,
       })
     }
@@ -74,7 +71,7 @@ export default function DashboardPage() {
           </AlertDescription>
         </Alert>
       </div>
-    );
+    )
   }
 
   return (
@@ -91,16 +88,14 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Total Aset"
-          value={isLoadingStats ? "-" : stats?.total_assets || 0}
+          value={isLoadingStats ? '-' : stats?.total_assets || 0}
           icon={Package}
           iconColor="text-blue-600"
           iconBgColor="bg-blue-100"
         />
         <StatCard
           title="Kondisi Baik"
-          value={
-            isLoadingStats ? "-" : stats?.assets_by_condition?.Baik || 0
-          }
+          value={isLoadingStats ? '-' : stats?.assets_by_condition?.Baik || 0}
           icon={CheckCircle}
           iconColor="text-green-600"
           iconBgColor="bg-green-100"
@@ -109,9 +104,9 @@ export default function DashboardPage() {
           title="Rusak / Hilang"
           value={
             isLoadingStats
-              ? "-"
-              : (stats?.assets_by_condition?.["Rusak Ringan"] || 0) +
-                (stats?.assets_by_condition?.["Rusak Berat"] || 0) +
+              ? '-'
+              : (stats?.assets_by_condition?.['Rusak Ringan'] || 0) +
+                (stats?.assets_by_condition?.['Rusak Berat'] || 0) +
                 (stats?.assets_by_condition?.Hilang || 0)
           }
           icon={AlertTriangle}
@@ -120,7 +115,7 @@ export default function DashboardPage() {
         />
         <StatCard
           title="Peminjaman Aktif"
-          value={isLoadingStats ? "-" : stats?.active_loans || 0}
+          value={isLoadingStats ? '-' : stats?.active_loans || 0}
           icon={HandCoins}
           iconColor="text-purple-600"
           iconBgColor="bg-purple-100"
@@ -157,7 +152,7 @@ export default function DashboardPage() {
                     </span>
                   </div>
                   <span className="text-lg font-bold text-yellow-600">
-                    {stats?.assets_by_condition?.["Rusak Ringan"] || 0}
+                    {stats?.assets_by_condition?.['Rusak Ringan'] || 0}
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
@@ -168,7 +163,7 @@ export default function DashboardPage() {
                     </span>
                   </div>
                   <span className="text-lg font-bold text-orange-600">
-                    {stats?.assets_by_condition?.["Rusak Berat"] || 0}
+                    {stats?.assets_by_condition?.['Rusak Berat'] || 0}
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
@@ -231,5 +226,5 @@ export default function DashboardPage() {
         isLoading={isLoadingActivities}
       />
     </div>
-  );
+  )
 }

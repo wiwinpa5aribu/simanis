@@ -10,29 +10,29 @@
  * - onCancel: callback saat batal
  */
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 
 import {
   inventoryCreateSchema,
   type InventoryCreateInput,
-} from "@/libs/validation/inventorySchemas";
-import { createInventory } from "@/libs/api/inventory";
-import { FileUpload } from "@/components/uploads/FileUpload";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+} from '@/libs/validation/inventorySchemas'
+import { createInventory } from '@/libs/api/inventory'
+import { FileUpload } from '@/components/uploads/FileUpload'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Loader2 } from 'lucide-react'
 
 interface InventoryFormProps {
-  assetId: number;
-  assetCode: string;
-  assetName: string;
-  onSuccess?: () => void;
-  onCancel?: () => void;
+  assetId: number
+  assetCode: string
+  assetName: string
+  onSuccess?: () => void
+  onCancel?: () => void
 }
 
 export function InventoryForm({
@@ -42,8 +42,8 @@ export function InventoryForm({
   onSuccess,
   onCancel,
 }: InventoryFormProps) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const queryClient = useQueryClient();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const queryClient = useQueryClient()
 
   const {
     register,
@@ -56,35 +56,35 @@ export function InventoryForm({
     defaultValues: {
       asset_id: assetId,
     },
-  });
+  })
 
   const mutation = useMutation({
     mutationFn: createInventory,
     onSuccess: () => {
       // Invalidate inventory list query
-      queryClient.invalidateQueries({ queryKey: ["inventory"] });
+      queryClient.invalidateQueries({ queryKey: ['inventory'] })
 
       // Reset form
-      reset();
-      setSelectedFile(null);
+      reset()
+      setSelectedFile(null)
 
       // Callback
-      if (onSuccess) onSuccess();
+      if (onSuccess) onSuccess()
     },
-  });
+  })
 
   const onSubmit = (data: InventoryCreateInput) => {
     mutation.mutate({
       asset_id: data.asset_id,
       photo: selectedFile || undefined,
       note: data.note,
-    });
-  };
+    })
+  }
 
   const handleFileUpload = (file: File) => {
-    setSelectedFile(file);
-    setValue("photo", file);
-  };
+    setSelectedFile(file)
+    setValue('photo', file)
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -115,7 +115,7 @@ export function InventoryForm({
           id="note"
           placeholder="Tambahkan catatan kondisi atau lokasi aset..."
           rows={4}
-          {...register("note")}
+          {...register('note')}
         />
         {errors.note && (
           <p className="text-sm text-destructive">{errors.note.message}</p>
@@ -129,7 +129,7 @@ export function InventoryForm({
           <AlertDescription>
             {mutation.error instanceof Error
               ? mutation.error.message
-              : "Gagal menyimpan inventarisasi"}
+              : 'Gagal menyimpan inventarisasi'}
           </AlertDescription>
         </Alert>
       )}
@@ -156,5 +156,5 @@ export function InventoryForm({
         </Button>
       </div>
     </form>
-  );
+  )
 }

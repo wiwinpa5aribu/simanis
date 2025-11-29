@@ -1,7 +1,12 @@
 import { z } from 'zod'
 
 // Enum Kondisi Aset
-export const ASSET_CONDITIONS = ['Baik', 'Rusak Ringan', 'Rusak Berat', 'Hilang'] as const
+export const ASSET_CONDITIONS = [
+  'Baik',
+  'Rusak Ringan',
+  'Rusak Berat',
+  'Hilang',
+] as const
 
 // Skema validasi untuk form aset (Minimal)
 export const assetSchema = z.object({

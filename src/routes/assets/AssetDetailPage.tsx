@@ -159,7 +159,7 @@ export function AssetDetailPage() {
               <ImageIcon className="w-5 h-5 text-green-600" />
               <h3 className="text-lg font-semibold text-gray-900">Foto Aset</h3>
             </div>
-            
+
             {/* Tampilkan foto saat ini jika ada */}
             {asset.photo_url && (
               <div className="mb-4">

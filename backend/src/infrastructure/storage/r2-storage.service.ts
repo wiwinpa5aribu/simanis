@@ -8,62 +8,62 @@ import { logger } from '../../shared/logger/winston.logger';
  * Uses S3-compatible API
  */
 export class R2StorageService implements IStorageService {
-    private client: S3Client;
-    private bucketName: string;
-    private publicUrl: string;
+  private client: S3Client;
+  private bucketName: string;
+  private publicUrl: string;
 
-    constructor() {
-        this.bucketName = config.r2.bucketName;
-        this.publicUrl = config.r2.publicUrl;
+  constructor() {
+    this.bucketName = config.r2.bucketName;
+    this.publicUrl = config.r2.publicUrl;
 
-        this.client = new S3Client({
-            region: 'auto',
-            endpoint: config.r2.endpoint,
-            credentials: {
-                accessKeyId: config.r2.accessKeyId,
-                secretAccessKey: config.r2.secretAccessKey,
-            },
-        });
+    this.client = new S3Client({
+      region: 'auto',
+      endpoint: config.r2.endpoint,
+      credentials: {
+        accessKeyId: config.r2.accessKeyId,
+        secretAccessKey: config.r2.secretAccessKey,
+      },
+    });
+  }
+
+  async upload(file: Buffer, filename: string, mimetype: string): Promise<UploadResult> {
+    // Generate unique key
+    const timestamp = Date.now();
+    const key = `${timestamp}-${filename}`;
+
+    const command = new PutObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+      Body: file,
+      ContentType: mimetype,
+    });
+
+    await this.client.send(command);
+
+    logger.info('File uploaded to R2', { key, size: file.length });
+
+    return {
+      url: `${this.publicUrl}/${key}`,
+      key,
+      size: file.length,
+    };
+  }
+
+  async delete(key: string): Promise<void> {
+    const command = new DeleteObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+
+    try {
+      await this.client.send(command);
+      logger.info('File deleted from R2', { key });
+    } catch (error) {
+      logger.warn('Failed to delete file from R2', { key, error });
     }
+  }
 
-    async upload(file: Buffer, filename: string, mimetype: string): Promise<UploadResult> {
-        // Generate unique key
-        const timestamp = Date.now();
-        const key = `${timestamp}-${filename}`;
-
-        const command = new PutObjectCommand({
-            Bucket: this.bucketName,
-            Key: key,
-            Body: file,
-            ContentType: mimetype,
-        });
-
-        await this.client.send(command);
-
-        logger.info('File uploaded to R2', { key, size: file.length });
-
-        return {
-            url: `${this.publicUrl}/${key}`,
-            key,
-            size: file.length,
-        };
-    }
-
-    async delete(key: string): Promise<void> {
-        const command = new DeleteObjectCommand({
-            Bucket: this.bucketName,
-            Key: key,
-        });
-
-        try {
-            await this.client.send(command);
-            logger.info('File deleted from R2', { key });
-        } catch (error) {
-            logger.warn('Failed to delete file from R2', { key, error });
-        }
-    }
-
-    getUrl(key: string): string {
-        return `${this.publicUrl}/${key}`;
-    }
+  getUrl(key: string): string {
+    return `${this.publicUrl}/${key}`;
+  }
 }

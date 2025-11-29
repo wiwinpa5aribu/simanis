@@ -4,7 +4,11 @@
  */
 
 import { api } from './client'
-import type { LoanFormValues, Loan, LoanDetail } from '../validation/loanSchemas'
+import type {
+  LoanFormValues,
+  Loan,
+  LoanDetail,
+} from '../validation/loanSchemas'
 import { logger } from '../utils/logger'
 import { ERROR_MESSAGES } from '../../constants'
 import { getErrorMessage } from '../utils/errorHandling'
@@ -97,11 +101,18 @@ export const getLoanById = async (id: number): Promise<LoanDetail> => {
       throw new Error('Peminjaman tidak ditemukan')
     }
 
-    logger.success('Loans API', `Berhasil mengambil detail peminjaman ID: ${id}`)
+    logger.success(
+      'Loans API',
+      `Berhasil mengambil detail peminjaman ID: ${id}`
+    )
 
     return response.data
   } catch (error: unknown) {
-    logger.error('Loans API', `Gagal mengambil peminjaman dengan ID: ${id}`, error)
+    logger.error(
+      'Loans API',
+      `Gagal mengambil peminjaman dengan ID: ${id}`,
+      error
+    )
     throw new Error(getErrorMessage(error) || ERROR_MESSAGES.NOT_FOUND)
   }
 }

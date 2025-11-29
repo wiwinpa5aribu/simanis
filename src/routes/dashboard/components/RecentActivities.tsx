@@ -1,25 +1,25 @@
 /**
  * Komponen RecentActivities
- * 
+ *
  * Menampilkan daftar aktivitas terbaru dengan link ke detail
  */
 
-import { Link } from "react-router-dom";
-import { formatDistanceToNow } from "date-fns";
-import { id as localeId } from "date-fns/locale";
+import { Link } from 'react-router-dom'
+import { formatDistanceToNow } from 'date-fns'
+import { id as localeId } from 'date-fns/locale'
 import {
   Package,
   ArrowRight,
   HandCoins,
   QrCode,
   ChevronRight,
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { RecentActivity } from "@/libs/api/dashboard";
+} from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import type { RecentActivity } from '@/libs/api/dashboard'
 
 interface RecentActivitiesProps {
-  activities: RecentActivity[];
-  isLoading?: boolean;
+  activities: RecentActivity[]
+  isLoading?: boolean
 }
 
 const activityIcons = {
@@ -27,14 +27,14 @@ const activityIcons = {
   mutation: ArrowRight,
   loan: HandCoins,
   inventory: QrCode,
-};
+}
 
 const activityColors = {
-  asset: "text-green-600 bg-green-100",
-  mutation: "text-blue-600 bg-blue-100",
-  loan: "text-purple-600 bg-purple-100",
-  inventory: "text-orange-600 bg-orange-100",
-};
+  asset: 'text-green-600 bg-green-100',
+  mutation: 'text-blue-600 bg-blue-100',
+  loan: 'text-purple-600 bg-purple-100',
+  inventory: 'text-orange-600 bg-orange-100',
+}
 
 export function RecentActivities({
   activities,
@@ -52,7 +52,7 @@ export function RecentActivities({
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   if (activities.length === 0) {
@@ -67,7 +67,7 @@ export function RecentActivities({
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
@@ -78,8 +78,8 @@ export function RecentActivities({
       <CardContent>
         <div className="space-y-3">
           {activities.map((activity) => {
-            const Icon = activityIcons[activity.type];
-            const colorClass = activityColors[activity.type];
+            const Icon = activityIcons[activity.type]
+            const colorClass = activityColors[activity.type]
 
             const activityContent = (
               <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
@@ -104,24 +104,20 @@ export function RecentActivities({
                   <ChevronRight className="h-5 w-5 text-gray-400 flex-shrink-0" />
                 )}
               </div>
-            );
+            )
 
             if (activity.link) {
               return (
-                <Link
-                  key={activity.id}
-                  to={activity.link}
-                  className="block"
-                >
+                <Link key={activity.id} to={activity.link} className="block">
                   {activityContent}
                 </Link>
-              );
+              )
             }
 
-            return <div key={activity.id}>{activityContent}</div>;
+            return <div key={activity.id}>{activityContent}</div>
           })}
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

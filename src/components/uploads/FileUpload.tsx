@@ -13,144 +13,144 @@
  * - disabled: status disabled
  */
 
-import { useState, useRef, type ChangeEvent } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Upload, X, FileIcon } from "lucide-react";
+import { useState, useRef, type ChangeEvent } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Progress } from '@/components/ui/progress'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Upload, X, FileIcon } from 'lucide-react'
 
 interface FileUploadProps {
-  accept?: string;
-  maxSizeMB?: number;
-  onUpload: (file: File) => void | Promise<void>;
-  onProgress?: (progress: number) => void;
-  label?: string;
-  disabled?: boolean;
-  currentFile?: string; // URL file saat ini (untuk preview)
+  accept?: string
+  maxSizeMB?: number
+  onUpload: (file: File) => void | Promise<void>
+  onProgress?: (progress: number) => void
+  label?: string
+  disabled?: boolean
+  currentFile?: string // URL file saat ini (untuk preview)
 }
 
 export function FileUpload({
-  accept = "image/*",
+  accept = 'image/*',
   maxSizeMB = 5,
   onUpload,
   onProgress,
-  label = "Upload File",
+  label = 'Upload File',
   disabled = false,
   currentFile,
 }: FileUploadProps) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(currentFile || null);
-  const [error, setError] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(currentFile || null)
+  const [error, setError] = useState<string | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const validateFile = (file: File): string | null => {
     // Validasi ukuran file
-    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    const maxSizeBytes = maxSizeMB * 1024 * 1024
     if (file.size > maxSizeBytes) {
-      return `Ukuran file melebihi batas maksimal ${maxSizeMB}MB`;
+      return `Ukuran file melebihi batas maksimal ${maxSizeMB}MB`
     }
 
     // Validasi tipe file
-    if (accept && accept !== "*") {
-      const acceptedTypes = accept.split(",").map((t) => t.trim());
-      const fileType = file.type;
-      const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
+    if (accept && accept !== '*') {
+      const acceptedTypes = accept.split(',').map((t) => t.trim())
+      const fileType = file.type
+      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
 
       const isAccepted = acceptedTypes.some((type) => {
-        if (type.endsWith("/*")) {
+        if (type.endsWith('/*')) {
           // Wildcard type (contoh: image/*)
-          const baseType = type.split("/")[0];
-          return fileType.startsWith(baseType + "/");
-        } else if (type.startsWith(".")) {
+          const baseType = type.split('/')[0]
+          return fileType.startsWith(baseType + '/')
+        } else if (type.startsWith('.')) {
           // Extension (contoh: .pdf)
-          return fileExtension === type.toLowerCase();
+          return fileExtension === type.toLowerCase()
         } else {
           // Exact type (contoh: image/jpeg)
-          return fileType === type;
+          return fileType === type
         }
-      });
+      })
 
       if (!isAccepted) {
-        return `Tipe file tidak didukung. Hanya menerima: ${accept}`;
+        return `Tipe file tidak didukung. Hanya menerima: ${accept}`
       }
     }
 
-    return null;
-  };
+    return null
+  }
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const file = e.target.files?.[0]
+    if (!file) return
 
     // Reset state
-    setError(null);
-    setProgress(0);
+    setError(null)
+    setProgress(0)
 
     // Validasi file
-    const validationError = validateFile(file);
+    const validationError = validateFile(file)
     if (validationError) {
-      setError(validationError);
-      return;
+      setError(validationError)
+      return
     }
 
-    setSelectedFile(file);
+    setSelectedFile(file)
 
     // Buat preview untuk gambar
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader()
       reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+        setPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
     } else {
-      setPreview(null);
+      setPreview(null)
     }
 
     // Upload file
     try {
-      setUploading(true);
+      setUploading(true)
 
       // Simulasi progress jika onProgress disediakan
       if (onProgress) {
         const interval = setInterval(() => {
           setProgress((prev) => {
-            const next = prev + 10;
+            const next = prev + 10
             if (next >= 90) {
-              clearInterval(interval);
-              return 90;
+              clearInterval(interval)
+              return 90
             }
-            onProgress(next);
-            return next;
-          });
-        }, 100);
+            onProgress(next)
+            return next
+          })
+        }, 100)
       }
 
-      await onUpload(file);
+      await onUpload(file)
 
-      setProgress(100);
-      if (onProgress) onProgress(100);
+      setProgress(100)
+      if (onProgress) onProgress(100)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Gagal mengupload file");
-      setSelectedFile(null);
-      setPreview(currentFile || null);
+      setError(err instanceof Error ? err.message : 'Gagal mengupload file')
+      setSelectedFile(null)
+      setPreview(currentFile || null)
     } finally {
-      setUploading(false);
+      setUploading(false)
     }
-  };
+  }
 
   const handleRemove = () => {
-    setSelectedFile(null);
-    setPreview(null);
-    setError(null);
-    setProgress(0);
+    setSelectedFile(null)
+    setPreview(null)
+    setError(null)
+    setProgress(0)
     if (inputRef.current) {
-      inputRef.current.value = "";
+      inputRef.current.value = ''
     }
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -177,7 +177,7 @@ export function FileUpload({
             className="w-full"
           >
             <Upload className="mr-2 h-4 w-4" />
-            {selectedFile ? "Ganti File" : "Pilih File"}
+            {selectedFile ? 'Ganti File' : 'Pilih File'}
           </Button>
         </div>
 
@@ -241,5 +241,5 @@ export function FileUpload({
         </p>
       </div>
     </div>
-  );
+  )
 }

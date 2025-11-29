@@ -154,9 +154,14 @@ export const getAuditLogById = async (id: number): Promise<AuditLog> => {
 
     const parsed = auditLogSchema.safeParse(response.data)
     if (!parsed.success) {
-      logger.error('Audit API', 'Response audit log detail tidak valid', undefined, {
-        issues: parsed.error.issues,
-      })
+      logger.error(
+        'Audit API',
+        'Response audit log detail tidak valid',
+        undefined,
+        {
+          issues: parsed.error.issues,
+        }
+      )
       throw new Error(ERROR_MESSAGES.SERVER_ERROR)
     }
 

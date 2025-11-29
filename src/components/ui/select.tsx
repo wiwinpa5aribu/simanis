@@ -7,7 +7,8 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   onValueChange?: (value: string) => void
 }
 
-interface SelectTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface SelectTriggerProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
 }
 
@@ -42,7 +43,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
 Select.displayName = 'Select'
 
-export function SelectTrigger({ children, className = '', ...props }: SelectTriggerProps) {
+export function SelectTrigger({
+  children,
+  className = '',
+  ...props
+}: SelectTriggerProps) {
   return (
     <button
       className={`flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ${className}`}
@@ -57,8 +62,16 @@ export function SelectContent({ children }: SelectContentProps) {
   return <div className="mt-1">{children}</div>
 }
 
-export function SelectItem({ value, children, className = '' }: SelectItemProps) {
-  return <option className={className} value={value}>{children}</option>
+export function SelectItem({
+  value,
+  children,
+  className = '',
+}: SelectItemProps) {
+  return (
+    <option className={className} value={value}>
+      {children}
+    </option>
+  )
 }
 
 export function SelectValue({ placeholder }: SelectValueProps) {

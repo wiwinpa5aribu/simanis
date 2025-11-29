@@ -6,17 +6,17 @@ import { ForbiddenError } from '../../shared/errors/forbidden-error';
  * Checks if user has required role
  */
 export function rbacMiddleware(allowedRoles: string[]) {
-    return async (request: FastifyRequest) => {
-        const user = request.user;
+  return async (request: FastifyRequest) => {
+    const user = request.user;
 
-        if (!user) {
-            throw new ForbiddenError('Unauthorized');
-        }
+    if (!user) {
+      throw new ForbiddenError('Unauthorized');
+    }
 
-        const hasRole = user.roles.some((role) => allowedRoles.includes(role));
+    const hasRole = user.roles.some((role) => allowedRoles.includes(role));
 
-        if (!hasRole) {
-            throw new ForbiddenError('Anda tidak memiliki akses untuk fitur ini');
-        }
-    };
+    if (!hasRole) {
+      throw new ForbiddenError('Anda tidak memiliki akses untuk fitur ini');
+    }
+  };
 }

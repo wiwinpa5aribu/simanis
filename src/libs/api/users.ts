@@ -41,7 +41,9 @@ export interface PaginatedUsers {
  * @returns Paginated users
  * @throws Error jika gagal mengambil data
  */
-export const getUsers = async (params: UserQueryParams = {}): Promise<PaginatedUsers> => {
+export const getUsers = async (
+  params: UserQueryParams = {}
+): Promise<PaginatedUsers> => {
   try {
     logger.info('Users API', 'Mengambil daftar pengguna', { ...params })
 
@@ -78,11 +80,18 @@ export const getUserById = async (id: number): Promise<User> => {
       throw new Error('Pengguna tidak ditemukan')
     }
 
-    logger.success('Users API', `Berhasil mengambil pengguna: ${response.data.name}`)
+    logger.success(
+      'Users API',
+      `Berhasil mengambil pengguna: ${response.data.name}`
+    )
 
     return response.data
   } catch (error: unknown) {
-    logger.error('Users API', `Gagal mengambil pengguna dengan ID: ${id}`, error)
+    logger.error(
+      'Users API',
+      `Gagal mengambil pengguna dengan ID: ${id}`,
+      error
+    )
     throw new Error(getErrorMessage(error) || ERROR_MESSAGES.NOT_FOUND)
   }
 }

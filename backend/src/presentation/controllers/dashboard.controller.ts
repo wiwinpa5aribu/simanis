@@ -9,26 +9,26 @@ const prisma = new PrismaClient();
 const auditRepository = new AuditRepositoryImpl(prisma);
 
 export class DashboardController {
-    /**
-     * GET /api/dashboard/stats
-     */
-    static async getStats(request: FastifyRequest, reply: FastifyReply) {
-        const getStatsUseCase = new GetStatsUseCase(prisma);
-        const stats = await getStatsUseCase.execute();
+  /**
+   * GET /api/dashboard/stats
+   */
+  static async getStats(request: FastifyRequest, reply: FastifyReply) {
+    const getStatsUseCase = new GetStatsUseCase(prisma);
+    const stats = await getStatsUseCase.execute();
 
-        return reply.status(200).send(createSuccessResponse(stats));
-    }
+    return reply.status(200).send(createSuccessResponse(stats));
+  }
 
-    /**
-     * GET /api/dashboard/activities
-     */
-    static async getActivities(request: FastifyRequest, reply: FastifyReply) {
-        const query = request.query as { limit?: string };
-        const limit = query.limit ? parseInt(query.limit) : 10;
+  /**
+   * GET /api/dashboard/activities
+   */
+  static async getActivities(request: FastifyRequest, reply: FastifyReply) {
+    const query = request.query as { limit?: string };
+    const limit = query.limit ? parseInt(query.limit) : 10;
 
-        const getActivitiesUseCase = new GetActivitiesUseCase(auditRepository);
-        const activities = await getActivitiesUseCase.execute(limit);
+    const getActivitiesUseCase = new GetActivitiesUseCase(auditRepository);
+    const activities = await getActivitiesUseCase.execute(limit);
 
-        return reply.status(200).send(createSuccessResponse(activities));
-    }
+    return reply.status(200).send(createSuccessResponse(activities));
+  }
 }

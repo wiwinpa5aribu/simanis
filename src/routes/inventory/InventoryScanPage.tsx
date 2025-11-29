@@ -9,31 +9,31 @@
  * 4. Submit inventarisasi
  */
 
-import { useState, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { logger } from "@/libs/utils/logger";
+import { useState, useRef } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+import { logger } from '@/libs/utils/logger'
 
-import { QRScanner } from "./components/QRScanner";
-import { InventoryForm } from "./components/InventoryForm";
-import { getAssetByCode } from "@/libs/api/assets";
+import { QRScanner } from './components/QRScanner'
+import { InventoryForm } from './components/InventoryForm'
+import { getAssetByCode } from '@/libs/api/assets'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Loader2, ArrowLeft, CheckCircle, Clock } from "lucide-react";
+} from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import { Loader2, ArrowLeft, CheckCircle, Clock } from 'lucide-react'
 
 export default function InventoryScanPage() {
-  const [scannedCode, setScannedCode] = useState<string | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [scanTime, setScanTime] = useState<number | null>(null);
-  const scanStartTimeRef = useRef<number | null>(null);
-  const navigate = useNavigate();
+  const [scannedCode, setScannedCode] = useState<string | null>(null)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [scanTime, setScanTime] = useState<number | null>(null)
+  const scanStartTimeRef = useRef<number | null>(null)
+  const navigate = useNavigate()
 
   // Query untuk fetch detail aset berdasarkan kode
   // Optimasi: staleTime 30s untuk menghindari fetch ulang jika scan kode yang sama
@@ -44,60 +44,60 @@ export default function InventoryScanPage() {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["asset", "by-code", scannedCode],
+    queryKey: ['asset', 'by-code', scannedCode],
     queryFn: async () => {
       // Mulai timer untuk mengukur waktu respons API
-      const apiStartTime = performance.now();
-      const result = await getAssetByCode(scannedCode!);
-      const apiEndTime = performance.now();
-      const apiTime = apiEndTime - apiStartTime;
+      const apiStartTime = performance.now()
+      const result = await getAssetByCode(scannedCode!)
+      const apiEndTime = performance.now()
+      const apiTime = apiEndTime - apiStartTime
 
       // Hitung total waktu dari scan hingga data diterima
       if (scanStartTimeRef.current) {
-        const totalTime = apiEndTime - scanStartTimeRef.current;
-        setScanTime(totalTime);
-        logger.performance('InventoryScanPage', 'Scan to data', totalTime);
-        logger.performance('InventoryScanPage', 'API call', apiTime);
+        const totalTime = apiEndTime - scanStartTimeRef.current
+        setScanTime(totalTime)
+        logger.performance('InventoryScanPage', 'Scan to data', totalTime)
+        logger.performance('InventoryScanPage', 'API call', apiTime)
       }
 
-      return result;
+      return result
     },
     enabled: !!scannedCode,
     retry: false,
     staleTime: 30000, // Cache selama 30 detik untuk performa lebih baik
-  });
+  })
 
   const handleScanSuccess = (code: string) => {
     // Catat waktu mulai scan untuk pengukuran performa
-    scanStartTimeRef.current = performance.now();
-    setScannedCode(code);
-    setShowSuccess(false);
-    setScanTime(null);
-  };
+    scanStartTimeRef.current = performance.now()
+    setScannedCode(code)
+    setShowSuccess(false)
+    setScanTime(null)
+  }
 
   const handleScanError = (errorMsg: string) => {
-    logger.error('InventoryScanPage', 'Scan error', errorMsg);
-  };
+    logger.error('InventoryScanPage', 'Scan error', errorMsg)
+  }
 
   const handleInventorySuccess = () => {
-    setShowSuccess(true);
+    setShowSuccess(true)
     // Reset setelah 2 detik
     setTimeout(() => {
-      setScannedCode(null);
-      setShowSuccess(false);
-    }, 2000);
-  };
+      setScannedCode(null)
+      setShowSuccess(false)
+    }, 2000)
+  }
 
   const handleCancel = () => {
-    setScannedCode(null);
-    setShowSuccess(false);
-    setScanTime(null);
-    scanStartTimeRef.current = null;
-  };
+    setScannedCode(null)
+    setShowSuccess(false)
+    setScanTime(null)
+    scanStartTimeRef.current = null
+  }
 
   const handleBack = () => {
-    navigate("/inventory");
-  };
+    navigate('/inventory')
+  }
 
   return (
     <div className="container max-w-2xl mx-auto py-6 space-y-6">
@@ -163,7 +163,7 @@ export default function InventoryScanPage() {
               <AlertDescription>
                 {error instanceof Error
                   ? error.message
-                  : "Aset tidak ditemukan dengan kode: " + scannedCode}
+                  : 'Aset tidak ditemukan dengan kode: ' + scannedCode}
               </AlertDescription>
             </Alert>
 
@@ -191,8 +191,8 @@ export default function InventoryScanPage() {
             <Alert
               className={
                 scanTime <= 2000
-                  ? "border-green-500 bg-green-50"
-                  : "border-yellow-500 bg-yellow-50"
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-yellow-500 bg-yellow-50'
               }
             >
               <Clock className="h-4 w-4" />
@@ -201,7 +201,9 @@ export default function InventoryScanPage() {
                   Waktu respons: {scanTime.toFixed(0)}ms
                 </span>
                 {scanTime <= 2000 ? (
-                  <span className="text-green-700 ml-2">✓ Performa optimal</span>
+                  <span className="text-green-700 ml-2">
+                    ✓ Performa optimal
+                  </span>
                 ) : (
                   <span className="text-yellow-700 ml-2">
                     ⚠ Koneksi lambat
@@ -231,5 +233,5 @@ export default function InventoryScanPage() {
         </>
       )}
     </div>
-  );
+  )
 }

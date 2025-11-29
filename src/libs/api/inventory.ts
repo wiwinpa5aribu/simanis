@@ -85,9 +85,14 @@ export async function getInventoryList(params: InventoryListParams = {}) {
 
     const parsed = inventoryListResponseSchema.safeParse(data)
     if (!parsed.success) {
-      logger.error('Inventory API', 'Response inventarisasi tidak valid', undefined, {
-        issues: parsed.error.issues,
-      })
+      logger.error(
+        'Inventory API',
+        'Response inventarisasi tidak valid',
+        undefined,
+        {
+          issues: parsed.error.issues,
+        }
+      )
       throw new Error(ERROR_MESSAGES.SERVER_ERROR)
     }
 

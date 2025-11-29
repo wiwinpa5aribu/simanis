@@ -1,7 +1,7 @@
-import * as React from "react";
-import { clsx } from "clsx";
+import * as React from 'react'
+import { clsx } from 'clsx'
 
-type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>;
+type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>
 
 const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
   ({ className, children, ...props }, ref) => {
@@ -9,16 +9,16 @@ const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
       <label
         ref={ref}
         className={clsx(
-          "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+          'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
           className
         )}
         {...props}
       >
         {children}
       </label>
-    );
+    )
   }
-);
-Label.displayName = "Label";
+)
+Label.displayName = 'Label'
 
-export { Label };
+export { Label }

@@ -57,7 +57,10 @@ export function DropdownMenuTrigger({ children }: DropdownMenuTriggerProps) {
   return <div className="cursor-pointer">{children}</div>
 }
 
-export function DropdownMenuContent({ children, align = 'end' }: DropdownMenuContentProps) {
+export function DropdownMenuContent({
+  children,
+  align = 'end',
+}: DropdownMenuContentProps) {
   return (
     <div
       className={`absolute z-50 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 ${
@@ -69,7 +72,11 @@ export function DropdownMenuContent({ children, align = 'end' }: DropdownMenuCon
   )
 }
 
-export function DropdownMenuItem({ children, onClick, className = '' }: DropdownMenuItemProps) {
+export function DropdownMenuItem({
+  children,
+  onClick,
+  className = '',
+}: DropdownMenuItemProps) {
   return (
     <button
       onClick={onClick}

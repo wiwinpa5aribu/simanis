@@ -24,7 +24,8 @@ export function OfflinePage() {
 
         {/* Description */}
         <p className="text-gray-600 mb-6">
-          Tidak dapat terhubung ke internet. Periksa koneksi jaringan Anda dan coba lagi.
+          Tidak dapat terhubung ke internet. Periksa koneksi jaringan Anda dan
+          coba lagi.
         </p>
 
         {/* Instructions */}

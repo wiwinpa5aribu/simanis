@@ -98,9 +98,14 @@ export const getDepreciationList = async (
 
     const parsed = responseSchema.safeParse(response.data)
     if (!parsed.success) {
-      logger.error('Depreciation API', 'Response penyusutan tidak valid', undefined, {
-        issues: parsed.error.issues,
-      })
+      logger.error(
+        'Depreciation API',
+        'Response penyusutan tidak valid',
+        undefined,
+        {
+          issues: parsed.error.issues,
+        }
+      )
       throw new Error(ERROR_MESSAGES.SERVER_ERROR)
     }
 

@@ -57,7 +57,9 @@ export function LoanDetailPage() {
             <h1 className="text-2xl font-bold text-gray-900">
               Detail Peminjaman #{loan.id}
             </h1>
-            <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(loan.status)}`}>
+            <span
+              className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(loan.status)}`}
+            >
               {loan.status}
             </span>
           </div>
@@ -77,20 +79,28 @@ export function LoanDetailPage() {
         <div className="bg-white shadow rounded-xl p-6">
           <div className="flex items-center gap-2 mb-4 border-b pb-2">
             <User className="w-5 h-5 text-blue-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Info Peminjam</h3>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Info Peminjam
+            </h3>
           </div>
           <dl className="space-y-3">
             <div>
               <dt className="text-sm text-gray-500">Nama</dt>
-              <dd className="text-sm font-medium text-gray-900">{loan.requester.name}</dd>
+              <dd className="text-sm font-medium text-gray-900">
+                {loan.requester.name}
+              </dd>
             </div>
             <div>
               <dt className="text-sm text-gray-500">Username</dt>
-              <dd className="text-sm text-gray-900">{loan.requester.username}</dd>
+              <dd className="text-sm text-gray-900">
+                {loan.requester.username}
+              </dd>
             </div>
             <div>
               <dt className="text-sm text-gray-500">Email</dt>
-              <dd className="text-sm text-gray-900">{loan.requester.email || '-'}</dd>
+              <dd className="text-sm text-gray-900">
+                {loan.requester.email || '-'}
+              </dd>
             </div>
           </dl>
         </div>
@@ -99,7 +109,9 @@ export function LoanDetailPage() {
         <div className="bg-white shadow rounded-xl p-6">
           <div className="flex items-center gap-2 mb-4 border-b pb-2">
             <Calendar className="w-5 h-5 text-green-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Info Peminjaman</h3>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Info Peminjaman
+            </h3>
           </div>
           <dl className="space-y-3">
             <div>
@@ -132,7 +144,9 @@ export function LoanDetailPage() {
       <div className="bg-white shadow rounded-xl p-6">
         <div className="flex items-center gap-2 mb-4 border-b pb-2">
           <FileText className="w-5 h-5 text-purple-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Tujuan Peminjaman</h3>
+          <h3 className="text-lg font-semibold text-gray-900">
+            Tujuan Peminjaman
+          </h3>
         </div>
         <p className="text-gray-700">{loan.tujuanPinjam}</p>
         {loan.catatan && (

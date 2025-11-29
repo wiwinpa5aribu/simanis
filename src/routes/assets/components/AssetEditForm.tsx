@@ -11,7 +11,8 @@ import { ASSET_CONDITIONS } from '../../../libs/validation/assetSchemas'
 
 // Schema validasi untuk edit form
 const editAssetSchema = z.object({
-  nama_barang: z.string()
+  nama_barang: z
+    .string()
     .min(1, 'Nama barang wajib diisi')
     .max(160, 'Nama barang maksimal 160 karakter'),
   merk: z.string().optional(),
@@ -31,7 +32,11 @@ interface AssetEditFormProps {
   onSuccess: () => void
 }
 
-export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps) {
+export function AssetEditForm({
+  asset,
+  onCancel,
+  onSuccess,
+}: AssetEditFormProps) {
   const queryClient = useQueryClient()
 
   // Fetch categories
@@ -57,13 +62,13 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
     },
   })
 
-
   // Update mutation
   const updateMutation = useMutation({
-    mutationFn: (data: EditAssetFormValues) => updateAsset(asset.id, {
-      ...data,
-      kode_aset: asset.kode_aset, // Keep original code
-    }),
+    mutationFn: (data: EditAssetFormValues) =>
+      updateAsset(asset.id, {
+        ...data,
+        kode_aset: asset.kode_aset, // Keep original code
+      }),
     onSuccess: () => {
       showSuccessToast('Aset berhasil diperbarui')
       queryClient.invalidateQueries({ queryKey: ['asset', String(asset.id)] })
@@ -90,7 +95,10 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Kode Aset (Read-only) */}
           <div>
-            <label htmlFor="kode_aset_display" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="kode_aset_display"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Kode Aset
             </label>
             <input
@@ -100,12 +108,17 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
               disabled
               className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
             />
-            <p className="mt-1 text-xs text-gray-400">Kode aset tidak dapat diubah</p>
+            <p className="mt-1 text-xs text-gray-400">
+              Kode aset tidak dapat diubah
+            </p>
           </div>
 
           {/* Nama Barang */}
           <div>
-            <label htmlFor="edit_nama_barang" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="edit_nama_barang"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Nama Barang <span className="text-red-500">*</span>
             </label>
             <input
@@ -117,13 +130,18 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
               }`}
             />
             {errors.nama_barang && (
-              <p className="mt-1 text-sm text-red-500">{errors.nama_barang.message}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.nama_barang.message}
+              </p>
             )}
           </div>
 
           {/* Kategori */}
           <div>
-            <label htmlFor="edit_category_id" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="edit_category_id"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Kategori <span className="text-red-500">*</span>
             </label>
             <select
@@ -142,13 +160,18 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
               ))}
             </select>
             {errors.category_id && (
-              <p className="mt-1 text-sm text-red-500">{errors.category_id.message}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.category_id.message}
+              </p>
             )}
           </div>
 
           {/* Kondisi */}
           <div>
-            <label htmlFor="edit_kondisi" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="edit_kondisi"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Kondisi <span className="text-red-500">*</span>
             </label>
             <select
@@ -165,7 +188,9 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
               ))}
             </select>
             {errors.kondisi && (
-              <p className="mt-1 text-sm text-red-500">{errors.kondisi.message}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.kondisi.message}
+              </p>
             )}
           </div>
         </div>
@@ -179,7 +204,10 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="edit_merk" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="edit_merk"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Merk / Brand
             </label>
             <input
@@ -191,7 +219,10 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
           </div>
 
           <div>
-            <label htmlFor="edit_tahun_perolehan" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="edit_tahun_perolehan"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Tahun Perolehan
             </label>
             <input
@@ -203,7 +234,10 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
           </div>
 
           <div className="md:col-span-2">
-            <label htmlFor="edit_spesifikasi" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="edit_spesifikasi"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Spesifikasi
             </label>
             <textarea

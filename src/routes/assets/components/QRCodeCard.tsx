@@ -21,12 +21,7 @@ export function QRCodeCard({ asset }: QRCodeCardProps) {
     <div className="qr-card border border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center bg-white">
       {/* QR Code */}
       <div className="qr-code-container mb-3">
-        <QRCode
-          value={qrValue}
-          size={120}
-          level="M"
-          className="qr-code"
-        />
+        <QRCode value={qrValue} size={120} level="M" className="qr-code" />
       </div>
 
       {/* Asset Code */}

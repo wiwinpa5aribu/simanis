@@ -130,7 +130,9 @@ export function AssetBulkActions({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => navigate('/assets/print-qr', { state: { assetIds: selectedIds } })}
+          onClick={() =>
+            navigate('/assets/print-qr', { state: { assetIds: selectedIds } })
+          }
         >
           <QrCode className="w-4 h-4 mr-2" />
           Print QR ({selectedIds.length})
@@ -148,7 +150,9 @@ export function AssetBulkActions({
 
       <Dialog
         open={isOpen}
-        onOpenChange={(open: boolean) => !isProcessing && !open && handleClose()}
+        onOpenChange={(open: boolean) =>
+          !isProcessing && !open && handleClose()
+        }
       >
         <DialogContent>
           <DialogHeader>

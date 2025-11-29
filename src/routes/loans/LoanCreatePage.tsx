@@ -87,8 +87,9 @@ export function LoanCreatePage() {
             <select
               id="asset_id"
               {...register('asset_id')}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${errors.asset_id ? 'border-red-500' : 'border-gray-300'
-                }`}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${
+                errors.asset_id ? 'border-red-500' : 'border-gray-300'
+              }`}
               disabled={isLoadingAssets}
             >
               <option value="">Pilih Aset...</option>
@@ -117,8 +118,9 @@ export function LoanCreatePage() {
               id="borrower_name"
               type="text"
               {...register('borrower_name')}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.borrower_name ? 'border-red-500' : 'border-gray-300'
-                }`}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
+                errors.borrower_name ? 'border-red-500' : 'border-gray-300'
+              }`}
               placeholder="Nama lengkap peminjam"
             />
             {errors.borrower_name && (
@@ -140,8 +142,9 @@ export function LoanCreatePage() {
               id="loan_date"
               type="date"
               {...register('loan_date')}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${errors.loan_date ? 'border-red-500' : 'border-gray-300'
-                }`}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
+                errors.loan_date ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
             {errors.loan_date && (
               <p className="mt-1 text-sm text-red-500">

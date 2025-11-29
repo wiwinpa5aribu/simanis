@@ -17,110 +17,106 @@ const assetRepository = new AssetRepositoryImpl(prisma);
 const auditRepository = new AuditRepositoryImpl(prisma);
 
 export class InventoryController {
-    /**
-     * POST /api/inventory
-     */
-    static async create(request: FastifyRequest, reply: FastifyReply) {
-        // Validate input
-        const result = createInventorySchema.safeParse(request.body);
-        if (!result.success) {
-            throw new ValidationError('Input tidak valid', result.error.errors);
-        }
-
-        const checkerId = request.user!.userId;
-
-        // Execute use case
-        const createInventoryUseCase = new CreateInventoryUseCase(
-            inventoryRepository,
-            assetRepository,
-            auditRepository
-        );
-        const inventory = await createInventoryUseCase.execute(result.data, checkerId);
-
-        return reply.status(201).send(createSuccessResponse(inventory));
+  /**
+   * POST /api/inventory
+   */
+  static async create(request: FastifyRequest, reply: FastifyReply) {
+    // Validate input
+    const result = createInventorySchema.safeParse(request.body);
+    if (!result.success) {
+      throw new ValidationError('Input tidak valid', result.error.errors);
     }
 
-    /**
-     * GET /api/inventory
-     */
-    static async getAll(request: FastifyRequest, reply: FastifyReply) {
-        const query = request.query as {
-            page?: string;
-            pageSize?: string;
-            assetId?: string;
-            checkerId?: string;
-            condition?: string;
-            startDate?: string;
-            endDate?: string;
-            from?: string;
-            to?: string;
-        };
+    const checkerId = request.user!.userId;
 
-        // Parse pagination
-        const { page, pageSize } = sanitizePaginationParams(
-            query.page ? parseInt(query.page) : undefined,
-            query.pageSize ? parseInt(query.pageSize) : undefined
-        );
+    // Execute use case
+    const createInventoryUseCase = new CreateInventoryUseCase(
+      inventoryRepository,
+      assetRepository,
+      auditRepository,
+    );
+    const inventory = await createInventoryUseCase.execute(result.data, checkerId);
 
-        // Parse filters - support both startDate/endDate and from/to
-        const filters = {
-            assetId: query.assetId ? parseInt(query.assetId) : undefined,
-            checkerId: query.checkerId ? parseInt(query.checkerId) : undefined,
-            condition: query.condition,
-            startDate: query.startDate
-                ? new Date(query.startDate)
-                : query.from
-                  ? new Date(query.from)
-                  : undefined,
-            endDate: query.endDate
-                ? new Date(query.endDate)
-                : query.to
-                  ? new Date(query.to)
-                  : undefined,
-        };
+    return reply.status(201).send(createSuccessResponse(inventory));
+  }
 
-        // Execute use case
-        const getInventoryUseCase = new GetInventoryUseCase(inventoryRepository);
-        const result = await getInventoryUseCase.execute({ page, pageSize, filters });
+  /**
+   * GET /api/inventory
+   */
+  static async getAll(request: FastifyRequest, reply: FastifyReply) {
+    const query = request.query as {
+      page?: string;
+      pageSize?: string;
+      assetId?: string;
+      checkerId?: string;
+      condition?: string;
+      startDate?: string;
+      endDate?: string;
+      from?: string;
+      to?: string;
+    };
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return reply.status(200).send(createSuccessResponse(result.checks, result.meta as any));
+    // Parse pagination
+    const { page, pageSize } = sanitizePaginationParams(
+      query.page ? parseInt(query.page) : undefined,
+      query.pageSize ? parseInt(query.pageSize) : undefined,
+    );
+
+    // Parse filters - support both startDate/endDate and from/to
+    const filters = {
+      assetId: query.assetId ? parseInt(query.assetId) : undefined,
+      checkerId: query.checkerId ? parseInt(query.checkerId) : undefined,
+      condition: query.condition,
+      startDate: query.startDate
+        ? new Date(query.startDate)
+        : query.from
+          ? new Date(query.from)
+          : undefined,
+      endDate: query.endDate ? new Date(query.endDate) : query.to ? new Date(query.to) : undefined,
+    };
+
+    // Execute use case
+    const getInventoryUseCase = new GetInventoryUseCase(inventoryRepository);
+    const result = await getInventoryUseCase.execute({ page, pageSize, filters });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return reply.status(200).send(createSuccessResponse(result.checks, result.meta as any));
+  }
+
+  /**
+   * GET /api/inventory/:id - Get inventory check by ID
+   */
+  static async getById(request: FastifyRequest, reply: FastifyReply) {
+    const { id } = request.params as { id: string };
+    const inventoryId = parseInt(id);
+
+    const inventory = await prisma.inventoryCheck.findUnique({
+      where: { id: inventoryId },
+      include: {
+        asset: {
+          select: {
+            id: true,
+            kodeAset: true,
+            namaBarang: true,
+            merk: true,
+            kondisi: true,
+            fotoUrl: true,
+          },
+        },
+        checker: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+          },
+        },
+      },
+    });
+
+    if (!inventory) {
+      throw new NotFoundError('Data inventaris tidak ditemukan');
     }
 
-    /**
-     * GET /api/inventory/:id - Get inventory check by ID
-     */
-    static async getById(request: FastifyRequest, reply: FastifyReply) {
-        const { id } = request.params as { id: string };
-        const inventoryId = parseInt(id);
-
-        const inventory = await prisma.inventoryCheck.findUnique({
-            where: { id: inventoryId },
-            include: {
-                asset: {
-                    select: {
-                        id: true,
-                        kodeAset: true,
-                        namaBarang: true,
-                        merk: true,
-                        kondisi: true,
-                        fotoUrl: true,
-                    },
-                },
-                checker: {
-                    select: {
-                        id: true,
-                        name: true,
-                        username: true,
-                    },
-                },
-            },
-        });
-
-        if (!inventory) {
-            throw new NotFoundError('Data inventaris tidak ditemukan');
-        }
-
-        return reply.status(200).send(createSuccessResponse(inventory));
-    }
+    return reply.status(200).send(createSuccessResponse(inventory));
+  }
 }

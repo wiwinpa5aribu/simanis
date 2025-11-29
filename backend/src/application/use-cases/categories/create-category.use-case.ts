@@ -5,19 +5,19 @@ import { CategoryDto } from '../../dto/category.dto';
 import { logger } from '../../../shared/logger/winston.logger';
 
 export class CreateCategoryUseCase {
-    constructor(private categoryRepository: IAssetCategoryRepository) { }
+  constructor(private categoryRepository: IAssetCategoryRepository) {}
 
-    async execute(data: CreateCategoryInput): Promise<CategoryDto> {
-        // Check if category already exists
-        const existing = await this.categoryRepository.findByName(data.name);
-        if (existing) {
-            throw new ConflictError('Kategori dengan nama ini sudah ada');
-        }
-
-        const category = await this.categoryRepository.create(data);
-
-        logger.info('Category created', { categoryId: category.id, name: category.name });
-
-        return category;
+  async execute(data: CreateCategoryInput): Promise<CategoryDto> {
+    // Check if category already exists
+    const existing = await this.categoryRepository.findByName(data.name);
+    if (existing) {
+      throw new ConflictError('Kategori dengan nama ini sudah ada');
     }
+
+    const category = await this.categoryRepository.create(data);
+
+    logger.info('Category created', { categoryId: category.id, name: category.name });
+
+    return category;
+  }
 }

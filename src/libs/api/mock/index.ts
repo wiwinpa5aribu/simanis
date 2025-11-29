@@ -1,6 +1,6 @@
 /**
  * Mock Data Index
- * 
+ *
  * Central export untuk semua mock data
  * Digunakan saat VITE_USE_MOCK_API=true
  */

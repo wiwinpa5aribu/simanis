@@ -1,6 +1,6 @@
 /**
  * Property Tests for QR Code Batch Print
- * 
+ *
  * Property 8: QR Code Selection Count
  * Property 9: QR Code Print Completeness
  * Property 11: Loading State Display
@@ -84,7 +84,10 @@ interface QRCodePrintData {
 }
 
 // Filter assets for print based on selection
-function getAssetsForPrint(assets: Asset[], selectedIds: number[]): QRCodePrintData[] {
+function getAssetsForPrint(
+  assets: Asset[],
+  selectedIds: number[]
+): QRCodePrintData[] {
   return assets
     .filter((asset) => selectedIds.includes(asset.id))
     .map((asset) => ({
@@ -102,9 +105,7 @@ describe('Property 8: QR Code Selection Count', () => {
     // Test various selection scenarios
     for (let i = 0; i < 10; i++) {
       const randomCount = Math.floor(Math.random() * assets.length) + 1
-      const randomIds = assets
-        .slice(0, randomCount)
-        .map((a) => a.id)
+      const randomIds = assets.slice(0, randomCount).map((a) => a.id)
 
       manager.selectAll(randomIds)
 
@@ -171,11 +172,11 @@ describe('Property 8: QR Code Selection Count', () => {
 describe('Property 9: QR Code Print Completeness', () => {
   it('should include QR code data for all selected assets', () => {
     const assets = generateMockAssets(20)
-    
+
     for (let i = 0; i < 10; i++) {
       const randomCount = Math.floor(Math.random() * assets.length) + 1
       const selectedIds = assets.slice(0, randomCount).map((a) => a.id)
-      
+
       const printData = getAssetsForPrint(assets, selectedIds)
 
       // Property: Print data should have same count as selected
@@ -192,7 +193,7 @@ describe('Property 9: QR Code Print Completeness', () => {
   it('should have asset code for each selected asset', () => {
     const assets = generateMockAssets(10)
     const selectedIds = assets.map((a) => a.id)
-    
+
     const printData = getAssetsForPrint(assets, selectedIds)
 
     for (const data of printData) {
@@ -205,7 +206,7 @@ describe('Property 9: QR Code Print Completeness', () => {
   it('should have asset name for each selected asset', () => {
     const assets = generateMockAssets(10)
     const selectedIds = assets.map((a) => a.id)
-    
+
     const printData = getAssetsForPrint(assets, selectedIds)
 
     for (const data of printData) {
@@ -218,12 +219,12 @@ describe('Property 9: QR Code Print Completeness', () => {
   it('should preserve asset code format', () => {
     const assets = generateMockAssets(10)
     const selectedIds = assets.map((a) => a.id)
-    
+
     const printData = getAssetsForPrint(assets, selectedIds)
 
     for (const data of printData) {
       const originalAsset = assets.find((a) => a.id === data.id)
-      
+
       // Property: Asset code should match original
       expect(data.kode_aset).toBe(originalAsset?.kode_aset)
     }
@@ -232,7 +233,7 @@ describe('Property 9: QR Code Print Completeness', () => {
   it('should return empty array when no assets selected', () => {
     const assets = generateMockAssets(10)
     const selectedIds: number[] = []
-    
+
     const printData = getAssetsForPrint(assets, selectedIds)
 
     expect(printData.length).toBe(0)
@@ -241,11 +242,11 @@ describe('Property 9: QR Code Print Completeness', () => {
   it('should only include selected assets', () => {
     const assets = generateMockAssets(10)
     const selectedIds = [1, 3, 5, 7, 9] // Only odd IDs
-    
+
     const printData = getAssetsForPrint(assets, selectedIds)
 
     expect(printData.length).toBe(5)
-    
+
     for (const data of printData) {
       expect(selectedIds).toContain(data.id)
     }
@@ -302,7 +303,11 @@ describe('Property 11: Loading State Display', () => {
   it('should handle error state', () => {
     const states = {
       loading: { isLoading: true, isError: false, data: null },
-      success: { isLoading: false, isError: false, data: generateMockAssets(5) },
+      success: {
+        isLoading: false,
+        isError: false,
+        data: generateMockAssets(5),
+      },
       error: { isLoading: false, isError: true, data: null },
     }
 

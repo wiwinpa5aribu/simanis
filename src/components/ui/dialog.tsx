@@ -55,9 +55,14 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
   )
 }
 
-export function DialogContent({ children, className = '' }: DialogContentProps) {
+export function DialogContent({
+  children,
+  className = '',
+}: DialogContentProps) {
   return (
-    <div className={`bg-white rounded-lg shadow-xl max-w-md w-full mx-4 ${className}`}>
+    <div
+      className={`bg-white rounded-lg shadow-xl max-w-md w-full mx-4 ${className}`}
+    >
       {children}
     </div>
   )
@@ -87,7 +92,9 @@ export function DialogClose({ onClose }: { onClose: () => void }) {
 }
 
 export function DialogFooter({ children }: { children: ReactNode }) {
-  return <div className="px-6 py-4 border-t flex justify-end gap-2">{children}</div>
+  return (
+    <div className="px-6 py-4 border-t flex justify-end gap-2">{children}</div>
+  )
 }
 
 // (definitions moved above)

@@ -3,8 +3,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus, Pencil, Trash2, X, Loader2 } from 'lucide-react'
-import { getCategories, createCategory, updateCategory, deleteCategory } from '../../libs/api/categories'
-import { categorySchema, type CategoryFormValues, type Category } from '../../libs/validation/categorySchemas'
+import {
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from '../../libs/api/categories'
+import {
+  categorySchema,
+  type CategoryFormValues,
+  type Category,
+} from '../../libs/validation/categorySchemas'
 import { LoadingSpinner, ErrorAlert } from '../../components/ui/Feedback'
 import { logger } from '@/libs/utils/logger'
 
@@ -24,7 +33,11 @@ export function CategoriesPage() {
   }, [])
 
   // Fetch Data Kategori
-  const { data: categories, isLoading, isError } = useQuery({
+  const {
+    data: categories,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
   })
@@ -101,7 +114,9 @@ export function CategoriesPage() {
 
   const handleDelete = (id: number) => {
     if (confirm('Apakah Anda yakin ingin menghapus kategori ini?')) {
-      logger.info('CategoriesPage', 'User confirmed delete category', { categoryId: id })
+      logger.info('CategoriesPage', 'User confirmed delete category', {
+        categoryId: id,
+      })
       deleteMutation.mutate(id)
     }
   }
@@ -111,7 +126,9 @@ export function CategoriesPage() {
   }
 
   if (isError) {
-    return <ErrorAlert message="Gagal memuat data kategori. Silakan coba lagi nanti." />
+    return (
+      <ErrorAlert message="Gagal memuat data kategori. Silakan coba lagi nanti." />
+    )
   }
 
   return (
@@ -120,7 +137,9 @@ export function CategoriesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Kategori Aset</h1>
-          <p className="text-gray-500">Kelola kategori untuk pengelompokan aset</p>
+          <p className="text-gray-500">
+            Kelola kategori untuk pengelompokan aset
+          </p>
         </div>
         <button
           onClick={openCreateModal}
@@ -201,10 +220,13 @@ export function CategoriesPage() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
               <div>
-                <label htmlFor="category-name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="category-name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Nama Kategori
                 </label>
                 <input
@@ -217,7 +239,9 @@ export function CategoriesPage() {
                   placeholder="Contoh: Elektronik"
                 />
                 {errors.name && (
-                  <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.name.message}
+                  </p>
                 )}
               </div>
 
@@ -231,7 +255,9 @@ export function CategoriesPage() {
                 </button>
                 <button
                   type="submit"
-                  disabled={createMutation.isPending || updateMutation.isPending}
+                  disabled={
+                    createMutation.isPending || updateMutation.isPending
+                  }
                   className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-70 flex items-center gap-2"
                 >
                   {(createMutation.isPending || updateMutation.isPending) && (

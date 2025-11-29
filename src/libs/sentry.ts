@@ -1,7 +1,7 @@
-import * as Sentry from '@sentry/react';
+import * as Sentry from '@sentry/react'
 
 export function initSentry() {
-  const dsn = import.meta.env.VITE_SENTRY_DSN;
+  const dsn = import.meta.env.VITE_SENTRY_DSN
 
   // Initialize if DSN is provided (works in both dev and prod)
   if (dsn) {
@@ -23,14 +23,14 @@ export function initSentry() {
       // Only send errors in production, log in development
       beforeSend(event) {
         if (import.meta.env.DEV) {
-          console.log('[Sentry] Would send event:', event);
+          console.log('[Sentry] Would send event:', event)
         }
-        return event;
+        return event
       },
-    });
+    })
 
-    console.log(`[Sentry] Initialized in ${import.meta.env.MODE} mode`);
+    console.log(`[Sentry] Initialized in ${import.meta.env.MODE} mode`)
   }
 }
 
-export { Sentry };
+export { Sentry }

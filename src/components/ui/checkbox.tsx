@@ -1,7 +1,8 @@
 // Komponen checkbox sederhana untuk tabel dan form
 import { forwardRef } from 'react'
 
-export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface CheckboxProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   onCheckedChange?: (checked: boolean) => void
 }
 

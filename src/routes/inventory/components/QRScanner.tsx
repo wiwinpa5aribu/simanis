@@ -12,62 +12,62 @@
  * - onError: callback saat terjadi error
  */
 
-import { useEffect, useRef, useState } from "react";
-import { Html5Qrcode, Html5QrcodeScannerState } from "html5-qrcode";
-import { logger } from "@/libs/utils/logger";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Camera, CameraOff, Keyboard } from "lucide-react";
+import { useEffect, useRef, useState } from 'react'
+import { Html5Qrcode, Html5QrcodeScannerState } from 'html5-qrcode'
+import { logger } from '@/libs/utils/logger'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Camera, CameraOff, Keyboard } from 'lucide-react'
 
 interface QRScannerProps {
-  onScanSuccess: (decodedText: string) => void;
-  onError?: (error: string) => void;
+  onScanSuccess: (decodedText: string) => void
+  onError?: (error: string) => void
 }
 
 export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
-  const [isScanning, setIsScanning] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [manualMode, setManualMode] = useState(false);
-  const [manualInput, setManualInput] = useState("");
-  const [cameras, setCameras] = useState<{ id: string; label: string }[]>([]);
-  const [selectedCamera, setSelectedCamera] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [manualMode, setManualMode] = useState(false)
+  const [manualInput, setManualInput] = useState('')
+  const [cameras, setCameras] = useState<{ id: string; label: string }[]>([])
+  const [selectedCamera, setSelectedCamera] = useState<string | null>(null)
 
-  const scannerRef = useRef<Html5Qrcode | null>(null);
-  const scannerElementId = "qr-reader";
+  const scannerRef = useRef<Html5Qrcode | null>(null)
+  const scannerElementId = 'qr-reader'
 
   // Inisialisasi scanner dan dapatkan daftar kamera
   useEffect(() => {
     const initScanner = async () => {
       try {
         // Dapatkan daftar kamera
-        const devices = await Html5Qrcode.getCameras();
+        const devices = await Html5Qrcode.getCameras()
 
         if (devices && devices.length > 0) {
-          setCameras(devices.map((d) => ({ id: d.id, label: d.label })));
+          setCameras(devices.map((d) => ({ id: d.id, label: d.label })))
 
           // Pilih kamera belakang jika tersedia (biasanya mengandung kata "back" atau "rear")
           const backCamera = devices.find(
             (d) =>
-              d.label.toLowerCase().includes("back") ||
-              d.label.toLowerCase().includes("rear")
-          );
+              d.label.toLowerCase().includes('back') ||
+              d.label.toLowerCase().includes('rear')
+          )
 
-          setSelectedCamera(backCamera?.id || devices[0].id);
+          setSelectedCamera(backCamera?.id || devices[0].id)
         } else {
-          setError("Tidak ada kamera yang tersedia");
-          setManualMode(true);
+          setError('Tidak ada kamera yang tersedia')
+          setManualMode(true)
         }
       } catch (err) {
-        logger.error('QRScanner', 'Error getting cameras', err);
-        setError("Gagal mengakses kamera. Silakan gunakan input manual.");
-        setManualMode(true);
-        if (onError) onError("Gagal mengakses kamera");
+        logger.error('QRScanner', 'Error getting cameras', err)
+        setError('Gagal mengakses kamera. Silakan gunakan input manual.')
+        setManualMode(true)
+        if (onError) onError('Gagal mengakses kamera')
       }
-    };
+    }
 
-    initScanner();
+    initScanner()
 
     // Cleanup saat unmount
     return () => {
@@ -75,23 +75,27 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
         scannerRef.current &&
         scannerRef.current.getState() === Html5QrcodeScannerState.SCANNING
       ) {
-        scannerRef.current.stop().catch((err) => logger.error('QRScanner', 'Error stopping scanner on cleanup', err));
+        scannerRef.current
+          .stop()
+          .catch((err) =>
+            logger.error('QRScanner', 'Error stopping scanner on cleanup', err)
+          )
       }
-    };
-  }, [onError]);
+    }
+  }, [onError])
 
   const startScanning = async () => {
     if (!selectedCamera) {
-      setError("Tidak ada kamera yang dipilih");
-      return;
+      setError('Tidak ada kamera yang dipilih')
+      return
     }
 
     try {
-      setError(null);
+      setError(null)
 
       // Inisialisasi scanner jika belum ada
       if (!scannerRef.current) {
-        scannerRef.current = new Html5Qrcode(scannerElementId);
+        scannerRef.current = new Html5Qrcode(scannerElementId)
       }
 
       // Mulai scanning dengan konfigurasi optimal untuk performa
@@ -108,32 +112,32 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
         (decodedText) => {
           // Callback saat QR berhasil di-scan
           // Langsung panggil callback tanpa delay untuk respons cepat
-          onScanSuccess(decodedText);
-          stopScanning();
+          onScanSuccess(decodedText)
+          stopScanning()
         },
         () => {
           // Error saat scanning (biasanya "No QR code found")
           // Kita abaikan error ini karena normal saat tidak ada QR di frame
         }
-      );
+      )
 
-      setIsScanning(true);
+      setIsScanning(true)
     } catch (err) {
-      logger.error('QRScanner', 'Error starting scanner', err);
+      logger.error('QRScanner', 'Error starting scanner', err)
       const errorMsg =
-        err instanceof Error ? err.message : "Gagal memulai scanner";
-      setError(errorMsg);
-      if (onError) onError(errorMsg);
+        err instanceof Error ? err.message : 'Gagal memulai scanner'
+      setError(errorMsg)
+      if (onError) onError(errorMsg)
 
       // Jika gagal, tawarkan mode manual
-      if (errorMsg.includes("Permission") || errorMsg.includes("NotAllowed")) {
+      if (errorMsg.includes('Permission') || errorMsg.includes('NotAllowed')) {
         setError(
-          "Izin kamera ditolak. Silakan gunakan input manual atau aktifkan izin kamera di pengaturan browser."
-        );
-        setManualMode(true);
+          'Izin kamera ditolak. Silakan gunakan input manual atau aktifkan izin kamera di pengaturan browser.'
+        )
+        setManualMode(true)
       }
     }
-  };
+  }
 
   const stopScanning = async () => {
     if (
@@ -141,36 +145,36 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
       scannerRef.current.getState() === Html5QrcodeScannerState.SCANNING
     ) {
       try {
-        await scannerRef.current.stop();
-        setIsScanning(false);
+        await scannerRef.current.stop()
+        setIsScanning(false)
       } catch (err) {
-        logger.error('QRScanner', 'Error stopping scanner', err);
+        logger.error('QRScanner', 'Error stopping scanner', err)
       }
     }
-  };
+  }
 
   const handleManualSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (manualInput.trim()) {
-      onScanSuccess(manualInput.trim());
-      setManualInput("");
+      onScanSuccess(manualInput.trim())
+      setManualInput('')
     }
-  };
+  }
 
   const toggleMode = () => {
     if (isScanning) {
-      stopScanning();
+      stopScanning()
     }
-    setManualMode(!manualMode);
-    setError(null);
-  };
+    setManualMode(!manualMode)
+    setError(null)
+  }
 
   return (
     <div className="space-y-4">
       {/* Toggle Mode Button */}
       <div className="flex justify-between items-center">
         <p className="text-sm text-muted-foreground">
-          {manualMode ? "Mode: Input Manual" : "Mode: Scan Kamera"}
+          {manualMode ? 'Mode: Input Manual' : 'Mode: Scan Kamera'}
         </p>
         <Button type="button" variant="outline" size="sm" onClick={toggleMode}>
           {manualMode ? (
@@ -204,7 +208,7 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
               <select
                 id="camera-select"
                 className="w-full p-2 border rounded-md"
-                value={selectedCamera || ""}
+                value={selectedCamera || ''}
                 onChange={(e) => setSelectedCamera(e.target.value)}
               >
                 {cameras.map((camera) => (
@@ -301,5 +305,5 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
         </form>
       )}
     </div>
-  );
+  )
 }

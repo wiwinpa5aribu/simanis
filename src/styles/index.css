@@ -1,7 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Global styles untuk SIMANIS */
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 

@@ -30,7 +30,8 @@ export const HTTP_STATUS = {
 // PESAN ERROR
 // ============================================
 export const ERROR_MESSAGES = {
-  NETWORK_ERROR: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
+  NETWORK_ERROR:
+    'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
   UNAUTHORIZED: 'Sesi Anda telah berakhir. Silakan login kembali.',
   FORBIDDEN: 'Anda tidak memiliki akses untuk melakukan tindakan ini.',
   NOT_FOUND: 'Data yang Anda cari tidak ditemukan.',

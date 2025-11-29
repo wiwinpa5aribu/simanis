@@ -7,7 +7,11 @@ interface UserDetailDrawerProps {
   onClose: () => void
 }
 
-export function UserDetailDrawer({ user, isOpen, onClose }: UserDetailDrawerProps) {
+export function UserDetailDrawer({
+  user,
+  isOpen,
+  onClose,
+}: UserDetailDrawerProps) {
   if (!isOpen || !user) return null
 
   const getRoleBadgeStyle = (role: string) => {
@@ -35,7 +39,9 @@ export function UserDetailDrawer({ user, isOpen, onClose }: UserDetailDrawerProp
       <div className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl z-50 transform transition-transform">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-900">Detail Pengguna</h2>
+          <h2 className="text-lg font-semibold text-gray-900">
+            Detail Pengguna
+          </h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -53,7 +59,9 @@ export function UserDetailDrawer({ user, isOpen, onClose }: UserDetailDrawerProp
                 {user.name.charAt(0).toUpperCase()}
               </span>
             </div>
-            <h3 className="mt-4 text-xl font-semibold text-gray-900">{user.name}</h3>
+            <h3 className="mt-4 text-xl font-semibold text-gray-900">
+              {user.name}
+            </h3>
             <p className="text-gray-500">@{user.username}</p>
           </div>
 

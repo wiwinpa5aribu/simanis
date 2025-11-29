@@ -1,6 +1,6 @@
 /**
  * Property Tests for Asset Edit Form
- * 
+ *
  * Property 1: Edit Form Pre-population
  * Property 2: Edit Form Validation
  */
@@ -10,7 +10,10 @@ import { z } from 'zod'
 
 // Asset Edit Schema (mirrors the actual schema)
 const assetEditSchema = z.object({
-  nama_barang: z.string().min(1, 'Nama barang wajib diisi').max(160, 'Nama barang maksimal 160 karakter'),
+  nama_barang: z
+    .string()
+    .min(1, 'Nama barang wajib diisi')
+    .max(160, 'Nama barang maksimal 160 karakter'),
   merk: z.string().optional(),
   spesifikasi: z.string().optional(),
   kondisi: z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat', 'Hilang'], {
@@ -27,11 +30,15 @@ function generateMockAsset() {
     id: Math.floor(Math.random() * 1000) + 1,
     kode_aset: `AST-${Math.floor(Math.random() * 10000)}`,
     nama_barang: `Aset Test ${Math.random().toString(36).substring(7)}`,
-    merk: Math.random() > 0.5 ? `Merk ${Math.random().toString(36).substring(7)}` : undefined,
+    merk:
+      Math.random() > 0.5
+        ? `Merk ${Math.random().toString(36).substring(7)}`
+        : undefined,
     spesifikasi: Math.random() > 0.5 ? 'Spesifikasi test' : undefined,
     kondisi: conditions[Math.floor(Math.random() * conditions.length)],
     category_id: Math.floor(Math.random() * 10) + 1,
-    current_room_id: Math.random() > 0.5 ? Math.floor(Math.random() * 20) + 1 : undefined,
+    current_room_id:
+      Math.random() > 0.5 ? Math.floor(Math.random() * 20) + 1 : undefined,
   }
 }
 
@@ -40,7 +47,7 @@ describe('Property 1: Edit Form Pre-population', () => {
     // Generate multiple test cases
     for (let i = 0; i < 10; i++) {
       const asset = generateMockAsset()
-      
+
       // Simulate form pre-population
       const formValues = {
         nama_barang: asset.nama_barang,
@@ -55,7 +62,7 @@ describe('Property 1: Edit Form Pre-population', () => {
       expect(formValues.nama_barang).toBe(asset.nama_barang)
       expect(formValues.kondisi).toBe(asset.kondisi)
       expect(formValues.category_id).toBe(asset.category_id)
-      
+
       // Optional fields should be empty string or actual value
       if (asset.merk) {
         expect(formValues.merk).toBe(asset.merk)
@@ -69,7 +76,7 @@ describe('Property 1: Edit Form Pre-population', () => {
   it('should preserve asset ID during edit', () => {
     for (let i = 0; i < 10; i++) {
       const asset = generateMockAsset()
-      
+
       // Property: Asset ID should remain unchanged
       expect(asset.id).toBeGreaterThan(0)
       expect(typeof asset.id).toBe('number')
@@ -88,7 +95,9 @@ describe('Property 2: Edit Form Validation', () => {
     const result = assetEditSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.issues.some(i => i.path.includes('nama_barang'))).toBe(true)
+      expect(
+        result.error.issues.some((i) => i.path.includes('nama_barang'))
+      ).toBe(true)
     }
   })
 
@@ -105,7 +114,7 @@ describe('Property 2: Edit Form Validation', () => {
 
   it('should reject invalid kondisi values', () => {
     const invalidConditions = ['Invalid', 'Bagus', 'Hancur', '', 123]
-    
+
     for (const kondisi of invalidConditions) {
       const invalidData = {
         nama_barang: 'Test Asset',
@@ -120,7 +129,7 @@ describe('Property 2: Edit Form Validation', () => {
 
   it('should accept valid kondisi values', () => {
     const validConditions = ['Baik', 'Rusak Ringan', 'Rusak Berat', 'Hilang']
-    
+
     for (const kondisi of validConditions) {
       const validData = {
         nama_barang: 'Test Asset',

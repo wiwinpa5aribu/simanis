@@ -21,7 +21,7 @@ const localStorageMock = (() => {
     },
     clear: () => {
       store = {}
-    }
+    },
   }
 })()
 
@@ -37,7 +37,7 @@ const sessionStorageMock = (() => {
     },
     clear: () => {
       store = {}
-    }
+    },
   }
 })()
 
@@ -45,11 +45,11 @@ const sessionStorageMock = (() => {
 beforeEach(() => {
   Object.defineProperty(window, 'localStorage', {
     value: localStorageMock,
-    writable: true
+    writable: true,
   })
   Object.defineProperty(window, 'sessionStorage', {
     value: sessionStorageMock,
-    writable: true
+    writable: true,
   })
   localStorageMock.clear()
   sessionStorageMock.clear()
@@ -61,7 +61,6 @@ afterEach(() => {
 })
 
 describe('Login Enhancements - Property Tests', () => {
-  
   // **Feature: login-enhancements, Property 1: Remember Me Storage Behavior**
   describe('Property 1: Remember Me Storage Behavior', () => {
     it('should store token in localStorage when rememberMe is true', () => {
@@ -71,7 +70,7 @@ describe('Login Enhancements - Property Tests', () => {
             id: fc.string(),
             username: fc.string(),
             name: fc.string(),
-            role: fc.string()
+            role: fc.string(),
           }),
           fc.string(),
           fc.boolean(),
@@ -79,30 +78,36 @@ describe('Login Enhancements - Property Tests', () => {
             // Reset state
             localStorageMock.clear()
             sessionStorageMock.clear()
-            
+
             const { result } = renderHook(() => useAuthStore())
-            
+
             act(() => {
               result.current.login(user, token, rememberMe)
             })
-            
+
             if (rememberMe) {
               // Should be stored in localStorage
-              const storedData = localStorageMock.getItem('simanis-auth-storage')
+              const storedData = localStorageMock.getItem(
+                'simanis-auth-storage'
+              )
               expect(storedData).toBeTruthy()
-              
+
               const parsed = JSON.parse(storedData!)
               expect(parsed.state.user).toEqual(user)
               expect(parsed.state.token).toBe(token)
               expect(parsed.state.rememberMe).toBe(true)
-              
+
               // Should not be in sessionStorage
-              expect(sessionStorageMock.getItem('simanis-auth-session')).toBeNull()
+              expect(
+                sessionStorageMock.getItem('simanis-auth-session')
+              ).toBeNull()
             } else {
               // Should be stored in sessionStorage
-              const storedData = sessionStorageMock.getItem('simanis-auth-session')
+              const storedData = sessionStorageMock.getItem(
+                'simanis-auth-session'
+              )
               expect(storedData).toBeTruthy()
-              
+
               const parsed = JSON.parse(storedData!)
               expect(parsed.state.user).toEqual(user)
               expect(parsed.state.token).toBe(token)
@@ -123,10 +128,10 @@ describe('Login Enhancements - Property Tests', () => {
           fc.integer({ min: 0, max: 60 }), // days ago
           (daysAgo: number) => {
             // Calculate if token should be expired (> 30 days)
-            const tokenTimestamp = Date.now() - (daysAgo * 24 * 60 * 60 * 1000)
+            const tokenTimestamp = Date.now() - daysAgo * 24 * 60 * 60 * 1000
             const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000
             const isExpired = Date.now() - tokenTimestamp > thirtyDaysInMs
-            
+
             // Property: token is expired if and only if daysAgo > 30
             expect(isExpired).toBe(daysAgo > 30)
           }
@@ -145,7 +150,7 @@ describe('Login Enhancements - Property Tests', () => {
             id: fc.string({ minLength: 1 }),
             username: fc.string({ minLength: 1 }),
             name: fc.string({ minLength: 1 }),
-            role: fc.string({ minLength: 1 })
+            role: fc.string({ minLength: 1 }),
           }),
           fc.string({ minLength: 1 }),
           fc.boolean(),
@@ -153,24 +158,24 @@ describe('Login Enhancements - Property Tests', () => {
             // Reset state
             localStorageMock.clear()
             sessionStorageMock.clear()
-            
+
             const { result } = renderHook(() => useAuthStore())
-            
+
             // Login first
             act(() => {
               result.current.login(user, token, rememberMe)
             })
-            
+
             // Verify authenticated
             expect(result.current.isAuthenticated).toBe(true)
             expect(result.current.user).toEqual(user)
             expect(result.current.token).toBe(token)
-            
+
             // Logout
             act(() => {
               result.current.logout()
             })
-            
+
             // State should be reset - this is the key property
             // Note: We check the state values directly, not storage
             // because zustand persist may have async behavior
@@ -186,7 +191,6 @@ describe('Login Enhancements - Property Tests', () => {
   })
 })
 
-
 // **Feature: login-enhancements, Property 4: Offline Detection Consistency**
 describe('Property 4: Offline Detection Consistency', () => {
   it('should correctly identify online/offline status transitions', () => {
@@ -198,11 +202,11 @@ describe('Property 4: Offline Detection Consistency', () => {
           // Property: status transition should be detected correctly
           // If initial !== final, a transition occurred
           const transitionOccurred = initialOnline !== finalOnline
-          
+
           // The system should detect:
           // - Going offline: initialOnline=true, finalOnline=false
           // - Going online: initialOnline=false, finalOnline=true
-          
+
           if (transitionOccurred) {
             if (initialOnline && !finalOnline) {
               // Went offline - should show offline banner

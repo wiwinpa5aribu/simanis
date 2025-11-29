@@ -1,26 +1,26 @@
 /**
  * Komponen StatCard
- * 
+ *
  * Menampilkan kartu statistik dengan angka dan label
  */
 
-import type { LucideIcon } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import type { LucideIcon } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
 
 interface StatCardProps {
-  title: string;
-  value: number | string;
-  icon: LucideIcon;
-  iconColor?: string;
-  iconBgColor?: string;
+  title: string
+  value: number | string
+  icon: LucideIcon
+  iconColor?: string
+  iconBgColor?: string
 }
 
 export function StatCard({
   title,
   value,
   icon: Icon,
-  iconColor = "text-blue-600",
-  iconBgColor = "bg-blue-100",
+  iconColor = 'text-blue-600',
+  iconBgColor = 'bg-blue-100',
 }: StatCardProps) {
   return (
     <Card>
@@ -36,5 +36,5 @@ export function StatCard({
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

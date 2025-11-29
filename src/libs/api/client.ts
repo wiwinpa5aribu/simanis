@@ -4,7 +4,11 @@
  * Dilengkapi dengan interceptor untuk logging dan error handling
  */
 
-import axios, { type AxiosError, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios'
+import axios, {
+  type AxiosError,
+  type InternalAxiosRequestConfig,
+  type AxiosResponse,
+} from 'axios'
 import { useAuthStore } from '../store/authStore'
 import { env } from '../utils/env'
 import { logger } from '../utils/logger'
@@ -37,15 +41,11 @@ api.interceptors.request.use(
       }
 
       // Log detail request untuk debugging
-      logger.api(
-        config.method || 'GET',
-        config.url || '',
-        {
-          baseURL: config.baseURL,
-          params: config.params,
-          data: config.data,
-        }
-      )
+      logger.api(config.method || 'GET', config.url || '', {
+        baseURL: config.baseURL,
+        params: config.params,
+        data: config.data,
+      })
 
       return config
     } catch (error) {
@@ -75,7 +75,12 @@ api.interceptors.response.use(
 
     // Unwrap backend response format { success: true, data: T, meta?: ... }
     // Jika response memiliki format wrapper, extract data-nya
-    if (response.data && typeof response.data === 'object' && 'success' in response.data && 'data' in response.data) {
+    if (
+      response.data &&
+      typeof response.data === 'object' &&
+      'success' in response.data &&
+      'data' in response.data
+    ) {
       // Preserve meta for pagination if exists
       const meta = response.data.meta
       response.data = response.data.data
@@ -144,7 +149,7 @@ function handleUnauthorized(): void {
   try {
     const logout = useAuthStore.getState().logout
     logout()
-    
+
     logger.info('API Client', 'User telah di-logout')
 
     // Redirect ke login jika tidak sedang di halaman login

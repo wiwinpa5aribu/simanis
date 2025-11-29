@@ -38,80 +38,83 @@ function App() {
   return (
     <ErrorBoundary>
       <NetworkProvider>
-      <Routes>
-        {/* Route Publik */}
-        <Route path="/login" element={<LoginPage />} />
+        <Routes>
+          {/* Route Publik */}
+          <Route path="/login" element={<LoginPage />} />
 
-        {/* Route Terproteksi (Butuh Login) */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<AppLayout />}>
-            {/* Redirect root ke /dashboard */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          {/* Route Terproteksi (Butuh Login) */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppLayout />}>
+              {/* Redirect root ke /dashboard */}
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-            <Route path="dashboard" element={<DashboardPage />} />
+              <Route path="dashboard" element={<DashboardPage />} />
 
-            <Route path="assets" element={<AssetsListPage />} />
-            <Route path="assets/favorites" element={<AssetsFavoritesPage />} />
-            <Route path="assets/new" element={<AssetCreatePage />} />
-            <Route path="assets/:id" element={<AssetDetailPage />} />
-            <Route path="assets/:id/edit" element={<AssetEditPage />} />
-            <Route path="assets/print-qr" element={<QRCodePrintPage />} />
-            <Route path="categories" element={<CategoriesPage />} />
-            <Route path="loans" element={<LoansListPage />} />
-            <Route path="loans/new" element={<LoanCreatePage />} />
-            <Route path="loans/:id" element={<LoanDetailPage />} />
-            <Route
-              path="inventory"
-              element={
-                <ErrorBoundary>
-                  <InventoryListPage />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path="inventory/scan"
-              element={
-                <ErrorBoundary>
-                  <InventoryScanPage />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path="depreciation"
-              element={
-                <ErrorBoundary>
-                  <DepreciationListPage />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path="reports/kib"
-              element={
-                <ErrorBoundary>
-                  <KIBGeneratePage />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path="audit"
-              element={
-                <ErrorBoundary>
-                  <AuditListPage />
-                </ErrorBoundary>
-              }
-            />
-            <Route path="profile/activity" element={<UserActivityPage />} />
+              <Route path="assets" element={<AssetsListPage />} />
+              <Route
+                path="assets/favorites"
+                element={<AssetsFavoritesPage />}
+              />
+              <Route path="assets/new" element={<AssetCreatePage />} />
+              <Route path="assets/:id" element={<AssetDetailPage />} />
+              <Route path="assets/:id/edit" element={<AssetEditPage />} />
+              <Route path="assets/print-qr" element={<QRCodePrintPage />} />
+              <Route path="categories" element={<CategoriesPage />} />
+              <Route path="loans" element={<LoansListPage />} />
+              <Route path="loans/new" element={<LoanCreatePage />} />
+              <Route path="loans/:id" element={<LoanDetailPage />} />
+              <Route
+                path="inventory"
+                element={
+                  <ErrorBoundary>
+                    <InventoryListPage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route
+                path="inventory/scan"
+                element={
+                  <ErrorBoundary>
+                    <InventoryScanPage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route
+                path="depreciation"
+                element={
+                  <ErrorBoundary>
+                    <DepreciationListPage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route
+                path="reports/kib"
+                element={
+                  <ErrorBoundary>
+                    <KIBGeneratePage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route
+                path="audit"
+                element={
+                  <ErrorBoundary>
+                    <AuditListPage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route path="profile/activity" element={<UserActivityPage />} />
 
-            {/* Admin-only routes */}
-            <Route element={<AdminRoute />}>
-              <Route path="users" element={<UsersListPage />} />
+              {/* Admin-only routes */}
+              <Route element={<AdminRoute />}>
+                <Route path="users" element={<UsersListPage />} />
+              </Route>
             </Route>
           </Route>
-        </Route>
-      </Routes>
+        </Routes>
 
-      {/* Toast notifications */}
-      <Toaster position="top-right" richColors />
+        {/* Toast notifications */}
+        <Toaster position="top-right" richColors />
       </NetworkProvider>
     </ErrorBoundary>
   )

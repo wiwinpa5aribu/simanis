@@ -25,7 +25,9 @@ export default function AuditListPage() {
 
   // State untuk filter
   const [filters, setFilters] = useState<AuditLogQueryParams>({
-    entity_type: (savedFilters.entity_type as AuditLogQueryParams['entity_type']) || undefined,
+    entity_type:
+      (savedFilters.entity_type as AuditLogQueryParams['entity_type']) ||
+      undefined,
     entity_id: (savedFilters.entity_id as number) || undefined,
     user_id: (savedFilters.user_id as number) || undefined,
     action: (savedFilters.action as AuditLogQueryParams['action']) || undefined,
@@ -57,16 +59,15 @@ export default function AuditListPage() {
   }, [filters, setFilter])
 
   // Query untuk fetch daftar audit logs
-  const {
-    data: auditData,
-    isLoading,
-
-  } = useQuery({
+  const { data: auditData, isLoading } = useQuery({
     queryKey: ['audit-logs', filters],
     queryFn: () => getAuditLogs(filters),
   })
 
-  const handleFilterChange = (key: keyof AuditLogQueryParams, value: unknown) => {
+  const handleFilterChange = (
+    key: keyof AuditLogQueryParams,
+    value: unknown
+  ) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value === '' ? undefined : value,

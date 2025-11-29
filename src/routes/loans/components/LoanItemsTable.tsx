@@ -58,13 +58,17 @@ export function LoanItemsTable({ items }: LoanItemsTableProps) {
                 {item.asset.merk || '-'}
               </td>
               <td className="px-4 py-3 whitespace-nowrap">
-                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getConditionBadge(item.conditionBefore)}`}>
+                <span
+                  className={`px-2 py-1 text-xs font-semibold rounded-full ${getConditionBadge(item.conditionBefore)}`}
+                >
                   {item.conditionBefore}
                 </span>
               </td>
               <td className="px-4 py-3 whitespace-nowrap">
                 {item.conditionAfter ? (
-                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getConditionBadge(item.conditionAfter)}`}>
+                  <span
+                    className={`px-2 py-1 text-xs font-semibold rounded-full ${getConditionBadge(item.conditionAfter)}`}
+                  >
                     {item.conditionAfter}
                   </span>
                 ) : (

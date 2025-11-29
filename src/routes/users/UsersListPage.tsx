@@ -108,7 +108,12 @@ export function UsersListPage() {
   }
 
   const users = usersData?.data || []
-  const meta = usersData?.meta || { total: 0, page: 1, pageSize: 10, totalPages: 1 }
+  const meta = usersData?.meta || {
+    total: 0,
+    page: 1,
+    pageSize: 10,
+    totalPages: 1,
+  }
 
   return (
     <div className="space-y-6">
@@ -119,8 +124,12 @@ export function UsersListPage() {
             <Users className="w-6 h-6 text-purple-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Manajemen Pengguna</h1>
-            <p className="text-gray-500">Kelola pengguna dan hak akses sistem</p>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Manajemen Pengguna
+            </h1>
+            <p className="text-gray-500">
+              Kelola pengguna dan hak akses sistem
+            </p>
           </div>
         </div>
       </div>

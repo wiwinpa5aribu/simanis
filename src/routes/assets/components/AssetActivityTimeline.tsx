@@ -3,7 +3,6 @@ import {
   Activity,
   FileText,
   MapPin,
-
   Clock,
   Edit,
   Trash2,

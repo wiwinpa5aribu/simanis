@@ -83,7 +83,10 @@ export function AssetCreatePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Kode Aset */}
               <div>
-                <label htmlFor="kode_aset" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="kode_aset"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Kode Aset <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -104,7 +107,10 @@ export function AssetCreatePage() {
 
               {/* Nama Barang */}
               <div>
-                <label htmlFor="nama_barang" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="nama_barang"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Nama Barang <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -125,7 +131,10 @@ export function AssetCreatePage() {
 
               {/* Kategori */}
               <div>
-                <label htmlFor="category_id" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="category_id"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Kategori <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -152,7 +161,10 @@ export function AssetCreatePage() {
 
               {/* Kondisi */}
               <div>
-                <label htmlFor="kondisi" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="kondisi"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Kondisi <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -183,7 +195,10 @@ export function AssetCreatePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="merk" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="merk"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Merk / Brand
                 </label>
                 <input
@@ -196,7 +211,10 @@ export function AssetCreatePage() {
               </div>
 
               <div>
-                <label htmlFor="tahun_perolehan" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="tahun_perolehan"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Tahun Perolehan
                 </label>
                 <input
@@ -209,7 +227,10 @@ export function AssetCreatePage() {
               </div>
 
               <div className="md:col-span-2">
-                <label htmlFor="spesifikasi" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="spesifikasi"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Spesifikasi
                 </label>
                 <textarea

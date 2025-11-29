@@ -74,9 +74,7 @@ export class GenerateKibReportUseCase {
         namaBarang: asset.namaBarang,
         merk: asset.merk || '-',
         spesifikasi: asset.spesifikasi || '-',
-        tahun: asset.tahunPerolehan
-          ? new Date(asset.tahunPerolehan).getFullYear()
-          : '-',
+        tahun: asset.tahunPerolehan ? new Date(asset.tahunPerolehan).getFullYear() : '-',
         kondisi: asset.kondisi,
         harga: Number(asset.harga),
         sumberDana: asset.sumberDana,

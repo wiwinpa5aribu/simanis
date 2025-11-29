@@ -1,6 +1,6 @@
 /**
  * Environment Variables Utility
- * 
+ *
  * Centralized access untuk environment variables dengan type safety
  */
 
@@ -24,20 +24,20 @@ export const env = {
   isDev: import.meta.env.DEV,
   isProd: import.meta.env.PROD,
   mode: import.meta.env.MODE,
-} as const;
+} as const
 
 // Type untuk environment variables
-export type Env = typeof env;
+export type Env = typeof env
 
 // Helper function untuk log environment (development only)
 export function logEnvironment() {
   if (env.isDev && env.enableLogging) {
-    console.group('🔧 Environment Configuration');
-    console.log('Mode:', env.mode);
-    console.log('API Base URL:', env.apiBaseUrl);
-    console.log('Use Mock API:', env.useMockApi);
-    console.log('Logging Enabled:', env.enableLogging);
-    console.log('PWA Enabled:', env.pwaEnabled);
-    console.groupEnd();
+    console.group('🔧 Environment Configuration')
+    console.log('Mode:', env.mode)
+    console.log('API Base URL:', env.apiBaseUrl)
+    console.log('Use Mock API:', env.useMockApi)
+    console.log('Logging Enabled:', env.enableLogging)
+    console.log('PWA Enabled:', env.pwaEnabled)
+    console.groupEnd()
   }
 }

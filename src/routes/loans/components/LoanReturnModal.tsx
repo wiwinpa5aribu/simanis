@@ -17,7 +17,11 @@ interface ItemCondition {
   conditionAfter: string
 }
 
-export function LoanReturnModal({ loan, isOpen, onClose }: LoanReturnModalProps) {
+export function LoanReturnModal({
+  loan,
+  isOpen,
+  onClose,
+}: LoanReturnModalProps) {
   const queryClient = useQueryClient()
   const [returnDate, setReturnDate] = useState(
     new Date().toISOString().split('T')[0]
@@ -57,7 +61,6 @@ export function LoanReturnModal({ loan, isOpen, onClose }: LoanReturnModalProps)
 
   if (!isOpen) return null
 
-
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
@@ -91,7 +94,10 @@ export function LoanReturnModal({ loan, isOpen, onClose }: LoanReturnModalProps)
             <div className="px-6 py-4 space-y-6 max-h-[60vh] overflow-y-auto">
               {/* Return Date */}
               <div>
-                <label htmlFor="return-date" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="return-date"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Tanggal Pengembalian
                 </label>
                 <input
