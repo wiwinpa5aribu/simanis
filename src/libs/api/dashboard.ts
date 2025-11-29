@@ -6,7 +6,8 @@
 import { api } from './client'
 import { logger } from '../utils/logger'
 import { z } from 'zod'
-// import { ERROR_MESSAGES } from '../../constants'
+import { env } from '../utils/env'
+import { mockDashboardStats, mockRecentActivities } from './mock/dashboard.mock'
 
 /**
  * Interface untuk statistik dashboard
@@ -24,6 +25,12 @@ export interface DashboardStats {
     count: number
   }[]
   active_loans: number
+  // Nilai aset untuk KIB
+  total_value?: number
+  depreciated_value?: number
+  // Inventarisasi
+  pending_inventory?: number
+  last_inventory_date?: string
 }
 
 /**
@@ -46,6 +53,13 @@ export interface RecentActivity {
 export const getDashboardStats = async (): Promise<DashboardStats> => {
   try {
     logger.info('Dashboard API', 'Mengambil statistik dashboard')
+
+    // Use mock data if enabled
+    if (env.useMockApi) {
+      logger.info('Dashboard API', 'Menggunakan mock data')
+      await new Promise((resolve) => setTimeout(resolve, 500)) // Simulate delay
+      return mockDashboardStats
+    }
 
     const response = await api.get<DashboardStats>('/dashboard/stats')
 
@@ -97,6 +111,13 @@ export const getRecentActivities = async (
 ): Promise<RecentActivity[]> => {
   try {
     logger.info('Dashboard API', `Mengambil ${limit} aktivitas terbaru`)
+
+    // Use mock data if enabled
+    if (env.useMockApi) {
+      logger.info('Dashboard API', 'Menggunakan mock aktivitas')
+      await new Promise((resolve) => setTimeout(resolve, 300)) // Simulate delay
+      return mockRecentActivities.slice(0, limit)
+    }
 
     const response = await api.get<RecentActivity[]>('/dashboard/activities', {
       params: { limit },

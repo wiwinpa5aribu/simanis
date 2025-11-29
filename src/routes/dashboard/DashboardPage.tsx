@@ -13,10 +13,13 @@ import {
   XCircle,
   HelpCircle,
   HandCoins,
+  ClipboardCheck,
 } from 'lucide-react'
 import { getDashboardStats, getRecentActivities } from '@/libs/api/dashboard'
 import { StatCard } from './components/StatCard'
 import { RecentActivities } from './components/RecentActivities'
+import { QuickActions } from './components/QuickActions'
+import { AssetValueSummary } from './components/AssetValueSummary'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { logger } from '@/libs/utils/logger'
@@ -84,8 +87,11 @@ export default function DashboardPage() {
         </p>
       </div>
 
+      {/* Quick Actions */}
+      <QuickActions />
+
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <StatCard
           title="Total Aset"
           value={isLoadingStats ? '-' : stats?.total_assets || 0}
@@ -120,10 +126,23 @@ export default function DashboardPage() {
           iconColor="text-purple-600"
           iconBgColor="bg-purple-100"
         />
+        <StatCard
+          title="Perlu Opname"
+          value={isLoadingStats ? '-' : stats?.pending_inventory || 0}
+          icon={ClipboardCheck}
+          iconColor="text-orange-600"
+          iconBgColor="bg-orange-100"
+        />
       </div>
 
-      {/* Kondisi Aset Detail */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Kondisi Aset & Nilai Aset */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Nilai Aset untuk KIB */}
+        <AssetValueSummary
+          totalValue={stats?.total_value || 0}
+          depreciatedValue={stats?.depreciated_value || 0}
+          isLoading={isLoadingStats}
+        />
         <Card>
           <CardHeader>
             <CardTitle>Aset per Kondisi</CardTitle>
@@ -219,6 +238,8 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Recent Activities - Full Width */}
 
       {/* Recent Activities */}
       <RecentActivities
