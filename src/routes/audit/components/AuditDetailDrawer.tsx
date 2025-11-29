@@ -46,27 +46,34 @@ export function AuditDetailDrawer({
 
     return (
       <div className="space-y-4">
-        {Object.entries(auditLog.field_changed).map(
-          ([field, change]: [string, { old?: unknown; new?: unknown }]) => (
+        {Object.entries(auditLog.field_changed).map(([field, change]) => {
+          const changeObj = change as
+            | { old?: unknown; new?: unknown }
+            | undefined
+          return (
             <div key={field} className="border rounded-lg p-4 bg-gray-50">
               <h4 className="font-semibold text-gray-900 mb-2">{field}</h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <p className="text-gray-500 font-medium mb-1">Nilai Lama:</p>
                   <pre className="bg-red-50 text-red-900 p-2 rounded border border-red-200 overflow-auto">
-                    {formatValue(change.old || auditLog.old_values?.[field])}
+                    {formatValue(
+                      changeObj?.old || auditLog.old_values?.[field]
+                    )}
                   </pre>
                 </div>
                 <div>
                   <p className="text-gray-500 font-medium mb-1">Nilai Baru:</p>
                   <pre className="bg-green-50 text-green-900 p-2 rounded border border-green-200 overflow-auto">
-                    {formatValue(change.new || auditLog.new_values?.[field])}
+                    {formatValue(
+                      changeObj?.new || auditLog.new_values?.[field]
+                    )}
                   </pre>
                 </div>
               </div>
             </div>
           )
-        )}
+        })}
       </div>
     )
   }

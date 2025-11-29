@@ -32,12 +32,23 @@ Object.defineProperty(window, 'matchMedia', {
 })
 
 // Mock IntersectionObserver (untuk lazy loading)
-globalThis.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  takeRecords() {
+class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | Document | null = null
+  readonly rootMargin: string = ''
+  readonly thresholds: ReadonlyArray<number> = []
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(
+    callback: IntersectionObserverCallback,
+    options?: IntersectionObserverInit
+  ) {}
+
+  disconnect(): void {}
+  observe(): void {}
+  unobserve(): void {}
+  takeRecords(): IntersectionObserverEntry[] {
     return []
   }
-  unobserve() {}
-} as typeof IntersectionObserver
+}
+
+globalThis.IntersectionObserver = MockIntersectionObserver
