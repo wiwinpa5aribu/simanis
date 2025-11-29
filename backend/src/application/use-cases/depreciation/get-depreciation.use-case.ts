@@ -9,10 +9,12 @@ export interface DepreciationFilters {
 export interface DepreciationListDto {
   entries: DepreciationEntry[];
   meta: {
-    total: number;
     page: number;
     pageSize: number;
+    totalItems: number;
     totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
   };
 }
 

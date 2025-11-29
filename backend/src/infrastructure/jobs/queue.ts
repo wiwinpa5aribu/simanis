@@ -5,7 +5,6 @@ import { logger } from '../../shared/logger/winston.logger';
 const connection = {
   host: config.redis.host,
   port: config.redis.port,
-  password: config.redis.password,
 };
 
 export const QUEUE_NAMES = {

@@ -54,7 +54,7 @@ export class GetAuditLogsUseCase {
       entityId: log.entityId,
       action: log.action,
       timestamp: log.timestamp,
-      details: log.fieldChanged,
+      details: (log.fieldChanged as Record<string, unknown>) ?? {},
       user: log.user
         ? {
             id: log.user.id,

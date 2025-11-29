@@ -13,7 +13,13 @@ export class AuditRepositoryImpl implements IAuditRepository {
     fieldChanged: Record<string, unknown>;
   }) {
     return this.prisma.auditLog.create({
-      data,
+      data: {
+        entityType: data.entityType,
+        entityId: data.entityId,
+        action: data.action,
+        fieldChanged: data.fieldChanged as object,
+        ...(data.userId && { user: { connect: { id: data.userId } } }),
+      },
     });
   }
 

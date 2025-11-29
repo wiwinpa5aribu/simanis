@@ -25,7 +25,7 @@ export class JwtService {
   sign(payload: JwtPayload): string {
     try {
       return jwt.sign(payload, this.secret, {
-        expiresIn: this.expiresIn,
+        expiresIn: this.expiresIn as jwt.SignOptions['expiresIn'],
       });
     } catch (error) {
       throw new Error(`Failed to sign JWT: ${error}`);

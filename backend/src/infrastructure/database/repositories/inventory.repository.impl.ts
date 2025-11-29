@@ -2,7 +2,7 @@ import { PrismaClient, InventoryCheck, Prisma } from '@prisma/client';
 import {
   IInventoryRepository,
   InventoryFilters,
-} from '../../../../domain/repositories/inventory.repository';
+} from '../../../domain/repositories/inventory.repository';
 
 export class InventoryRepositoryImpl implements IInventoryRepository {
   constructor(private prisma: PrismaClient) {}
@@ -35,7 +35,7 @@ export class InventoryRepositoryImpl implements IInventoryRepository {
     }
 
     if (filters.checkerId) {
-      where.checkerId = filters.checkerId;
+      where.checkedBy = filters.checkerId;
     }
 
     if (filters.condition) {
@@ -43,12 +43,12 @@ export class InventoryRepositoryImpl implements IInventoryRepository {
     }
 
     if (filters.startDate || filters.endDate) {
-      where.createdAt = {};
+      where.checkedAt = {};
       if (filters.startDate) {
-        where.createdAt.gte = filters.startDate;
+        where.checkedAt.gte = filters.startDate;
       }
       if (filters.endDate) {
-        where.createdAt.lte = filters.endDate;
+        where.checkedAt.lte = filters.endDate;
       }
     }
 
@@ -58,14 +58,14 @@ export class InventoryRepositoryImpl implements IInventoryRepository {
         skip,
         take,
         orderBy: {
-          createdAt: 'desc',
+          checkedAt: 'desc',
         },
         include: {
           asset: {
             select: {
               id: true,
-              kode: true,
-              nama: true,
+              kodeAset: true,
+              namaBarang: true,
               category: true,
             },
           },

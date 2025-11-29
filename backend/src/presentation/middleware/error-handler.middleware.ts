@@ -15,7 +15,7 @@ export function errorHandler(error: FastifyError, request: FastifyRequest, reply
   const errorContext = {
     path: request.url,
     method: request.method,
-    userId: request.user?.id,
+    userId: request.user?.userId,
     ip: request.ip,
     userAgent: request.headers['user-agent'],
   };

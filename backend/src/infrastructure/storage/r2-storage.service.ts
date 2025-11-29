@@ -13,15 +13,15 @@ export class R2StorageService implements IStorageService {
   private publicUrl: string;
 
   constructor() {
-    this.bucketName = config.r2.bucketName;
-    this.publicUrl = config.r2.publicUrl;
+    this.bucketName = config.r2.bucketName ?? '';
+    this.publicUrl = config.r2.publicUrl ?? '';
 
     this.client = new S3Client({
       region: 'auto',
-      endpoint: config.r2.endpoint,
+      endpoint: config.r2.endpoint ?? '',
       credentials: {
-        accessKeyId: config.r2.accessKeyId,
-        secretAccessKey: config.r2.secretAccessKey,
+        accessKeyId: config.r2.accessKeyId ?? '',
+        secretAccessKey: config.r2.secretAccessKey ?? '',
       },
     });
   }

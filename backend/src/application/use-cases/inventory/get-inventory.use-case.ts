@@ -22,20 +22,21 @@ export class GetInventoryUseCase {
 
     const meta = calculatePagination(total, page, pageSize);
 
-    // Map to DTO
-    const checksDto = checks.map((check) => ({
+    // Map to DTO - use type assertion for included relations
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const checksDto = checks.map((check: any) => ({
       id: check.id,
       assetId: check.assetId,
-      checkerId: check.checkerId,
+      checkerId: check.checkedBy,
       kondisi: check.kondisi,
       photoUrl: check.photoUrl,
       note: check.note,
-      createdAt: check.createdAt,
+      createdAt: check.checkedAt,
       asset: check.asset
         ? {
             id: check.asset.id,
-            kode: check.asset.kode,
-            nama: check.asset.nama,
+            kode: check.asset.kodeAset,
+            nama: check.asset.namaBarang,
             category: check.asset.category,
           }
         : undefined,
