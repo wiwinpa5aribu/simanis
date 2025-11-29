@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# MCP settings (contains credentials)
+.kiro/settings/mcp.json
