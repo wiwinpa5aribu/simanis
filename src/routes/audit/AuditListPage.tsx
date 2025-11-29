@@ -25,10 +25,10 @@ export default function AuditListPage() {
 
   // State untuk filter
   const [filters, setFilters] = useState<AuditLogQueryParams>({
-    entity_type: (savedFilters.entity_type as any) || undefined,
+    entity_type: (savedFilters.entity_type as AuditLogQueryParams['entity_type']) || undefined,
     entity_id: (savedFilters.entity_id as number) || undefined,
     user_id: (savedFilters.user_id as number) || undefined,
-    action: (savedFilters.action as any) || undefined,
+    action: (savedFilters.action as AuditLogQueryParams['action']) || undefined,
     from_date: (savedFilters.from_date as string) || undefined,
     to_date: (savedFilters.to_date as string) || undefined,
     page: 1,

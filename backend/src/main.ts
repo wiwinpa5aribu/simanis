@@ -7,7 +7,7 @@ import { logger } from './shared/logger/winston.logger';
 import { errorHandler } from './presentation/middleware/error-handler.middleware';
 import { loggerMiddleware } from './presentation/middleware/logger.middleware';
 import { registerRoutes } from './presentation/routes';
-import { initializeJobs } from './infrastructure/jobs';
+// import { initializeJobs } from './infrastructure/jobs';
 
 async function bootstrap() {
     // Create Fastify instance

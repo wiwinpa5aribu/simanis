@@ -2,11 +2,8 @@ import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
 import {
     createBuildingSchema,
-    updateBuildingSchema,
     createFloorSchema,
-    updateFloorSchema,
     createRoomSchema,
-    updateRoomSchema,
 } from '../../src/application/validators/location.validators';
 import { userQuerySchema } from '../../src/application/validators/user.validators';
 

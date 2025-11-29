@@ -21,7 +21,7 @@ export class GetActivitiesUseCase {
         return logs.map((log) => {
             const type = this.mapEntityTypeToActivityType(log.entityType);
             const title = this.generateTitle(log.action, log.entityType);
-            const description = this.generateDescription(log, type);
+            const description = this.generateDescription(log);
             const link = this.generateLink(type, log.entityId);
 
             return {
@@ -60,7 +60,7 @@ export class GetActivitiesUseCase {
         return `${entityMap[entityType] || entityType} ${actionMap[action] || action}`;
     }
 
-    private generateDescription(log: { action: string; entityType: string; entityId: number; user?: { name: string } | null; fieldChanged: unknown }, _type: string): string {
+    private generateDescription(log: { action: string; entityType: string; entityId: number; user?: { name: string } | null; fieldChanged: unknown }): string {
         const userName = log.user?.name || 'Sistem';
         const entityName = this.getEntityDisplayName(log.entityType);
         

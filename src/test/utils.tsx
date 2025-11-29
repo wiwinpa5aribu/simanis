@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 
 // Create a custom render function yang include providers
-const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
+function AllTheProviders({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -31,8 +31,14 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>
 ) => render(ui, { wrapper: AllTheProviders, ...options })
 
-// Re-export everything
-export * from '@testing-library/react'
+// Re-export specific items from testing-library (not using export *)
+export {
+  screen,
+  fireEvent,
+  waitFor as waitForElement,
+  within,
+  cleanup,
+} from '@testing-library/react'
 export { customRender as render }
 
 // Helper untuk wait dengan timeout

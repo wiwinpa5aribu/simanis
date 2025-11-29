@@ -47,7 +47,7 @@ export function AuditDetailDrawer({
     return (
       <div className="space-y-4">
         {Object.entries(auditLog.field_changed).map(
-          ([field, change]: [string, any]) => (
+          ([field, change]: [string, { old?: unknown; new?: unknown }]) => (
             <div key={field} className="border rounded-lg p-4 bg-gray-50">
               <h4 className="font-semibold text-gray-900 mb-2">{field}</h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
@@ -77,6 +77,10 @@ export function AuditDetailDrawer({
       <div
         className="fixed inset-0 bg-black bg-opacity-50 z-40"
         onClick={onClose}
+        onKeyDown={(e) => e.key === 'Escape' && onClose()}
+        role="button"
+        tabIndex={0}
+        aria-label="Close drawer"
       />
 
       {/* Drawer */}
