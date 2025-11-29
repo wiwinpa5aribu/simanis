@@ -20,6 +20,8 @@ export default defineConfig([
       'jsx-a11y': jsxA11y,
     },
     rules: {
+      // Allow unused vars with underscore prefix
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       // Accessibility rules
       'jsx-a11y/alt-text': 'error',
       'jsx-a11y/anchor-has-content': 'error',

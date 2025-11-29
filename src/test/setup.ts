@@ -37,10 +37,9 @@ class MockIntersectionObserver implements IntersectionObserver {
   readonly rootMargin: string = ''
   readonly thresholds: ReadonlyArray<number> = []
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(
-    callback: IntersectionObserverCallback,
-    options?: IntersectionObserverInit
+    _callback: IntersectionObserverCallback,
+    _options?: IntersectionObserverInit
   ) {
     // Parameters required by IntersectionObserver interface but not used in mock
   }
