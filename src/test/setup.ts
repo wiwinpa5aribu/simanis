@@ -41,7 +41,9 @@ class MockIntersectionObserver implements IntersectionObserver {
   constructor(
     callback: IntersectionObserverCallback,
     options?: IntersectionObserverInit
-  ) {}
+  ) {
+    // Parameters required by IntersectionObserver interface but not used in mock
+  }
 
   disconnect(): void {}
   observe(): void {}
