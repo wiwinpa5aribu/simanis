@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>;
 
 const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, children, ...props }, ref) => {
     return (
       <label
         ref={ref}
@@ -13,7 +13,9 @@ const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
           className
         )}
         {...props}
-      />
+      >
+        {children}
+      </label>
     );
   }
 );

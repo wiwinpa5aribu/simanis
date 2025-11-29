@@ -50,6 +50,7 @@ export function AssetsListPage() {
     return () => {
       logger.lifecycle('AssetsListPage', 'unmount')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Update store saat filter berubah

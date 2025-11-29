@@ -58,15 +58,15 @@ const NetworkProvider: React.FC<NetworkProviderProps> = ({ children }) => {
   );
 };
 
-export { NetworkProvider };
-
 /**
  * Hook to access network connectivity status
  */
-export const useNetwork = (): NetworkContextValue => {
+function useNetwork(): NetworkContextValue {
   const context = useContext(NetworkContext);
   if (context === undefined) {
     throw new Error('useNetwork must be used within a NetworkProvider');
   }
   return context;
-};
+}
+
+export { NetworkProvider, useNetwork };
