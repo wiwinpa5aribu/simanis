@@ -6,6 +6,7 @@ import { LogIn, AlertCircle } from 'lucide-react'
 import { login as loginApi } from '../../libs/api/auth'
 import {
   loginSchema,
+  type LoginFormInput,
   type LoginFormValues,
 } from '../../libs/validation/authSchemas'
 import { useAuthStore } from '../../libs/store/authStore'
@@ -23,7 +24,7 @@ export function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormValues>({
+  } = useForm<LoginFormInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       username: '',
@@ -37,7 +38,7 @@ export function LoginPage() {
     mutationFn: loginApi,
     onSuccess: (data, variables) => {
       // Simpan user & token ke store global dengan rememberMe option
-      setAuth(data.user, data.token, variables.rememberMe)
+      setAuth(data.user, data.token, variables.rememberMe ?? false)
       // Redirect ke halaman aset
       navigate('/assets')
     },
@@ -47,8 +48,13 @@ export function LoginPage() {
     },
   })
 
-  const onSubmit = (data: LoginFormValues) => {
-    loginMutation.mutate(data)
+  const onSubmit = (data: LoginFormInput) => {
+    const formData: LoginFormValues = {
+      username: data.username,
+      password: data.password,
+      rememberMe: data.rememberMe ?? false,
+    }
+    loginMutation.mutate(formData)
   }
 
   // Simulasi Login untuk Demo (Jika Backend belum siap)
