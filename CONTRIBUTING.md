@@ -73,6 +73,66 @@ Sebelum commit, pastikan:
 
 Pre-commit hooks akan otomatis menjalankan lint dan format.
 
+## 📐 Coding Standards
+
+### React Hook Form + Zod Pattern
+
+Untuk form dengan validasi Zod, gunakan pattern berikut:
+
+```typescript
+// 1. Schema - gunakan .optional() untuk checkbox/optional fields
+export const mySchema = z.object({
+  name: z.string().min(1, 'Wajib diisi'),
+  rememberMe: z.boolean().optional(),
+})
+
+// 2. Buat 2 tipe: Input (form) dan Output (submit)
+export type MyFormInput = z.input<typeof mySchema>
+export type MyFormValues = {
+  name: string
+  rememberMe: boolean  // Non-optional di output
+}
+
+// 3. Di component
+const { register, handleSubmit } = useForm<MyFormInput>({
+  resolver: zodResolver(mySchema),
+  defaultValues: { name: '', rememberMe: false },
+})
+
+// 4. Convert di onSubmit dengan nullish coalescing
+const onSubmit = (data: MyFormInput) => {
+  const formData: MyFormValues = {
+    name: data.name,
+    rememberMe: data.rememberMe ?? false,
+  }
+}
+```
+
+### Unused Parameters
+
+Gunakan underscore prefix untuk parameter yang intentionally unused:
+
+```typescript
+// ✅ Benar
+constructor(_callback: CallbackType, _options?: OptionsType) {}
+
+// ❌ Salah - akan error ESLint
+constructor(callback: CallbackType, options?: OptionsType) {}
+```
+
+### Mock Classes di Test
+
+```typescript
+class MockIntersectionObserver implements IntersectionObserver {
+  constructor(
+    _callback: IntersectionObserverCallback,
+    _options?: IntersectionObserverInit
+  ) {}
+}
+```
+
+Dokumentasi lengkap: `.kiro/steering/coding-standards.md`
+
 ## 🌿 Branch Naming
 
 ```
