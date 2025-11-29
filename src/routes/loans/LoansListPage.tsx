@@ -34,6 +34,7 @@ export function LoansListPage() {
     return () => {
       logger.lifecycle('LoansListPage', 'unmount')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Update store saat filter berubah

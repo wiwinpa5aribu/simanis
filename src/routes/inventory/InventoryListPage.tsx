@@ -36,6 +36,7 @@ export default function InventoryListPage() {
     return () => {
       logger.lifecycle('InventoryListPage', 'unmount')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [filters, setFilters] = useState<InventoryListParams>({

@@ -270,6 +270,7 @@ export function QRScanner({ onScanSuccess, onError }: QRScannerProps) {
               placeholder="Contoh: AST-2024-001"
               value={manualInput}
               onChange={(e) => setManualInput(e.target.value)}
+              // eslint-disable-next-line jsx-a11y/no-autofocus
               autoFocus
               className="text-base"
             />
