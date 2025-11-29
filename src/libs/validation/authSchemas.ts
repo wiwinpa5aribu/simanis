@@ -5,7 +5,7 @@ import { z } from 'zod'
 export const loginSchema = z.object({
   username: z.string().min(1, 'Username atau email wajib diisi'),
   password: z.string().min(1, 'Password wajib diisi'),
-  rememberMe: z.boolean().optional().default(false),
+  rememberMe: z.boolean().default(false),
 })
 
-export type LoginFormValues = z.infer<typeof loginSchema>
+export type LoginFormValues = z.output<typeof loginSchema>
