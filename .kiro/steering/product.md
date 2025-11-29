@@ -1,37 +1,26 @@
 # SIMANIS - Sistem Manajemen Aset Sekolah
 
-School Asset Management System for Indonesian schools.
-
-## Purpose
-
-Manage school inventory assets including registration, tracking, loans, depreciation, and reporting.
+## Overview
+SIMANIS is a school asset management system (Indonesian: Sistem Manajemen Aset Sekolah) designed to track, manage, and report on school assets throughout their lifecycle.
 
 ## Core Features
+- Asset registration with QR codes for tracking
+- Asset categorization and location management (buildings, floors, rooms)
+- Loan management for borrowing/returning assets
+- Inventory checks with QR scanning
+- Depreciation tracking and calculations
+- KIB (Kartu Inventaris Barang) report generation
+- Audit trail logging
+- Role-based access control (Admin, Staff)
 
-- Asset registration with QR code generation
-- Location tracking via building/floor/room hierarchy
-- Asset mutations (location transfers)
-- Loan management for teachers/staff
-- Periodic inventory checks (stock opname) via QR scanning
-- Automatic depreciation calculation (straight-line method)
-- KIB report generation (Excel/PDF)
-- Audit trail for all changes
+## Domain Concepts
+- **Asset (Aset)**: Physical items tracked by the system with unique codes and QR identifiers
+- **Mutation (Mutasi)**: Movement of assets between rooms/locations
+- **Loan (Peminjaman)**: Temporary borrowing of assets with return tracking
+- **Inventory Check (Opname)**: Periodic verification of asset condition and location
+- **Depreciation (Penyusutan)**: Value reduction calculation over asset lifetime
+- **KIB Report**: Official Indonesian government asset inventory card format
 
 ## User Roles
-
-- Kepsek (Principal)
-- Wakasek Sarpras (Vice Principal - Facilities)
-- Bendahara BOS (BOS Treasurer)
-- Operator
-- Guru (Teacher)
-
-## Domain Language
-
-Use Indonesian terminology for domain concepts:
-- Aset (Asset)
-- Peminjaman (Loan)
-- Mutasi (Transfer/Mutation)
-- Inventarisasi (Inventory Check)
-- Penyusutan (Depreciation)
-- Kondisi: Baik, Rusak Ringan, Rusak Berat, Hilang
-- Sumber Dana: BOS, APBD, Hibah
+- **Admin**: Full system access including user management
+- **Staff**: Asset operations, loans, inventory checks

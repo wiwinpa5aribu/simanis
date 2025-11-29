@@ -11,6 +11,7 @@ import {
   QueryCache,
   MutationCache,
 } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { BrowserRouter } from 'react-router-dom'
 import './styles/index.css'
 import App from './App.tsx'
@@ -91,6 +92,8 @@ try {
           <BrowserRouter>
             <App />
           </BrowserRouter>
+          {/* DevTools hanya muncul di development mode */}
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </ErrorBoundary>
     </StrictMode>
