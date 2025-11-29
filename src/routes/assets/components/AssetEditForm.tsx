@@ -90,10 +90,11 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Kode Aset (Read-only) */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="kode_aset_display" className="block text-sm font-medium text-gray-700 mb-1">
               Kode Aset
             </label>
             <input
+              id="kode_aset_display"
               type="text"
               value={asset.kode_aset}
               disabled
@@ -104,10 +105,11 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
 
           {/* Nama Barang */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="edit_nama_barang" className="block text-sm font-medium text-gray-700 mb-1">
               Nama Barang <span className="text-red-500">*</span>
             </label>
             <input
+              id="edit_nama_barang"
               type="text"
               {...register('nama_barang')}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
@@ -121,10 +123,11 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
 
           {/* Kategori */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="edit_category_id" className="block text-sm font-medium text-gray-700 mb-1">
               Kategori <span className="text-red-500">*</span>
             </label>
             <select
+              id="edit_category_id"
               {...register('category_id')}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${
                 errors.category_id ? 'border-red-500' : 'border-gray-300'
@@ -145,10 +148,11 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
 
           {/* Kondisi */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="edit_kondisi" className="block text-sm font-medium text-gray-700 mb-1">
               Kondisi <span className="text-red-500">*</span>
             </label>
             <select
+              id="edit_kondisi"
               {...register('kondisi')}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${
                 errors.kondisi ? 'border-red-500' : 'border-gray-300'
@@ -175,10 +179,11 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="edit_merk" className="block text-sm font-medium text-gray-700 mb-1">
               Merk / Brand
             </label>
             <input
+              id="edit_merk"
               type="text"
               {...register('merk')}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
@@ -186,10 +191,11 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="edit_tahun_perolehan" className="block text-sm font-medium text-gray-700 mb-1">
               Tahun Perolehan
             </label>
             <input
+              id="edit_tahun_perolehan"
               type="number"
               {...register('tahun_perolehan')}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
@@ -197,10 +203,11 @@ export function AssetEditForm({ asset, onCancel, onSuccess }: AssetEditFormProps
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="edit_spesifikasi" className="block text-sm font-medium text-gray-700 mb-1">
               Spesifikasi
             </label>
             <textarea
+              id="edit_spesifikasi"
               {...register('spesifikasi')}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
