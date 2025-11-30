@@ -5,10 +5,12 @@ import { useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { createAsset } from '../../libs/api/assets'
 import { getCategories } from '../../libs/api/categories'
+import { getRooms } from '../../libs/api/locations'
 import {
   createAssetSchema,
   type CreateAssetFormValues,
   ASSET_CONDITIONS,
+  SUMBER_DANA_VALUES,
 } from '../../libs/validation/assetSchemas'
 
 // Komponen Halaman Tambah Aset
@@ -21,6 +23,12 @@ export function AssetCreatePage() {
   const { data: categories, isLoading: isLoadingCategories } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
+  })
+
+  // Fetch Ruangan untuk Dropdown Lokasi
+  const { data: rooms, isLoading: isLoadingRooms } = useQuery({
+    queryKey: ['rooms'],
+    queryFn: getRooms,
   })
 
   // Setup Form
@@ -84,6 +92,30 @@ export function AssetCreatePage() {
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Kode Aset */}
+              <div>
+                <label
+                  htmlFor="kodeAset"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Kode Aset <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="kodeAset"
+                  type="text"
+                  {...register('kodeAset')}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
+                    errors.kodeAset ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder="Misal: SCH/EL/LPT/001"
+                />
+                {errors.kodeAset && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.kodeAset.message}
+                  </p>
+                )}
+              </div>
+
               {/* Nama Barang */}
               <div>
                 <label
@@ -166,13 +198,131 @@ export function AssetCreatePage() {
             </div>
           </div>
 
-          {/* Section: Detail Tambahan (Opsional) */}
+          {/* Section: Informasi Perolehan */}
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-gray-900 border-b pb-2 pt-4">
-              Detail Tambahan (Opsional)
+              Informasi Perolehan
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Harga */}
+              <div>
+                <label
+                  htmlFor="harga"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Harga Perolehan <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="harga"
+                  type="number"
+                  {...register('harga')}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
+                    errors.harga ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder="Misal: 5000000"
+                />
+                {errors.harga && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.harga.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Sumber Dana */}
+              <div>
+                <label
+                  htmlFor="sumberDana"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Sumber Dana <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="sumberDana"
+                  {...register('sumberDana')}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${
+                    errors.sumberDana ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                >
+                  {SUMBER_DANA_VALUES.map((sd) => (
+                    <option key={sd} value={sd}>
+                      {sd}
+                    </option>
+                  ))}
+                </select>
+                {errors.sumberDana && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.sumberDana.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Tahun Perolehan */}
+              <div>
+                <label
+                  htmlFor="tahunPerolehan"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Tahun Perolehan
+                </label>
+                <input
+                  id="tahunPerolehan"
+                  type="date"
+                  {...register('tahunPerolehan')}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+
+              {/* Masa Manfaat */}
+              <div>
+                <label
+                  htmlFor="masaManfaatTahun"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Masa Manfaat (Tahun)
+                </label>
+                <input
+                  id="masaManfaatTahun"
+                  type="number"
+                  {...register('masaManfaatTahun')}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Misal: 5"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section: Lokasi & Detail */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium text-gray-900 border-b pb-2 pt-4">
+              Lokasi & Detail
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Lokasi (Room) */}
+              <div>
+                <label
+                  htmlFor="currentRoomId"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Lokasi Penempatan
+                </label>
+                <select
+                  id="currentRoomId"
+                  {...register('currentRoomId')}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  disabled={isLoadingRooms}
+                >
+                  <option value="">Pilih Ruangan</option>
+                  {rooms?.map((room) => (
+                    <option key={room.id} value={room.id}>
+                      {room.name} {room.code ? `(${room.code})` : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Merk */}
               <div>
                 <label
                   htmlFor="merk"
@@ -189,21 +339,7 @@ export function AssetCreatePage() {
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="tahunPerolehan"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Tahun Perolehan
-                </label>
-                <input
-                  id="tahunPerolehan"
-                  type="date"
-                  {...register('tahunPerolehan')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                />
-              </div>
-
+              {/* Spesifikasi */}
               <div className="md:col-span-2">
                 <label
                   htmlFor="spesifikasi"

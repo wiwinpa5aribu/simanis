@@ -20,6 +20,10 @@ export const SUMBER_DANA_VALUES = ['BOS', 'APBD', 'Hibah'] as const
 
 // Skema validasi untuk form create aset
 export const createAssetSchema = z.object({
+  kodeAset: z
+    .string()
+    .min(1, 'Kode aset wajib diisi')
+    .max(50, 'Kode aset maksimal 50 karakter'),
   namaBarang: z.string().min(1, 'Nama barang wajib diisi').max(160),
   merk: z.string().max(120).optional(),
   spesifikasi: z.string().optional(),
@@ -54,6 +58,7 @@ export type AssetFormValues = CreateAssetFormValues
 
 // Skema validasi untuk form update aset
 export const updateAssetSchema = z.object({
+  kodeAset: z.string().max(50).optional(),
   namaBarang: z.string().min(1).max(160).optional(),
   merk: z.string().max(120).optional(),
   spesifikasi: z.string().optional(),

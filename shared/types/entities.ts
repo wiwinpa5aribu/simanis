@@ -57,6 +57,7 @@ export interface Asset {
   // Relations
   category?: AssetCategory | null
   creator?: User | null
+  currentRoom?: Room | null
 }
 
 export type AssetCondition = 'Baik' | 'Rusak Ringan' | 'Rusak Berat' | 'Hilang'

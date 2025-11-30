@@ -20,6 +20,7 @@ interface QuickActionItem {
   href: string
   color: string
   bgColor: string
+  roles: string[] // Roles that can see this action
 }
 
 const quickActions: QuickActionItem[] = [
@@ -30,6 +31,7 @@ const quickActions: QuickActionItem[] = [
     href: '/assets/create',
     color: 'text-blue-600',
     bgColor: 'bg-blue-100 hover:bg-blue-200',
+    roles: ['admin', 'wakasek', 'operator'],
   },
   {
     title: 'Scan QR',
@@ -38,6 +40,7 @@ const quickActions: QuickActionItem[] = [
     href: '/inventory/scan',
     color: 'text-green-600',
     bgColor: 'bg-green-100 hover:bg-green-200',
+    roles: ['admin', 'wakasek', 'operator'],
   },
   {
     title: 'Peminjaman',
@@ -46,6 +49,7 @@ const quickActions: QuickActionItem[] = [
     href: '/loans/create',
     color: 'text-purple-600',
     bgColor: 'bg-purple-100 hover:bg-purple-200',
+    roles: ['admin', 'wakasek', 'operator', 'guru'],
   },
   {
     title: 'Mutasi Aset',
@@ -54,6 +58,7 @@ const quickActions: QuickActionItem[] = [
     href: '/assets/mutation',
     color: 'text-orange-600',
     bgColor: 'bg-orange-100 hover:bg-orange-200',
+    roles: ['admin', 'wakasek', 'operator'],
   },
   {
     title: 'Laporan KIB',
@@ -62,10 +67,21 @@ const quickActions: QuickActionItem[] = [
     href: '/reports/kib',
     color: 'text-red-600',
     bgColor: 'bg-red-100 hover:bg-red-200',
+    roles: ['admin', 'wakasek', 'bendahara', 'kepsek'],
   },
 ]
 
-export function QuickActions() {
+interface QuickActionsProps {
+  role?: string
+}
+
+export function QuickActions({ role = 'operator' }: QuickActionsProps) {
+  const filteredActions = quickActions.filter((action) =>
+    action.roles.includes(role)
+  )
+
+  if (filteredActions.length === 0) return null
+
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -73,7 +89,7 @@ export function QuickActions() {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {quickActions.map((action) => (
+          {filteredActions.map((action) => (
             <Link
               key={action.title}
               to={action.href}

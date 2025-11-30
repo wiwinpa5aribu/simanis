@@ -32,7 +32,7 @@ import { DataTable, type Column } from '../../components/table/DataTable'
 import { FilterBar } from '../../components/filters/FilterBar'
 import { useFilterStore } from '../../libs/store/filterStore'
 import { useFavoriteStore } from '../../libs/store/favoriteStore'
-import { AssetBulkActions } from './components/AssetBulkActions'
+import { AssetBulkActions, AssetCard } from './components'
 import { showSuccessToast } from '../../libs/ui/toast'
 import { usePermission } from '../../libs/hooks/usePermission'
 import { useDebouncedValue } from '../../libs/hooks/useDebouncedValue'
@@ -394,23 +394,83 @@ export function AssetsListPage() {
         </div>
       </div>
 
-      {/* Tabel Aset */}
-      <DataTable
-        columns={columns}
-        data={paginatedAssets}
-        isLoading={isLoading}
-        pagination={{
-          page: currentPage,
-          pageSize: pageSize,
-          total: filteredAssets.length,
-          totalPages: totalPages,
-        }}
-        onPageChange={setCurrentPage}
-        emptyMessage="Belum ada data aset yang sesuai dengan pencarian."
-        selectable={can('manage_assets')}
-        selectedIds={selectedIds}
-        onSelectionChange={setSelectedIds}
-      />
+      {/* Mobile Card View - tampil di layar kecil */}
+      <div className="block md:hidden space-y-3">
+        {isLoading ? (
+          <div className="text-center py-8 text-gray-500">Memuat data...</div>
+        ) : paginatedAssets.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            Belum ada data aset yang sesuai dengan pencarian.
+          </div>
+        ) : (
+          paginatedAssets.map((asset) => (
+            <AssetCard
+              key={asset.id}
+              asset={
+                asset as Asset & {
+                  currentRoom?: { name: string } | null
+                  category?: { name: string } | null
+                }
+              }
+              isFavorite={isFavorite(asset.id)}
+              onToggleFavorite={() => {
+                toggleFavorite(asset.id)
+                if (!isFavorite(asset.id)) {
+                  showSuccessToast('Aset ditambahkan ke favorit')
+                }
+              }}
+              onViewDetail={() => navigate(`/assets/${asset.id}`)}
+            />
+          ))
+        )}
+      </div>
+
+      {/* Desktop Table View - tersembunyi di layar kecil */}
+      <div className="hidden md:block">
+        <DataTable
+          columns={columns}
+          data={paginatedAssets}
+          isLoading={isLoading}
+          pagination={{
+            page: currentPage,
+            pageSize: pageSize,
+            total: filteredAssets.length,
+            totalPages: totalPages,
+          }}
+          onPageChange={setCurrentPage}
+          emptyMessage="Belum ada data aset yang sesuai dengan pencarian."
+          selectable={can('manage_assets')}
+          selectedIds={selectedIds}
+          onSelectionChange={setSelectedIds}
+        />
+      </div>
+
+      {/* Mobile Pagination */}
+      {totalPages > 1 && (
+        <div className="flex md:hidden items-center justify-between px-2 py-3 border-t">
+          <span className="text-sm text-gray-500">
+            Halaman {currentPage} dari {totalPages}
+          </span>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              Sebelumnya
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Berikutnya
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Bulk Actions Panel */}
       {can('manage_assets') && (

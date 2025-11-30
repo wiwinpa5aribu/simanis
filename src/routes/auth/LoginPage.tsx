@@ -91,13 +91,23 @@ export function LoginPage() {
     loginMutation.mutate(formData)
   }
 
-  const handleDemoLogin = () => {
-    setAuth(
-      { id: '1', username: 'admin', name: 'Administrator', role: 'admin' },
-      'demo-token-123',
-      true
-    )
-    navigate('/dashboard')
+  const handleDemoLogin = (role: string) => {
+    const demoUsers = {
+      kepsek: 'kepsek',
+      wakasek: 'wakasek',
+      bendahara: 'bendahara',
+      operator: 'operator',
+      guru: 'guru',
+    }
+
+    const username = demoUsers[role as keyof typeof demoUsers]
+    if (username) {
+      loginMutation.mutate({
+        username,
+        password: 'password123',
+        rememberMe: true,
+      })
+    }
   }
 
   return (
@@ -311,13 +321,46 @@ export function LoginPage() {
 
               {/* Demo Login */}
               <div className="mt-6 pt-6 border-t border-gray-200">
-                <button
-                  type="button"
-                  onClick={handleDemoLogin}
-                  className="w-full py-3 px-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-all text-sm font-medium"
-                >
-                  🎮 Masuk sebagai Demo User
-                </button>
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3 text-center">
+                  Demo Access (Development Mode)
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin('kepsek')}
+                    className="py-2 px-3 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all"
+                  >
+                    👨‍💼 Kepsek
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin('wakasek')}
+                    className="py-2 px-3 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all"
+                  >
+                    🏗️ Wakasek Sarpras
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin('bendahara')}
+                    className="py-2 px-3 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all"
+                  >
+                    💰 Bendahara
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin('operator')}
+                    className="py-2 px-3 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all"
+                  >
+                    💻 Operator
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin('guru')}
+                    className="col-span-2 py-2 px-3 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all"
+                  >
+                    👨‍🏫 Guru / Staf
+                  </button>
+                </div>
               </div>
             </div>
           </div>

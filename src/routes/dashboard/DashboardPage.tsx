@@ -23,14 +23,18 @@ import { AssetValueSummary } from './components/AssetValueSummary'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { logger } from '@/libs/utils/logger'
+import { useAuthStore } from '@/libs/store/authStore'
 
 export default function DashboardPage() {
+  const user = useAuthStore((state) => state.user)
+  const role = user?.role || 'operator'
+
   useEffect(() => {
-    logger.lifecycle('DashboardPage', 'mount')
+    logger.lifecycle('DashboardPage', 'mount', { role })
     return () => {
       logger.lifecycle('DashboardPage', 'unmount')
     }
-  }, [])
+  }, [role])
 
   // Fetch statistik
   const {
@@ -88,156 +92,169 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <QuickActions />
+      <QuickActions role={role} />
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <StatCard
-          title="Total Aset"
-          value={isLoadingStats ? '-' : stats?.total_assets || 0}
-          icon={Package}
-          iconColor="text-blue-600"
-          iconBgColor="bg-blue-100"
-        />
-        <StatCard
-          title="Kondisi Baik"
-          value={isLoadingStats ? '-' : stats?.assets_by_condition?.Baik || 0}
-          icon={CheckCircle}
-          iconColor="text-green-600"
-          iconBgColor="bg-green-100"
-        />
-        <StatCard
-          title="Rusak / Hilang"
-          value={
-            isLoadingStats
-              ? '-'
-              : (stats?.assets_by_condition?.['Rusak Ringan'] || 0) +
-                (stats?.assets_by_condition?.['Rusak Berat'] || 0) +
-                (stats?.assets_by_condition?.Hilang || 0)
-          }
-          icon={AlertTriangle}
-          iconColor="text-red-600"
-          iconBgColor="bg-red-100"
-        />
-        <StatCard
-          title="Peminjaman Aktif"
-          value={isLoadingStats ? '-' : stats?.active_loans || 0}
-          icon={HandCoins}
-          iconColor="text-purple-600"
-          iconBgColor="bg-purple-100"
-        />
-        <StatCard
-          title="Perlu Opname"
-          value={isLoadingStats ? '-' : stats?.pending_inventory || 0}
-          icon={ClipboardCheck}
-          iconColor="text-orange-600"
-          iconBgColor="bg-orange-100"
-        />
-      </div>
+      {/* Stats Grid - Hide for Guru */}
+      {role !== 'guru' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <StatCard
+            title="Total Aset"
+            value={isLoadingStats ? '-' : stats?.total_assets || 0}
+            icon={Package}
+            iconColor="text-blue-600"
+            iconBgColor="bg-blue-100"
+          />
+          <StatCard
+            title="Kondisi Baik"
+            value={isLoadingStats ? '-' : stats?.assets_by_condition?.Baik || 0}
+            icon={CheckCircle}
+            iconColor="text-green-600"
+            iconBgColor="bg-green-100"
+          />
+          <StatCard
+            title="Rusak / Hilang"
+            value={
+              isLoadingStats
+                ? '-'
+                : (stats?.assets_by_condition?.['Rusak Ringan'] || 0) +
+                  (stats?.assets_by_condition?.['Rusak Berat'] || 0) +
+                  (stats?.assets_by_condition?.Hilang || 0)
+            }
+            icon={AlertTriangle}
+            iconColor="text-red-600"
+            iconBgColor="bg-red-100"
+          />
+          <StatCard
+            title="Peminjaman Aktif"
+            value={isLoadingStats ? '-' : stats?.active_loans || 0}
+            icon={HandCoins}
+            iconColor="text-purple-600"
+            iconBgColor="bg-purple-100"
+          />
+          <StatCard
+            title="Perlu Opname"
+            value={isLoadingStats ? '-' : stats?.pending_inventory || 0}
+            icon={ClipboardCheck}
+            iconColor="text-orange-600"
+            iconBgColor="bg-orange-100"
+          />
+        </div>
+      )}
 
-      {/* Kondisi Aset & Nilai Aset */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Nilai Aset untuk KIB */}
-        <AssetValueSummary
-          totalValue={stats?.total_value || 0}
-          depreciatedValue={stats?.depreciated_value || 0}
-          isLoading={isLoadingStats}
-        />
-        <Card>
-          <CardHeader>
-            <CardTitle>Aset per Kondisi</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isLoadingStats ? (
-              <div className="text-center py-8 text-gray-500">
-                Memuat data...
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                    <span className="font-medium text-gray-900">Baik</span>
-                  </div>
-                  <span className="text-lg font-bold text-green-600">
-                    {stats?.assets_by_condition?.Baik || 0}
-                  </span>
+      {/* Kondisi Aset & Nilai Aset - Hide for Guru */}
+      {role !== 'guru' && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Nilai Aset untuk KIB - Only for Bendahara, Kepsek, Wakasek */}
+          {['admin', 'bendahara', 'kepsek', 'wakasek'].includes(role) && (
+            <AssetValueSummary
+              totalValue={stats?.total_value || 0}
+              depreciatedValue={stats?.depreciated_value || 0}
+              isLoading={isLoadingStats}
+            />
+          )}
+
+          <Card
+            className={
+              ['admin', 'bendahara', 'kepsek', 'wakasek'].includes(role)
+                ? ''
+                : 'lg:col-span-2'
+            }
+          >
+            <CardHeader>
+              <CardTitle>Aset per Kondisi</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isLoadingStats ? (
+                <div className="text-center py-8 text-gray-500">
+                  Memuat data...
                 </div>
-                <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    <span className="font-medium text-gray-900">
-                      Rusak Ringan
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                      <span className="font-medium text-gray-900">Baik</span>
+                    </div>
+                    <span className="text-lg font-bold text-green-600">
+                      {stats?.assets_by_condition?.Baik || 0}
                     </span>
                   </div>
-                  <span className="text-lg font-bold text-yellow-600">
-                    {stats?.assets_by_condition?.['Rusak Ringan'] || 0}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <XCircle className="h-5 w-5 text-orange-600" />
-                    <span className="font-medium text-gray-900">
-                      Rusak Berat
-                    </span>
-                  </div>
-                  <span className="text-lg font-bold text-orange-600">
-                    {stats?.assets_by_condition?.['Rusak Berat'] || 0}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <HelpCircle className="h-5 w-5 text-red-600" />
-                    <span className="font-medium text-gray-900">Hilang</span>
-                  </div>
-                  <span className="text-lg font-bold text-red-600">
-                    {stats?.assets_by_condition?.Hilang || 0}
-                  </span>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Top 5 Kategori Aset</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isLoadingStats ? (
-              <div className="text-center py-8 text-gray-500">
-                Memuat data...
-              </div>
-            ) : stats?.assets_by_category &&
-              stats.assets_by_category.length > 0 ? (
-              <div className="space-y-3">
-                {stats.assets_by_category.slice(0, 5).map((category, idx) => (
-                  <div
-                    key={category.category_name}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-600 rounded-full font-bold text-sm">
-                        {idx + 1}
-                      </div>
+                  <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="h-5 w-5 text-yellow-600" />
                       <span className="font-medium text-gray-900">
-                        {category.category_name}
+                        Rusak Ringan
                       </span>
                     </div>
-                    <span className="text-lg font-bold text-blue-600">
-                      {category.count}
+                    <span className="text-lg font-bold text-yellow-600">
+                      {stats?.assets_by_condition?.['Rusak Ringan'] || 0}
                     </span>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 text-gray-500">
-                Belum ada data kategori
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+                  <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <XCircle className="h-5 w-5 text-orange-600" />
+                      <span className="font-medium text-gray-900">
+                        Rusak Berat
+                      </span>
+                    </div>
+                    <span className="text-lg font-bold text-orange-600">
+                      {stats?.assets_by_condition?.['Rusak Berat'] || 0}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <HelpCircle className="h-5 w-5 text-red-600" />
+                      <span className="font-medium text-gray-900">Hilang</span>
+                    </div>
+                    <span className="text-lg font-bold text-red-600">
+                      {stats?.assets_by_condition?.Hilang || 0}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Top 5 Kategori Aset</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isLoadingStats ? (
+                <div className="text-center py-8 text-gray-500">
+                  Memuat data...
+                </div>
+              ) : stats?.assets_by_category &&
+                stats.assets_by_category.length > 0 ? (
+                <div className="space-y-3">
+                  {stats.assets_by_category.slice(0, 5).map((category, idx) => (
+                    <div
+                      key={category.category_name}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-600 rounded-full font-bold text-sm">
+                          {idx + 1}
+                        </div>
+                        <span className="font-medium text-gray-900">
+                          {category.category_name}
+                        </span>
+                      </div>
+                      <span className="text-lg font-bold text-blue-600">
+                        {category.count}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  Belum ada data kategori
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Recent Activities - Full Width */}
 

@@ -23,10 +23,17 @@ Implementasi fitur manajemen aset sesuai dengan requirements dan design document
     - _Requirements: 1.5_
   - [ ]* 1.3 Write property test untuk filter pencarian
     - **Property 1: Search Filter Correctness**
+
+
+
+
     - **Validates: Requirements 1.2**
-  - [ ]* 1.4 Write property test untuk filter kategori dan kondisi
+  - [x]* 1.4 Write property test untuk filter kategori dan kondisi
+
     - **Property 2: Category Filter Correctness**
     - **Property 3: Condition Filter Correctness**
+
+
     - **Validates: Requirements 1.3, 1.4**
 
 - [ ] 2. Implementasi responsive DataTable dengan card view mobile
