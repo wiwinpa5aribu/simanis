@@ -1,14 +1,34 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Search, Eye, Star } from 'lucide-react'
+import {
+  Plus,
+  Search,
+  Eye,
+  Star,
+  MapPin,
+  DollarSign,
+  CircleCheck,
+  CircleAlert,
+  CircleX,
+  CircleHelp,
+} from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../components/ui/select'
+import { formatCurrency } from '../../libs/utils/format'
 import { getAssets } from '../../libs/api/assets'
+import { getCategories } from '../../libs/api/categories'
 import type { Asset } from '../../libs/validation/assetSchemas'
+import { ASSET_CONDITIONS } from '../../libs/validation/assetSchemas'
 import { ErrorAlert } from '../../components/ui/Feedback'
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
-import { DataTable } from '../../components/table/DataTable'
-import type { Column, RowAction } from '../../components/table/DataTable'
+import { DataTable, type Column } from '../../components/table/DataTable'
 import { FilterBar } from '../../components/filters/FilterBar'
 import { useFilterStore } from '../../libs/store/filterStore'
 import { useFavoriteStore } from '../../libs/store/favoriteStore'
@@ -68,13 +88,94 @@ export function AssetsListPage() {
     queryFn: () => getAssets(),
   })
 
+  // Fetch Categories for Filter
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+  })
+
+  const [categoryFilter, setCategoryFilter] = useState<string>('all')
+  const [conditionFilter, setConditionFilter] = useState<string>('all')
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const PAGE_SIZE_OPTIONS = [10, 25, 50] as const
+
   // Filter client-side (sementara, idealnya server-side)
-  const filteredAssets =
-    assetsResponse?.data?.filter(
-      (asset: Asset) =>
-        asset.namaBarang.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        asset.kodeAset.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || []
+  const filteredAssets = useMemo(() => {
+    return (
+      assetsResponse?.data?.filter((asset: Asset) => {
+        const matchesSearch =
+          asset.namaBarang.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          asset.kodeAset.toLowerCase().includes(searchTerm.toLowerCase())
+
+        const matchesCategory =
+          categoryFilter === 'all' ||
+          asset.categoryId?.toString() === categoryFilter
+
+        const matchesCondition =
+          conditionFilter === 'all' || asset.kondisi === conditionFilter
+
+        return matchesSearch && matchesCategory && matchesCondition
+      }) || []
+    )
+  }, [assetsResponse?.data, searchTerm, categoryFilter, conditionFilter])
+
+  // Paginated data
+  const paginatedAssets = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize
+    return filteredAssets.slice(startIndex, startIndex + pageSize)
+  }, [filteredAssets, currentPage, pageSize])
+
+  const totalPages = Math.ceil(filteredAssets.length / pageSize)
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm, categoryFilter, conditionFilter, pageSize])
+
+  // Helper function untuk mendapatkan warna badge kondisi
+  const getConditionBadge = (kondisi: string) => {
+    const badgeStyles: Record<
+      string,
+      { bg: string; text: string; icon: React.ReactNode }
+    > = {
+      Baik: {
+        bg: 'bg-green-100',
+        text: 'text-green-800',
+        icon: <CircleCheck className="w-3.5 h-3.5" />,
+      },
+      'Rusak Ringan': {
+        bg: 'bg-yellow-100',
+        text: 'text-yellow-800',
+        icon: <CircleAlert className="w-3.5 h-3.5" />,
+      },
+      'Rusak Berat': {
+        bg: 'bg-orange-100',
+        text: 'text-orange-800',
+        icon: <CircleX className="w-3.5 h-3.5" />,
+      },
+      Hilang: {
+        bg: 'bg-red-100',
+        text: 'text-red-800',
+        icon: <CircleHelp className="w-3.5 h-3.5" />,
+      },
+    }
+    const style = badgeStyles[kondisi] || {
+      bg: 'bg-gray-100',
+      text: 'text-gray-800',
+      icon: null,
+    }
+    return (
+      <span
+        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${style.bg} ${style.text}`}
+      >
+        {style.icon}
+        {kondisi}
+      </span>
+    )
+  }
 
   // Definisi kolom tabel
   const columns: Column<Asset>[] = [
@@ -126,30 +227,56 @@ export function AssetsListPage() {
       cell: (item) => item.category?.name ?? '-',
     },
     {
+      key: 'location',
+      header: 'Lokasi',
+      cell: (item) => {
+        if (item.currentRoom) {
+          return (
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-gray-400" />
+              <span>{item.currentRoom.name}</span>
+            </div>
+          )
+        }
+        return <span className="text-gray-400">-</span>
+      },
+    },
+    {
       key: 'kondisi',
       header: 'Kondisi',
+      cell: (item) => getConditionBadge(item.kondisi),
+    },
+    {
+      key: 'value',
+      header: 'Nilai Aset',
       cell: (item) => (
-        <span
-          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-            item.kondisi === 'Baik'
-              ? 'bg-green-100 text-green-800'
-              : item.kondisi === 'Hilang'
-                ? 'bg-red-100 text-red-800'
-                : 'bg-yellow-100 text-yellow-800'
-          }`}
-        >
-          {item.kondisi}
-        </span>
+        <div className="flex items-center gap-1.5">
+          <DollarSign className="w-3.5 h-3.5 text-gray-400" />
+          <span className="font-medium">
+            {formatCurrency(Number(item.harga))}
+          </span>
+        </div>
       ),
     },
-  ]
-
-  // Definisi aksi baris
-  const rowActions: RowAction<Asset>[] = [
     {
-      label: 'Detail',
-      icon: <Eye className="w-4 h-4" />,
-      onClick: (item) => navigate(`/assets/${item.id}`),
+      key: 'actions',
+      header: 'Aksi',
+      cell: (item) => (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            logger.info('AssetsListPage', 'User clicked asset detail', {
+              assetId: item.id,
+              assetName: item.namaBarang,
+            })
+            navigate(`/assets/${item.id}`)
+          }}
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          Detail
+        </Button>
+      ),
     },
   ]
 
@@ -206,20 +333,76 @@ export function AssetsListPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+
+        {/* Category Filter */}
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger>
+            <SelectValue placeholder="Semua Kategori" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Semua Kategori</SelectItem>
+            {categories?.map((cat) => (
+              <SelectItem key={cat.id} value={cat.id.toString()}>
+                {cat.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        {/* Condition Filter */}
+        <Select value={conditionFilter} onValueChange={setConditionFilter}>
+          <SelectTrigger>
+            <SelectValue placeholder="Semua Kondisi" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Semua Kondisi</SelectItem>
+            {ASSET_CONDITIONS.map((cond) => (
+              <SelectItem key={cond} value={cond}>
+                {cond}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </FilterBar>
+
+      {/* Page Size Selector */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500">Tampilkan</span>
+          <Select
+            value={pageSize.toString()}
+            onValueChange={(val) => setPageSize(Number(val))}
+          >
+            <SelectTrigger className="w-20">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {PAGE_SIZE_OPTIONS.map((size) => (
+                <SelectItem key={size} value={size.toString()}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <span className="text-sm text-gray-500">item per halaman</span>
+        </div>
+        <div className="text-sm text-gray-500">
+          Total: {filteredAssets.length} aset
+        </div>
+      </div>
 
       {/* Tabel Aset */}
       <DataTable
         columns={columns}
-        data={filteredAssets}
+        data={paginatedAssets}
         isLoading={isLoading}
-        rowActions={rowActions}
         pagination={{
-          page: 1,
-          pageSize: filteredAssets.length,
+          page: currentPage,
+          pageSize: pageSize,
           total: filteredAssets.length,
-          totalPages: 1,
+          totalPages: totalPages,
         }}
+        onPageChange={setCurrentPage}
         emptyMessage="Belum ada data aset yang sesuai dengan pencarian."
         selectable={can('manage_assets')}
         selectedIds={selectedIds}
