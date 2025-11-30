@@ -9,6 +9,16 @@ import type {
 // Re-export types
 export type { Loan, LoanItem, LoanStatus }
 
+// Backward compatibility - simple loan schema for single asset
+export const loanSchema = z.object({
+  assetId: z.coerce.number().int().positive('Aset wajib dipilih'),
+  tanggalPinjam: z.string().min(1, 'Tanggal pinjam wajib diisi'),
+  tujuanPinjam: z.string().optional(),
+  catatan: z.string().optional(),
+})
+
+export type LoanFormValues = z.infer<typeof loanSchema>
+
 // Skema validasi untuk form create peminjaman (multiple items)
 export const createLoanSchema = z.object({
   tanggalPinjam: z.string().min(1, 'Tanggal pinjam wajib diisi'),
@@ -36,7 +46,7 @@ export const returnLoanSchema = z.object({
       z.object({
         assetId: z.coerce.number().int().positive(),
         conditionAfter: z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat'], {
-          errorMap: () => ({ message: 'Kondisi pengembalian wajib dipilih' }),
+          message: 'Kondisi pengembalian wajib dipilih',
         }),
       })
     )

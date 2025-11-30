@@ -31,6 +31,6 @@ export const useFilterStore = create<FilterStore>()(
       }),
       { name: 'simanis-filters' }
     ),
-    { name: 'FilterStore', enabled: process.env.NODE_ENV === 'development' }
+    { name: 'FilterStore', enabled: import.meta.env.DEV }
   )
 )

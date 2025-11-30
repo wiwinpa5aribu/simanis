@@ -9,14 +9,13 @@ import type {
   LoanDetail,
   CreateLoanFormValues,
   ReturnLoanFormValues,
-  LoanFilterValues,
 } from '../validation/loanSchemas'
 import { logger } from '../utils/logger'
 import { ERROR_MESSAGES } from '../../constants'
 import { getErrorMessage } from '../utils/errorHandling'
 import { assertValidId, isDefined } from '../utils/guards'
 
-interface PaginatedResponse<T> {
+export interface PaginatedResponse<T> {
   data: T[]
   meta: {
     page: number
@@ -26,11 +25,21 @@ interface PaginatedResponse<T> {
   }
 }
 
+export interface LoanFilters {
+  status?: string
+  requestedBy?: number
+  assetId?: number
+  startDate?: string
+  endDate?: string
+  page?: number
+  pageSize?: number
+}
+
 /**
  * Get Loans - Mengambil daftar peminjaman dengan pagination dan filter
  */
 export const getLoans = async (
-  filters?: Partial<LoanFilterValues>
+  filters?: LoanFilters
 ): Promise<PaginatedResponse<Loan>> => {
   try {
     logger.info('Loans API', 'Mengambil daftar peminjaman', filters)

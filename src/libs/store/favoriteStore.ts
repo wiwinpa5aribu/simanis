@@ -27,6 +27,6 @@ export const useFavoriteStore = create<FavoriteStore>()(
       }),
       { name: 'simanis-favorites' }
     ),
-    { name: 'FavoriteStore', enabled: process.env.NODE_ENV === 'development' }
+    { name: 'FavoriteStore', enabled: import.meta.env.DEV }
   )
 )

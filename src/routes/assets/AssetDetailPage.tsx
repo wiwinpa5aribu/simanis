@@ -104,7 +104,7 @@ export function AssetDetailPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              {asset.nama_barang}
+              {asset.namaBarang}
               <button
                 onClick={handleToggleFavorite}
                 className="focus:outline-none"
@@ -121,7 +121,7 @@ export function AssetDetailPage() {
                 />
               </button>
             </h1>
-            <p className="text-gray-500">{asset.kode_aset}</p>
+            <p className="text-gray-500">{asset.kodeAset}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -161,11 +161,11 @@ export function AssetDetailPage() {
             </div>
 
             {/* Tampilkan foto saat ini jika ada */}
-            {asset.photo_url && (
+            {asset.fotoUrl && (
               <div className="mb-4">
                 <img
-                  src={asset.photo_url}
-                  alt={asset.nama_barang}
+                  src={asset.fotoUrl}
+                  alt={asset.namaBarang}
                   className="w-full h-auto rounded-lg border"
                 />
               </div>
@@ -179,10 +179,10 @@ export function AssetDetailPage() {
                 onUpload={handlePhotoUpload}
                 label="Upload Foto Aset"
                 disabled={uploadPhotoMutation.isPending}
-                currentFile={asset.photo_url}
+                currentFile={asset.fotoUrl ?? undefined}
               />
             ) : (
-              !asset.photo_url && (
+              !asset.fotoUrl && (
                 <div className="text-center py-8 text-gray-500">
                   <p className="text-sm">Belum ada foto untuk aset ini</p>
                 </div>
@@ -198,7 +198,7 @@ export function AssetDetailPage() {
               <div>
                 <dt className="text-sm font-medium text-gray-500">Kategori</dt>
                 <dd className="mt-1 text-sm text-gray-900 font-medium">
-                  {asset.category_name || '-'}
+                  {asset.category?.name || '-'}
                 </dd>
               </div>
               <div>
@@ -230,7 +230,11 @@ export function AssetDetailPage() {
                   Tahun Perolehan
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  {asset.tahun_perolehan || '-'}
+                  {asset.tahunPerolehan
+                    ? asset.tahunPerolehan instanceof Date
+                      ? asset.tahunPerolehan.toLocaleDateString('id-ID')
+                      : String(asset.tahunPerolehan)
+                    : '-'}
                 </dd>
               </div>
               <div className="sm:col-span-2">

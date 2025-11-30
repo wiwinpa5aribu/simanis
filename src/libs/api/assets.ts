@@ -7,7 +7,6 @@ import { api } from './client'
 import type {
   CreateAssetFormValues,
   UpdateAssetFormValues,
-  AssetFilterValues,
   Asset,
 } from '../validation/assetSchemas'
 import { logger } from '../utils/logger'
@@ -15,7 +14,7 @@ import { ERROR_MESSAGES } from '../../constants'
 import { getErrorMessage } from '../utils/errorHandling'
 import { assertNonEmptyString, isDefined } from '../utils/guards'
 
-interface PaginatedResponse<T> {
+export interface PaginatedResponse<T> {
   data: T[]
   meta: {
     page: number
@@ -25,11 +24,21 @@ interface PaginatedResponse<T> {
   }
 }
 
+export interface AssetFilters {
+  search?: string
+  categoryId?: number
+  kondisi?: string
+  roomId?: number
+  buildingId?: number
+  page?: number
+  pageSize?: number
+}
+
 /**
  * Get Assets - Mengambil daftar aset dengan pagination dan filter
  */
 export const getAssets = async (
-  filters?: Partial<AssetFilterValues>
+  filters?: AssetFilters
 ): Promise<PaginatedResponse<Asset>> => {
   try {
     logger.info('Assets API', 'Mengambil daftar aset', filters)
@@ -164,10 +173,6 @@ export const updateAsset = async (
 
     const response = await api.put<Asset>(`/assets/${id}`, data)
 
-    if (!isDefined(response.data)) {
-      throw new Error('Gagal mengupdate aset: response kosong')
-    }
-
     logger.success(
       'Assets API',
       `Berhasil mengupdate aset: ${response.data.namaBarang}`
@@ -211,14 +216,8 @@ export const updateAssetPhoto = async (
     formData.append('photo', file)
 
     const response = await api.put<Asset>(`/assets/${id}/photo`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
-
-    if (!isDefined(response.data)) {
-      throw new Error('Gagal mengupload foto: response kosong')
-    }
 
     logger.success(
       'Assets API',
@@ -229,6 +228,30 @@ export const updateAssetPhoto = async (
     logger.error(
       'Assets API',
       `Gagal mengupload foto untuk aset ID: ${id}`,
+      error
+    )
+    throw new Error(getErrorMessage(error) || ERROR_MESSAGES.UNKNOWN_ERROR)
+  }
+}
+
+/**
+ * Get Asset QR Code - Mengambil QR code aset
+ */
+export const getAssetQrCode = async (id: number): Promise<string> => {
+  try {
+    logger.info('Assets API', `Mengambil QR code untuk aset ID: ${id}`)
+
+    const response = await api.get<{ qrCode: string }>(`/assets/${id}/qr-code`)
+
+    logger.success(
+      'Assets API',
+      `Berhasil mengambil QR code untuk aset ID: ${id}`
+    )
+    return response.data.qrCode
+  } catch (error: unknown) {
+    logger.error(
+      'Assets API',
+      `Gagal mengambil QR code untuk aset ID: ${id}`,
       error
     )
     throw new Error(getErrorMessage(error) || ERROR_MESSAGES.UNKNOWN_ERROR)

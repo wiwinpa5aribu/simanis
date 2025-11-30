@@ -26,10 +26,10 @@ export const createAssetSchema = z.object({
   tahunPerolehan: z.string().optional(), // Format: YYYY-MM-DD
   harga: z.coerce.number().min(0, 'Harga tidak boleh negatif'),
   sumberDana: z.enum(['BOS', 'APBD', 'Hibah'], {
-    errorMap: () => ({ message: 'Sumber dana harus BOS, APBD, atau Hibah' }),
+    message: 'Sumber dana harus BOS, APBD, atau Hibah',
   }),
   kondisi: z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat', 'Hilang'], {
-    errorMap: () => ({ message: 'Pilih kondisi aset yang valid' }),
+    message: 'Pilih kondisi aset yang valid',
   }),
   categoryId: z.coerce
     .number()
@@ -40,11 +40,17 @@ export const createAssetSchema = z.object({
   currentRoomId: z.coerce.number().int().positive().optional(),
 })
 
+// Backward compatibility - alias untuk assetSchema
+export const assetSchema = createAssetSchema
+
 // Input type untuk form (sebelum transform)
 export type CreateAssetFormInput = z.input<typeof createAssetSchema>
 
 // Output type setelah validasi
 export type CreateAssetFormValues = z.infer<typeof createAssetSchema>
+
+// Backward compatibility
+export type AssetFormValues = CreateAssetFormValues
 
 // Skema validasi untuk form update aset
 export const updateAssetSchema = z.object({
