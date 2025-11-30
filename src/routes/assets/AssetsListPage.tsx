@@ -230,11 +230,14 @@ export function AssetsListPage() {
       key: 'location',
       header: 'Lokasi',
       cell: (item) => {
-        if (item.currentRoom) {
+        // Use type assertion for relation field that may not be in base type
+        const room = (item as Asset & { currentRoom?: { name: string } | null })
+          .currentRoom
+        if (room) {
           return (
             <div className="flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-gray-400" />
-              <span>{item.currentRoom.name}</span>
+              <span>{room.name}</span>
             </div>
           )
         }
