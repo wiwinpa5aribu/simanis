@@ -198,7 +198,7 @@ export function AssetDetailPage() {
               <div>
                 <dt className="text-sm font-medium text-gray-500">Kategori</dt>
                 <dd className="mt-1 text-sm text-gray-900 font-medium">
-                  {asset.category?.name || '-'}
+                  {asset.category?.name ?? '-'}
                 </dd>
               </div>
               <div>

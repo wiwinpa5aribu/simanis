@@ -223,8 +223,8 @@ export default function InventoryScanPage() {
             <CardContent>
               <InventoryForm
                 assetId={asset.id}
-                assetCode={asset.kode_aset}
-                assetName={asset.nama_barang}
+                assetCode={asset.kodeAset}
+                assetName={asset.namaBarang}
                 onSuccess={handleInventorySuccess}
                 onCancel={handleCancel}
               />

@@ -49,19 +49,19 @@ export function LoanItemsTable({ items }: LoanItemsTableProps) {
           {items.map((item) => (
             <tr key={item.assetId} className="hover:bg-gray-50">
               <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                {item.asset.kodeAset}
+                {item.asset?.kodeAset ?? '-'}
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                {item.asset.namaBarang}
+                {item.asset?.namaBarang ?? '-'}
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                {item.asset.merk || '-'}
+                {item.asset?.merk ?? '-'}
               </td>
               <td className="px-4 py-3 whitespace-nowrap">
                 <span
-                  className={`px-2 py-1 text-xs font-semibold rounded-full ${getConditionBadge(item.conditionBefore)}`}
+                  className={`px-2 py-1 text-xs font-semibold rounded-full ${getConditionBadge(item.conditionBefore ?? 'Baik')}`}
                 >
-                  {item.conditionBefore}
+                  {item.conditionBefore ?? '-'}
                 </span>
               </td>
               <td className="px-4 py-3 whitespace-nowrap">

@@ -51,7 +51,7 @@ export function AssetEditPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Edit Aset</h1>
           <p className="text-gray-500">
-            {asset.kode_aset} - {asset.nama_barang}
+            {asset.kodeAset} - {asset.namaBarang}
           </p>
         </div>
       </div>

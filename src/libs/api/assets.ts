@@ -41,7 +41,11 @@ export const getAssets = async (
   filters?: AssetFilters
 ): Promise<PaginatedResponse<Asset>> => {
   try {
-    logger.info('Assets API', 'Mengambil daftar aset', filters)
+    logger.info(
+      'Assets API',
+      'Mengambil daftar aset',
+      filters as Record<string, unknown>
+    )
 
     const response = await api.get<Asset[]>('/assets', { params: filters })
 

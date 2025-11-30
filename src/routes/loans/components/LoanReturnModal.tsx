@@ -6,6 +6,9 @@ import { showSuccessToast, showErrorToast } from '../../../libs/ui/toast'
 import { ASSET_CONDITIONS } from '../../../libs/validation/assetSchemas'
 import type { LoanDetail } from '../../../libs/validation/loanSchemas'
 
+// Only allow conditions that can be selected for return (exclude 'Hilang')
+const RETURN_CONDITIONS = ASSET_CONDITIONS.filter((c) => c !== 'Hilang')
+
 interface LoanReturnModalProps {
   loan: LoanDetail
   isOpen: boolean
@@ -29,12 +32,21 @@ export function LoanReturnModal({
   const [itemConditions, setItemConditions] = useState<ItemCondition[]>(
     loan.items.map((item) => ({
       assetId: item.assetId,
-      conditionAfter: item.conditionBefore, // Default to same condition
+      conditionAfter: item.conditionBefore ?? 'Baik',
     }))
   )
 
   const returnMutation = useMutation({
-    mutationFn: () => returnLoan(loan.id, returnDate),
+    mutationFn: () =>
+      returnLoan(loan.id, {
+        items: itemConditions.map((item) => ({
+          assetId: item.assetId,
+          conditionAfter: item.conditionAfter as
+            | 'Baik'
+            | 'Rusak Ringan'
+            | 'Rusak Berat',
+        })),
+      }),
     onSuccess: () => {
       showSuccessToast('Peminjaman berhasil dikembalikan')
       queryClient.invalidateQueries({ queryKey: ['loan', String(loan.id)] })
@@ -132,14 +144,16 @@ export function LoanReturnModal({
                       <select
                         value={
                           itemConditions.find((c) => c.assetId === item.assetId)
-                            ?.conditionAfter || item.conditionBefore
+                            ?.conditionAfter ??
+                          item.conditionBefore ??
+                          'Baik'
                         }
                         onChange={(e) =>
                           handleConditionChange(item.assetId, e.target.value)
                         }
                         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
                       >
-                        {ASSET_CONDITIONS.map((cond) => (
+                        {RETURN_CONDITIONS.map((cond) => (
                           <option key={cond} value={cond}>
                             {cond}
                           </option>

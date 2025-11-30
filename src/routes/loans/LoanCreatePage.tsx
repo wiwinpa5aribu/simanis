@@ -6,11 +6,11 @@ import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { createLoan } from '../../libs/api/loans'
 import { getAssets } from '../../libs/api/assets'
 import {
-  loanSchema,
-  type LoanFormValues,
+  createLoanSchema,
+  type CreateLoanFormValues,
 } from '../../libs/validation/loanSchemas'
 import { logger } from '../../libs/utils/logger'
-import { showErrorToast } from '../../libs/ui/toast'
+import { showErrorToast, showSuccessToast } from '../../libs/ui/toast'
 
 // Komponen Halaman Catat Peminjaman
 // Form untuk mencatat peminjaman aset baru
@@ -18,31 +18,39 @@ export function LoanCreatePage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  // Fetch Daftar Aset (Hanya yang kondisinya Baik/Tersedia - logic filter di backend idealnya)
-  // Untuk phase 1, kita ambil semua aset dulu
-  const { data: assets, isLoading: isLoadingAssets } = useQuery({
+  // Fetch Daftar Aset
+  const { data: assetsResponse, isLoading: isLoadingAssets } = useQuery({
     queryKey: ['assets'],
-    queryFn: getAssets,
+    queryFn: () => getAssets(),
   })
+
+  const assets = assetsResponse?.data ?? []
 
   // Setup Form
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoanFormValues>({
+    watch,
+    setValue,
+  } = useForm<CreateLoanFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(loanSchema) as any, // Bypass potential type mismatch
+    resolver: zodResolver(createLoanSchema) as any,
     defaultValues: {
-      loan_date: new Date().toISOString().split('T')[0], // Default hari ini
+      tanggalPinjam: new Date().toISOString().split('T')[0],
+      items: [],
     },
   })
+
+  // Watch selected asset for single-item loan (simplified)
+  const selectedAssetId = watch('items.0.assetId')
 
   // Mutation Create Loan
   const createMutation = useMutation({
     mutationFn: createLoan,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['loans'] })
+      showSuccessToast('Peminjaman berhasil dicatat')
       navigate('/loans')
     },
     onError: (error: unknown) => {
@@ -51,8 +59,21 @@ export function LoanCreatePage() {
     },
   })
 
-  const onSubmit = (data: LoanFormValues) => {
+  const onSubmit = (data: CreateLoanFormValues) => {
     createMutation.mutate(data)
+  }
+
+  const handleAssetSelect = (assetId: number) => {
+    const asset = assets.find((a) => a.id === assetId)
+    if (asset) {
+      setValue('items', [
+        {
+          assetId: asset.id,
+          conditionBefore:
+            asset.kondisi === 'Hilang' ? undefined : asset.kondisi,
+        },
+      ])
+    }
   }
 
   return (
@@ -79,53 +100,30 @@ export function LoanCreatePage() {
           {/* Aset */}
           <div>
             <label
-              htmlFor="asset_id"
+              htmlFor="assetId"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Aset yang Dipinjam <span className="text-red-500">*</span>
             </label>
             <select
-              id="asset_id"
-              {...register('asset_id')}
+              id="assetId"
+              value={selectedAssetId || ''}
+              onChange={(e) => handleAssetSelect(Number(e.target.value))}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${
-                errors.asset_id ? 'border-red-500' : 'border-gray-300'
+                errors.items ? 'border-red-500' : 'border-gray-300'
               }`}
               disabled={isLoadingAssets}
             >
               <option value="">Pilih Aset...</option>
-              {assets?.map((asset) => (
+              {assets.map((asset) => (
                 <option key={asset.id} value={asset.id}>
-                  {asset.nama_barang} ({asset.kode_aset}) - {asset.kondisi}
+                  {asset.namaBarang} ({asset.kodeAset}) - {asset.kondisi}
                 </option>
               ))}
             </select>
-            {errors.asset_id && (
+            {errors.items && (
               <p className="mt-1 text-sm text-red-500">
-                {errors.asset_id.message}
-              </p>
-            )}
-          </div>
-
-          {/* Nama Peminjam */}
-          <div>
-            <label
-              htmlFor="borrower_name"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Nama Peminjam <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="borrower_name"
-              type="text"
-              {...register('borrower_name')}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
-                errors.borrower_name ? 'border-red-500' : 'border-gray-300'
-              }`}
-              placeholder="Nama lengkap peminjam"
-            />
-            {errors.borrower_name && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.borrower_name.message}
+                {errors.items.message || 'Pilih minimal 1 aset'}
               </p>
             )}
           </div>
@@ -133,40 +131,57 @@ export function LoanCreatePage() {
           {/* Tanggal Pinjam */}
           <div>
             <label
-              htmlFor="loan_date"
+              htmlFor="tanggalPinjam"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Tanggal Pinjam <span className="text-red-500">*</span>
             </label>
             <input
-              id="loan_date"
+              id="tanggalPinjam"
               type="date"
-              {...register('loan_date')}
+              {...register('tanggalPinjam')}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
-                errors.loan_date ? 'border-red-500' : 'border-gray-300'
+                errors.tanggalPinjam ? 'border-red-500' : 'border-gray-300'
               }`}
             />
-            {errors.loan_date && (
+            {errors.tanggalPinjam && (
               <p className="mt-1 text-sm text-red-500">
-                {errors.loan_date.message}
+                {errors.tanggalPinjam.message}
               </p>
             )}
+          </div>
+
+          {/* Tujuan Pinjam */}
+          <div>
+            <label
+              htmlFor="tujuanPinjam"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Tujuan Peminjaman (Opsional)
+            </label>
+            <input
+              id="tujuanPinjam"
+              type="text"
+              {...register('tujuanPinjam')}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Contoh: Untuk kegiatan upacara"
+            />
           </div>
 
           {/* Catatan */}
           <div>
             <label
-              htmlFor="notes"
+              htmlFor="catatan"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Catatan / Keperluan (Opsional)
+              Catatan (Opsional)
             </label>
             <textarea
-              id="notes"
-              {...register('notes')}
+              id="catatan"
+              {...register('catatan')}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="Contoh: Untuk kegiatan upacara hari Senin"
+              placeholder="Catatan tambahan..."
             />
           </div>
 
@@ -180,7 +195,7 @@ export function LoanCreatePage() {
             </Link>
             <button
               type="submit"
-              disabled={createMutation.isPending}
+              disabled={createMutation.isPending || !selectedAssetId}
               className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-70"
             >
               {createMutation.isPending ? (

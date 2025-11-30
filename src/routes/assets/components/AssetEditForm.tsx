@@ -11,7 +11,7 @@ import { ASSET_CONDITIONS } from '../../../libs/validation/assetSchemas'
 
 // Schema validasi untuk edit form
 const editAssetSchema = z.object({
-  nama_barang: z
+  namaBarang: z
     .string()
     .min(1, 'Nama barang wajib diisi')
     .max(160, 'Nama barang maksimal 160 karakter'),
@@ -20,8 +20,8 @@ const editAssetSchema = z.object({
   kondisi: z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat', 'Hilang'], {
     message: 'Kondisi tidak valid',
   }),
-  category_id: z.coerce.number().min(1, 'Kategori tidak valid'),
-  tahun_perolehan: z.coerce.number().optional(),
+  categoryId: z.coerce.number().min(1, 'Kategori tidak valid'),
+  tahunPerolehan: z.coerce.number().optional(),
 })
 
 type EditAssetFormValues = z.infer<typeof editAssetSchema>
@@ -53,12 +53,17 @@ export function AssetEditForm({
   } = useForm<EditAssetFormValues>({
     resolver: zodResolver(editAssetSchema) as never,
     defaultValues: {
-      nama_barang: asset.nama_barang,
+      namaBarang: asset.namaBarang,
       merk: asset.merk || '',
       spesifikasi: asset.spesifikasi || '',
       kondisi: asset.kondisi,
-      category_id: asset.category_id,
-      tahun_perolehan: asset.tahun_perolehan,
+      categoryId: asset.categoryId ?? undefined,
+      tahunPerolehan:
+        asset.tahunPerolehan instanceof Date
+          ? asset.tahunPerolehan.getFullYear()
+          : typeof asset.tahunPerolehan === 'string'
+            ? new Date(asset.tahunPerolehan).getFullYear()
+            : undefined,
     },
   })
 
@@ -66,8 +71,11 @@ export function AssetEditForm({
   const updateMutation = useMutation({
     mutationFn: (data: EditAssetFormValues) =>
       updateAsset(asset.id, {
-        ...data,
-        kode_aset: asset.kode_aset, // Keep original code
+        namaBarang: data.namaBarang,
+        merk: data.merk,
+        spesifikasi: data.spesifikasi,
+        kondisi: data.kondisi,
+        categoryId: data.categoryId,
       }),
     onSuccess: () => {
       showSuccessToast('Aset berhasil diperbarui')
@@ -104,7 +112,7 @@ export function AssetEditForm({
             <input
               id="kode_aset_display"
               type="text"
-              value={asset.kode_aset}
+              value={asset.kodeAset}
               disabled
               className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
             />
@@ -116,22 +124,22 @@ export function AssetEditForm({
           {/* Nama Barang */}
           <div>
             <label
-              htmlFor="edit_nama_barang"
+              htmlFor="edit_namaBarang"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Nama Barang <span className="text-red-500">*</span>
             </label>
             <input
-              id="edit_nama_barang"
+              id="edit_namaBarang"
               type="text"
-              {...register('nama_barang')}
+              {...register('namaBarang')}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
-                errors.nama_barang ? 'border-red-500' : 'border-gray-300'
+                errors.namaBarang ? 'border-red-500' : 'border-gray-300'
               }`}
             />
-            {errors.nama_barang && (
+            {errors.namaBarang && (
               <p className="mt-1 text-sm text-red-500">
-                {errors.nama_barang.message}
+                {errors.namaBarang.message}
               </p>
             )}
           </div>
@@ -139,16 +147,16 @@ export function AssetEditForm({
           {/* Kategori */}
           <div>
             <label
-              htmlFor="edit_category_id"
+              htmlFor="edit_categoryId"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Kategori <span className="text-red-500">*</span>
             </label>
             <select
-              id="edit_category_id"
-              {...register('category_id')}
+              id="edit_categoryId"
+              {...register('categoryId')}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${
-                errors.category_id ? 'border-red-500' : 'border-gray-300'
+                errors.categoryId ? 'border-red-500' : 'border-gray-300'
               }`}
               disabled={isLoadingCategories}
             >
@@ -159,9 +167,9 @@ export function AssetEditForm({
                 </option>
               ))}
             </select>
-            {errors.category_id && (
+            {errors.categoryId && (
               <p className="mt-1 text-sm text-red-500">
-                {errors.category_id.message}
+                {errors.categoryId.message}
               </p>
             )}
           </div>
@@ -220,15 +228,15 @@ export function AssetEditForm({
 
           <div>
             <label
-              htmlFor="edit_tahun_perolehan"
+              htmlFor="edit_tahunPerolehan"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Tahun Perolehan
             </label>
             <input
-              id="edit_tahun_perolehan"
+              id="edit_tahunPerolehan"
               type="number"
-              {...register('tahun_perolehan')}
+              {...register('tahunPerolehan')}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>

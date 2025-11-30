@@ -6,8 +6,8 @@ import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { createAsset } from '../../libs/api/assets'
 import { getCategories } from '../../libs/api/categories'
 import {
-  assetSchema,
-  type AssetFormValues,
+  createAssetSchema,
+  type CreateAssetFormValues,
   ASSET_CONDITIONS,
 } from '../../libs/validation/assetSchemas'
 
@@ -28,11 +28,14 @@ export function AssetCreatePage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AssetFormValues>({
+  } = useForm<CreateAssetFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(assetSchema) as any, // Bypass type mismatch for coerced values
+    resolver: zodResolver(createAssetSchema) as any, // Bypass type mismatch for coerced values
     defaultValues: {
       kondisi: 'Baik',
+      sumberDana: 'BOS',
+      harga: 0,
+      masaManfaatTahun: 0,
     },
   })
 
@@ -49,7 +52,7 @@ export function AssetCreatePage() {
     },
   })
 
-  const onSubmit = (data: AssetFormValues) => {
+  const onSubmit = (data: CreateAssetFormValues) => {
     createMutation.mutate(data)
   }
 
@@ -81,50 +84,26 @@ export function AssetCreatePage() {
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Kode Aset */}
-              <div>
-                <label
-                  htmlFor="kode_aset"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Kode Aset <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="kode_aset"
-                  type="text"
-                  {...register('kode_aset')}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
-                    errors.kode_aset ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  placeholder="Misal: INV-2024-001"
-                />
-                {errors.kode_aset && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.kode_aset.message}
-                  </p>
-                )}
-              </div>
-
               {/* Nama Barang */}
               <div>
                 <label
-                  htmlFor="nama_barang"
+                  htmlFor="namaBarang"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Nama Barang <span className="text-red-500">*</span>
                 </label>
                 <input
-                  id="nama_barang"
+                  id="namaBarang"
                   type="text"
-                  {...register('nama_barang')}
+                  {...register('namaBarang')}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
-                    errors.nama_barang ? 'border-red-500' : 'border-gray-300'
+                    errors.namaBarang ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Misal: Laptop Lenovo ThinkPad"
                 />
-                {errors.nama_barang && (
+                {errors.namaBarang && (
                   <p className="mt-1 text-sm text-red-500">
-                    {errors.nama_barang.message}
+                    {errors.namaBarang.message}
                   </p>
                 )}
               </div>
@@ -132,16 +111,16 @@ export function AssetCreatePage() {
               {/* Kategori */}
               <div>
                 <label
-                  htmlFor="category_id"
+                  htmlFor="categoryId"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Kategori <span className="text-red-500">*</span>
                 </label>
                 <select
-                  id="category_id"
-                  {...register('category_id')}
+                  id="categoryId"
+                  {...register('categoryId')}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white ${
-                    errors.category_id ? 'border-red-500' : 'border-gray-300'
+                    errors.categoryId ? 'border-red-500' : 'border-gray-300'
                   }`}
                   disabled={isLoadingCategories}
                 >
@@ -152,9 +131,9 @@ export function AssetCreatePage() {
                     </option>
                   ))}
                 </select>
-                {errors.category_id && (
+                {errors.categoryId && (
                   <p className="mt-1 text-sm text-red-500">
-                    {errors.category_id.message}
+                    {errors.categoryId.message}
                   </p>
                 )}
               </div>
@@ -212,17 +191,16 @@ export function AssetCreatePage() {
 
               <div>
                 <label
-                  htmlFor="tahun_perolehan"
+                  htmlFor="tahunPerolehan"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Tahun Perolehan
                 </label>
                 <input
-                  id="tahun_perolehan"
-                  type="number"
-                  {...register('tahun_perolehan')}
+                  id="tahunPerolehan"
+                  type="date"
+                  {...register('tahunPerolehan')}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="Misal: 2024"
                 />
               </div>
 

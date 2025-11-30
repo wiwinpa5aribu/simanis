@@ -3,7 +3,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Search, CheckCircle } from 'lucide-react'
 import { getLoans, returnLoan } from '../../libs/api/loans'
-import type { Loan } from '../../libs/validation/loanSchemas'
+import type {
+  Loan,
+  ReturnLoanFormValues,
+} from '../../libs/validation/loanSchemas'
 import { LoadingSpinner, ErrorAlert } from '../../components/ui/Feedback'
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
@@ -14,7 +17,6 @@ import { showSuccessToast, showErrorToast } from '../../libs/ui/toast'
 import { logger } from '../../libs/utils/logger'
 
 // Komponen Halaman Daftar Peminjaman
-// Menampilkan tabel peminjaman dan aksi pengembalian
 export function LoansListPage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -41,24 +43,26 @@ export function LoansListPage() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setFilter(routeKey, { search: searchTerm })
-    }, 500) // Debounce save
+    }, 500)
     return () => clearTimeout(timeoutId)
   }, [searchTerm, setFilter])
 
   // Fetch Data Peminjaman
   const {
-    data: loans,
+    data: loansResponse,
     isLoading,
     isError,
   } = useQuery({
     queryKey: ['loans'],
-    queryFn: getLoans,
+    queryFn: () => getLoans(),
   })
+
+  const loans = loansResponse?.data ?? []
 
   // Mutation: Tandai Dikembalikan
   const returnMutation = useMutation({
-    mutationFn: ({ id, date }: { id: number; date: string }) =>
-      returnLoan(id, date),
+    mutationFn: ({ id, data }: { id: number; data: ReturnLoanFormValues }) =>
+      returnLoan(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['loans'] })
       showSuccessToast('Aset berhasil ditandai dikembalikan.')
@@ -72,52 +76,73 @@ export function LoansListPage() {
   const handleReturn = (item: Loan) => {
     logger.info('LoansListPage', 'User clicked return loan', {
       loanId: item.id,
-      borrower: item.borrower_name,
-      assetId: item.asset_id,
     })
 
     if (window.confirm('Tandai aset ini sebagai dikembalikan hari ini?')) {
-      const today = new Date().toISOString().split('T')[0]
-      returnMutation.mutate({ id: item.id, date: today })
+      // Create return data with items from loan
+      // Filter out 'Hilang' condition as it's not valid for return
+      const returnData: ReturnLoanFormValues = {
+        items:
+          item.items?.map((loanItem) => {
+            const condition = loanItem.conditionBefore
+            // Only allow valid return conditions
+            const validCondition: 'Baik' | 'Rusak Ringan' | 'Rusak Berat' =
+              condition === 'Baik' ||
+              condition === 'Rusak Ringan' ||
+              condition === 'Rusak Berat'
+                ? condition
+                : 'Baik'
+            return {
+              assetId: loanItem.assetId,
+              conditionAfter: validCondition,
+            }
+          }) ?? [],
+      }
+      returnMutation.mutate({ id: item.id, data: returnData })
     }
   }
 
   // Filter client-side
-  const filteredLoans =
-    loans?.filter(
-      (loan) =>
-        loan.borrower_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (loan.asset_name || '').toLowerCase().includes(searchTerm.toLowerCase())
-    ) || []
+  const filteredLoans = loans.filter((loan: Loan) => {
+    const requesterName = loan.requester?.name ?? ''
+    return requesterName.toLowerCase().includes(searchTerm.toLowerCase())
+  })
 
   // Handle row click to navigate to detail
   const handleRowClick = (loan: Loan) => {
     navigate(`/loans/${loan.id}`)
   }
 
+  // Format date helper
+  const formatDate = (date: Date | string | undefined) => {
+    if (!date) return '-'
+    const d = typeof date === 'string' ? new Date(date) : date
+    return d.toLocaleDateString('id-ID')
+  }
+
   // Definisi kolom
   const columns: Column<Loan>[] = [
     {
-      key: 'borrower_name',
+      key: 'requester',
       header: 'Peminjam',
       cell: (item) => (
         <button
           onClick={() => handleRowClick(item)}
           className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
         >
-          {item.borrower_name}
+          {item.requester?.name ?? `User #${item.requestedBy}`}
         </button>
       ),
     },
     {
-      key: 'asset_name',
-      header: 'Aset',
-      cell: (item) => item.asset_name || `Aset #${item.asset_id}`,
+      key: 'items',
+      header: 'Jumlah Aset',
+      cell: (item) => `${item.items?.length ?? 0} aset`,
     },
     {
-      key: 'loan_date',
+      key: 'tanggalPinjam',
       header: 'Tanggal Pinjam',
-      cell: (item) => item.loan_date,
+      cell: (item) => formatDate(item.tanggalPinjam),
     },
     {
       key: 'status',
@@ -127,7 +152,9 @@ export function LoansListPage() {
           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
             item.status === 'Dikembalikan'
               ? 'bg-green-100 text-green-800'
-              : 'bg-yellow-100 text-yellow-800'
+              : item.status === 'Terlambat'
+                ? 'bg-red-100 text-red-800'
+                : 'bg-yellow-100 text-yellow-800'
           }`}
         >
           {item.status}
@@ -140,7 +167,7 @@ export function LoansListPage() {
       className: 'text-right',
       cell: (item) => (
         <div className="flex justify-end">
-          {item.status === 'Dipinjam' ? (
+          {item.status === 'Dipinjam' || item.status === 'Terlambat' ? (
             <Button
               variant="ghost"
               size="sm"
@@ -190,7 +217,7 @@ export function LoansListPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
             type="text"
-            placeholder="Cari peminjam atau nama aset..."
+            placeholder="Cari peminjam..."
             className="pl-9"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

@@ -24,21 +24,21 @@ export function AssetsFavoritesPage() {
 
   // Fetch data aset dari API
   const {
-    data: assets,
+    data: assetsResponse,
     isLoading,
     isError,
   } = useQuery({
     queryKey: ['assets'],
-    queryFn: getAssets,
+    queryFn: () => getAssets(),
   })
 
   // Filter aset: hanya yang ada di favoriteAssetIds DAN sesuai search term
   const filteredAssets =
-    assets?.filter(
-      (asset) =>
+    assetsResponse?.data?.filter(
+      (asset: Asset) =>
         favoriteAssetIds.includes(asset.id) &&
-        (asset.nama_barang.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          asset.kode_aset.toLowerCase().includes(searchTerm.toLowerCase()))
+        (asset.namaBarang.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          asset.kodeAset.toLowerCase().includes(searchTerm.toLowerCase()))
     ) || []
 
   // Definisi kolom tabel
@@ -63,19 +63,19 @@ export function AssetsFavoritesPage() {
       ),
     },
     {
-      key: 'kode_aset',
+      key: 'kodeAset',
       header: 'Kode Aset',
-      cell: (item) => <span className="font-medium">{item.kode_aset}</span>,
+      cell: (item) => <span className="font-medium">{item.kodeAset}</span>,
     },
     {
-      key: 'nama_barang',
+      key: 'namaBarang',
       header: 'Nama Barang',
-      cell: (item) => item.nama_barang,
+      cell: (item) => item.namaBarang,
     },
     {
       key: 'category',
       header: 'Kategori',
-      cell: (item) => item.category_name || '-',
+      cell: (item) => item.category?.name ?? '-',
     },
     {
       key: 'kondisi',

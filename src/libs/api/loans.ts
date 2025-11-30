@@ -42,7 +42,11 @@ export const getLoans = async (
   filters?: LoanFilters
 ): Promise<PaginatedResponse<Loan>> => {
   try {
-    logger.info('Loans API', 'Mengambil daftar peminjaman', filters)
+    logger.info(
+      'Loans API',
+      'Mengambil daftar peminjaman',
+      filters as Record<string, unknown>
+    )
 
     const response = await api.get<Loan[]>('/loans', { params: filters })
 

@@ -14,16 +14,16 @@ export function QRCodePrintPage() {
 
   // Fetch all assets and filter by selected IDs
   const {
-    data: allAssets,
+    data: assetsResponse,
     isLoading,
     isError,
   } = useQuery({
     queryKey: ['assets'],
-    queryFn: getAssets,
+    queryFn: () => getAssets(),
   })
 
   const selectedAssets =
-    allAssets?.filter((asset) => assetIds.includes(asset.id)) || []
+    assetsResponse?.data?.filter((asset) => assetIds.includes(asset.id)) || []
 
   const handlePrint = () => {
     window.print()
@@ -94,8 +94,8 @@ export function QRCodePrintPage() {
             key={asset.id}
             asset={{
               id: asset.id,
-              kode_aset: asset.kode_aset,
-              nama_barang: asset.nama_barang,
+              kode_aset: asset.kodeAset,
+              nama_barang: asset.namaBarang,
             }}
           />
         ))}
