@@ -9,9 +9,13 @@ import { logger } from './shared/logger/winston.logger';
 import { errorHandler } from './presentation/middleware/error-handler.middleware';
 import { loggerMiddleware } from './presentation/middleware/logger.middleware';
 import { registerRoutes } from './presentation/routes';
+import { initSentry, captureException } from './shared/sentry/sentry';
 // import { initializeJobs } from './infrastructure/jobs';
 
 async function bootstrap() {
+  // Initialize Sentry for error tracking
+  initSentry();
+
   // Create Fastify instance
   const fastify = Fastify({
     logger: false, // Use Winston instead
@@ -94,6 +98,15 @@ async function bootstrap() {
       };
     });
 
+    // Test Sentry endpoint (development only)
+    if (config.env === 'development') {
+      fastify.get('/debug-sentry', async () => {
+        const testError = new Error('Test Sentry Error from SIMANIS Backend');
+        captureException(testError, { test: true, timestamp: new Date().toISOString() });
+        return { message: 'Test error sent to Sentry. Check your Sentry dashboard.' };
+      });
+    }
+
     // Initialize background jobs (disabled for testing)
     // await initializeJobs();
 
@@ -107,6 +120,7 @@ async function bootstrap() {
     logger.info(`🔧 Environment: ${config.env}`);
   } catch (error) {
     logger.error('Failed to start server', { error });
+    captureException(error as Error, { context: 'bootstrap' });
     process.exit(1);
   }
 }

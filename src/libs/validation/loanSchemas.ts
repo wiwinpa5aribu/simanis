@@ -1,58 +1,81 @@
 import { z } from 'zod'
+import type {
+  Loan,
+  LoanItem,
+  LoanStatus,
+  AssetCondition,
+} from '../../../shared/types/entities'
 
-// Skema validasi untuk form peminjaman
-export const loanSchema = z.object({
-  asset_id: z.coerce.number().min(1, 'Aset wajib dipilih'),
-  borrower_name: z.string().min(1, 'Nama peminjam wajib diisi'),
-  loan_date: z.string().min(1, 'Tanggal pinjam wajib diisi'),
-  return_date: z.string().optional(), // Opsional saat meminjam, diisi saat kembali
-  notes: z.string().optional(),
+// Re-export types
+export type { Loan, LoanItem, LoanStatus }
+
+// Skema validasi untuk form create peminjaman (multiple items)
+export const createLoanSchema = z.object({
+  tanggalPinjam: z.string().min(1, 'Tanggal pinjam wajib diisi'),
+  tujuanPinjam: z.string().optional(),
+  catatan: z.string().optional(),
+  items: z
+    .array(
+      z.object({
+        assetId: z.coerce.number().int().positive('Aset wajib dipilih'),
+        conditionBefore: z
+          .enum(['Baik', 'Rusak Ringan', 'Rusak Berat'])
+          .optional(),
+      })
+    )
+    .min(1, 'Minimal 1 aset harus dipinjam'),
 })
 
-export type LoanFormValues = z.infer<typeof loanSchema>
+export type CreateLoanFormInput = z.input<typeof createLoanSchema>
+export type CreateLoanFormValues = z.infer<typeof createLoanSchema>
 
-// Tipe data Peminjaman dari Backend
-export interface Loan {
-  id: number
-  asset_id: number
-  asset_name?: string
-  asset_code?: string
-  borrower_name: string
-  loan_date: string
-  return_date?: string | null
-  status: 'Dipinjam' | 'Dikembalikan'
-  notes?: string
-  created_at?: string
-  updated_at?: string
-}
+// Skema validasi untuk form pengembalian
+export const returnLoanSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        assetId: z.coerce.number().int().positive(),
+        conditionAfter: z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat'], {
+          errorMap: () => ({ message: 'Kondisi pengembalian wajib dipilih' }),
+        }),
+      })
+    )
+    .min(1, 'Minimal 1 aset harus dikembalikan'),
+})
 
-// Tipe data Detail Peminjaman dengan informasi lengkap
-export interface LoanItem {
-  assetId: number
-  conditionBefore: string
-  conditionAfter: string | null
-  asset: {
-    id: number
-    kodeAset: string
-    namaBarang: string
-    merk: string
-    kondisi: string
-  }
-}
+export type ReturnLoanFormInput = z.input<typeof returnLoanSchema>
+export type ReturnLoanFormValues = z.infer<typeof returnLoanSchema>
 
-export interface LoanDetail {
-  id: number
-  requestedBy: number
-  tanggalPinjam: string
-  tanggalKembali: string | null
-  tujuanPinjam: string
-  status: 'Dipinjam' | 'Dikembalikan' | 'Terlambat'
-  catatan: string | null
+// Skema untuk filter peminjaman
+export const loanFilterSchema = z.object({
+  status: z.enum(['Dipinjam', 'Dikembalikan', 'Terlambat']).optional(),
+  requestedBy: z.coerce.number().optional(),
+  assetId: z.coerce.number().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  page: z.coerce.number().min(1).default(1),
+  pageSize: z.coerce.number().min(1).max(100).default(10),
+})
+
+export type LoanFilterValues = z.infer<typeof loanFilterSchema>
+
+// Type untuk detail peminjaman dengan relasi lengkap
+export interface LoanDetail extends Loan {
   requester: {
     id: number
     name: string
     username: string
-    email: string
+    email: string | null
   }
-  items: LoanItem[]
+  items: Array<
+    LoanItem & {
+      asset: {
+        id: number
+        kodeAset: string
+        namaBarang: string
+        merk: string | null
+        kondisi: AssetCondition
+      }
+    }
+  >
 }

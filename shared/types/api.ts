@@ -1,7 +1,10 @@
 /**
  * Shared API Types
  * Request/Response types untuk konsistensi antara frontend dan backend
+ * Disesuaikan dengan Prisma Schema (camelCase)
  */
+
+import type { AssetCondition, SumberDana, LoanStatus } from './entities'
 
 // ============================================
 // Generic API Response
@@ -54,77 +57,100 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   user: {
-    id: string
+    id: number
     username: string
     name: string
-    role: string
+    roles: string[]
   }
   token: string
+  expiresIn: string
+}
+
+export interface ForgotPasswordRequest {
+  email: string
+}
+
+export interface ResetPasswordRequest {
+  token: string
+  password: string
 }
 
 // ============================================
 // Asset API
 // ============================================
-export interface AssetFilters {
+export interface AssetFilters extends PaginationParams {
   search?: string
   categoryId?: number
-  kondisi?: string
+  kondisi?: AssetCondition
   roomId?: number
   buildingId?: number
 }
 
 export interface CreateAssetRequest {
   namaBarang: string
-  categoryId: number
-  kondisi: string
-  hargaPerolehan: number
-  tanggalPerolehan: string
-  umurEkonomis: number
-  roomId?: number
+  merk?: string
+  spesifikasi?: string
+  tahunPerolehan?: string
+  harga: number
+  sumberDana: SumberDana
+  kondisi: AssetCondition
+  categoryId?: number
+  masaManfaatTahun?: number
+  currentRoomId?: number
 }
 
-export interface UpdateAssetRequest extends Partial<CreateAssetRequest> {
-  id: string
+export interface UpdateAssetRequest {
+  namaBarang?: string
+  merk?: string
+  spesifikasi?: string
+  kondisi?: AssetCondition
+  categoryId?: number
+  currentRoomId?: number
 }
 
 // ============================================
 // Loan API
 // ============================================
-export interface LoanFilters {
-  status?: string
-  borrowerId?: string
-  assetId?: string
+export interface LoanFilters extends PaginationParams {
+  status?: LoanStatus
+  requestedBy?: number
+  assetId?: number
   startDate?: string
   endDate?: string
 }
 
 export interface CreateLoanRequest {
-  assetId: string
-  borrowerId: string
   tanggalPinjam: string
-  note?: string
+  tujuanPinjam?: string
+  catatan?: string
+  items: Array<{
+    assetId: number
+    conditionBefore?: AssetCondition
+  }>
 }
 
 export interface ReturnLoanRequest {
-  loanId: string
-  tanggalKembali: string
-  note?: string
+  items: Array<{
+    assetId: number
+    conditionAfter: AssetCondition
+  }>
 }
 
 // ============================================
 // Inventory Check API
 // ============================================
-export interface InventoryFilters {
-  assetId?: string
-  checkerId?: string
-  kondisi?: string
+export interface InventoryFilters extends PaginationParams {
+  assetId?: number
+  checkerId?: number
+  kondisi?: AssetCondition
   startDate?: string
   endDate?: string
 }
 
 export interface CreateInventoryCheckRequest {
-  assetId: string
-  kondisi: string
+  assetId: number
+  kondisi: AssetCondition
+  qrCodeScanned?: string
   photoUrl?: string
   note?: string
 }
@@ -132,9 +158,40 @@ export interface CreateInventoryCheckRequest {
 // ============================================
 // Depreciation API
 // ============================================
-export interface DepreciationFilters {
-  assetId?: string
+export interface DepreciationFilters extends PaginationParams {
+  assetId?: number
   year?: number
+}
+
+// ============================================
+// Category API
+// ============================================
+export interface CreateCategoryRequest {
+  name: string
+  description?: string
+}
+
+export interface UpdateCategoryRequest {
+  name?: string
+  description?: string
+}
+
+// ============================================
+// Location API
+// ============================================
+export interface CreateBuildingRequest {
+  name: string
+}
+
+export interface CreateFloorRequest {
+  buildingId: number
+  levelNumber: number
+}
+
+export interface CreateRoomRequest {
+  floorId: number
+  name: string
+  code?: string
 }
 
 // ============================================

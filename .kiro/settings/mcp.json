@@ -3,30 +3,37 @@
     "mysql": {
       "command": "uvx",
       "args": [
-        "mcp-server-mysql",
-        "--host", "localhost",
-        "--port", "3306",
-        "--user", "root",
-        "--database", "simanis"
+        "mcp-server-mysql"
       ],
       "env": {
-        "MYSQL_PASSWORD": "${MYSQL_PASSWORD}"
+        "MYSQL_HOST": "localhost",
+        "MYSQL_PORT": "3306",
+        "MYSQL_USER": "root",
+        "MYSQL_PASSWORD": "",
+        "MYSQL_DATABASE": "simanis_dev"
       },
-      "disabled": true,
-      "autoApprove": []
+      "disabled": false,
+      "autoApprove": [
+        "list_tables"
+      ]
     },
     "github": {
-      "command": "uvx",
-      "args": ["mcp-server-github"],
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
       "env": {
-        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
       },
-      "disabled": true,
+      "disabled": false,
       "autoApprove": []
     },
     "brave-search": {
       "command": "uvx",
-      "args": ["mcp-server-brave-search"],
+      "args": [
+        "mcp-server-brave-search"
+      ],
       "env": {
         "BRAVE_API_KEY": "${BRAVE_API_KEY}"
       },
@@ -35,7 +42,9 @@
     },
     "aws-docs": {
       "command": "uvx",
-      "args": ["awslabs.aws-documentation-mcp-server@latest"],
+      "args": [
+        "awslabs.aws-documentation-mcp-server@latest"
+      ],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       },

@@ -1,57 +1,76 @@
 /**
  * Status Constants
  * Definisi status untuk berbagai entitas SIMANIS
+ * Disesuaikan dengan Prisma Schema (Title Case)
  */
 
 // ============================================
 // Asset Condition (Kondisi Aset)
 // ============================================
 export const ASSET_CONDITIONS = {
-  BAIK: 'baik',
-  RUSAK_RINGAN: 'rusak_ringan',
-  RUSAK_BERAT: 'rusak_berat',
-  HILANG: 'hilang',
+  BAIK: 'Baik',
+  RUSAK_RINGAN: 'Rusak Ringan',
+  RUSAK_BERAT: 'Rusak Berat',
+  HILANG: 'Hilang',
 } as const
 
 export type AssetConditionKey = keyof typeof ASSET_CONDITIONS
 export type AssetConditionValue = (typeof ASSET_CONDITIONS)[AssetConditionKey]
 
-export const ASSET_CONDITION_LABELS: Record<AssetConditionValue, string> = {
-  baik: 'Baik',
-  rusak_ringan: 'Rusak Ringan',
-  rusak_berat: 'Rusak Berat',
-  hilang: 'Hilang',
-}
+export const ASSET_CONDITION_OPTIONS: { value: AssetConditionValue; label: string }[] = [
+  { value: 'Baik', label: 'Baik' },
+  { value: 'Rusak Ringan', label: 'Rusak Ringan' },
+  { value: 'Rusak Berat', label: 'Rusak Berat' },
+  { value: 'Hilang', label: 'Hilang' },
+]
 
 export const ASSET_CONDITION_COLORS: Record<AssetConditionValue, string> = {
-  baik: 'green',
-  rusak_ringan: 'yellow',
-  rusak_berat: 'red',
-  hilang: 'gray',
+  'Baik': 'green',
+  'Rusak Ringan': 'yellow',
+  'Rusak Berat': 'red',
+  'Hilang': 'gray',
 }
+
+// ============================================
+// Sumber Dana (Funding Source)
+// ============================================
+export const SUMBER_DANA = {
+  BOS: 'BOS',
+  APBD: 'APBD',
+  HIBAH: 'Hibah',
+} as const
+
+export type SumberDanaKey = keyof typeof SUMBER_DANA
+export type SumberDanaValue = (typeof SUMBER_DANA)[SumberDanaKey]
+
+export const SUMBER_DANA_OPTIONS: { value: SumberDanaValue; label: string }[] = [
+  { value: 'BOS', label: 'BOS' },
+  { value: 'APBD', label: 'APBD' },
+  { value: 'Hibah', label: 'Hibah' },
+]
 
 // ============================================
 // Loan Status (Status Peminjaman)
 // ============================================
 export const LOAN_STATUS = {
-  DIPINJAM: 'dipinjam',
-  DIKEMBALIKAN: 'dikembalikan',
-  TERLAMBAT: 'terlambat',
+  DIPINJAM: 'Dipinjam',
+  DIKEMBALIKAN: 'Dikembalikan',
+  TERLAMBAT: 'Terlambat',
 } as const
 
 export type LoanStatusKey = keyof typeof LOAN_STATUS
 export type LoanStatusValue = (typeof LOAN_STATUS)[LoanStatusKey]
 
-export const LOAN_STATUS_LABELS: Record<LoanStatusValue, string> = {
-  dipinjam: 'Dipinjam',
-  dikembalikan: 'Dikembalikan',
-  terlambat: 'Terlambat',
-}
+export const LOAN_STATUS_OPTIONS: { value: LoanStatusValue; label: string }[] = [
+  { value: 'Dipinjam', label: 'Dipinjam' },
+  { value: 'Dikembalikan', label: 'Dikembalikan' },
+  { value: 'Terlambat', label: 'Terlambat' },
+]
 
 export const LOAN_STATUS_COLORS: Record<LoanStatusValue, string> = {
-  dipinjam: 'blue',
-  dikembalikan: 'green',
-  terlambat: 'red',
+  'Dipinjam': 'blue',
+  'Dikembalikan': 'green',
+  'Terlambat': 'red',
 }
 
 // ============================================

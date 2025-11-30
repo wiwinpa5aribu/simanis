@@ -1,45 +1,73 @@
 import { z } from 'zod'
+import type {
+  Asset,
+  AssetCategory,
+  AssetCondition,
+  SumberDana,
+} from '../../../shared/types/entities'
 
-// Enum Kondisi Aset
+// Re-export types
+export type { Asset, AssetCategory, AssetCondition, SumberDana }
+
+// Enum values sesuai Prisma Schema (Title Case)
 export const ASSET_CONDITIONS = [
   'Baik',
   'Rusak Ringan',
   'Rusak Berat',
   'Hilang',
 ] as const
+export const SUMBER_DANA_VALUES = ['BOS', 'APBD', 'Hibah'] as const
 
-// Skema validasi untuk form aset (Minimal)
-export const assetSchema = z.object({
-  kode_aset: z.string().min(1, 'Kode aset wajib diisi'),
-  nama_barang: z.string().min(1, 'Nama barang wajib diisi'),
-  category_id: z.coerce.number().min(1, 'Kategori wajib dipilih'),
-  kondisi: z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat', 'Hilang'], {
-    message: 'Pilih kondisi aset yang valid',
-  }),
-  // Field opsional (bisa dikembangkan nanti)
-  merk: z.string().optional(),
+// Skema validasi untuk form create aset
+export const createAssetSchema = z.object({
+  namaBarang: z.string().min(1, 'Nama barang wajib diisi').max(160),
+  merk: z.string().max(120).optional(),
   spesifikasi: z.string().optional(),
-  tahun_perolehan: z.coerce.number().optional(),
-  harga: z.coerce.number().optional(),
-  sumber_dana: z.string().optional(),
+  tahunPerolehan: z.string().optional(), // Format: YYYY-MM-DD
+  harga: z.coerce.number().min(0, 'Harga tidak boleh negatif'),
+  sumberDana: z.enum(['BOS', 'APBD', 'Hibah'], {
+    errorMap: () => ({ message: 'Sumber dana harus BOS, APBD, atau Hibah' }),
+  }),
+  kondisi: z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat', 'Hilang'], {
+    errorMap: () => ({ message: 'Pilih kondisi aset yang valid' }),
+  }),
+  categoryId: z.coerce
+    .number()
+    .int()
+    .positive('Kategori wajib dipilih')
+    .optional(),
+  masaManfaatTahun: z.coerce.number().int().min(0).default(0),
+  currentRoomId: z.coerce.number().int().positive().optional(),
 })
 
-export type AssetFormValues = z.infer<typeof assetSchema>
+// Input type untuk form (sebelum transform)
+export type CreateAssetFormInput = z.input<typeof createAssetSchema>
 
-// Tipe data Aset dari Backend
-export interface Asset {
-  id: number
-  kode_aset: string
-  nama_barang: string
-  category_id: number
-  category_name?: string // Opsional, jika backend join tabel
-  kondisi: (typeof ASSET_CONDITIONS)[number]
-  merk?: string
-  spesifikasi?: string
-  tahun_perolehan?: number
-  harga?: number
-  sumber_dana?: string
-  photo_url?: string // URL foto aset
-  created_at?: string
-  updated_at?: string
-}
+// Output type setelah validasi
+export type CreateAssetFormValues = z.infer<typeof createAssetSchema>
+
+// Skema validasi untuk form update aset
+export const updateAssetSchema = z.object({
+  namaBarang: z.string().min(1).max(160).optional(),
+  merk: z.string().max(120).optional(),
+  spesifikasi: z.string().optional(),
+  kondisi: z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat', 'Hilang']).optional(),
+  categoryId: z.coerce.number().int().positive().optional(),
+  currentRoomId: z.coerce.number().int().positive().optional(),
+})
+
+export type UpdateAssetFormInput = z.input<typeof updateAssetSchema>
+export type UpdateAssetFormValues = z.infer<typeof updateAssetSchema>
+
+// Skema untuk filter aset
+export const assetFilterSchema = z.object({
+  search: z.string().optional(),
+  categoryId: z.coerce.number().optional(),
+  kondisi: z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat', 'Hilang']).optional(),
+  roomId: z.coerce.number().optional(),
+  buildingId: z.coerce.number().optional(),
+  page: z.coerce.number().min(1).default(1),
+  pageSize: z.coerce.number().min(1).max(100).default(10),
+})
+
+export type AssetFilterValues = z.infer<typeof assetFilterSchema>

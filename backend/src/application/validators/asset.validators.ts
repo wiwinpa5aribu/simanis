@@ -4,7 +4,7 @@ import { z } from 'zod';
  * Create asset schema
  */
 export const createAssetSchema = z.object({
-  kodeAset: z.string().min(1, 'Kode aset wajib diisi').max(50),
+  kodeAset: z.string().max(50).optional(), // Auto-generated if not provided
   namaBarang: z.string().min(1, 'Nama barang wajib diisi').max(160),
   merk: z.string().max(120).optional(),
   spesifikasi: z.string().optional(),

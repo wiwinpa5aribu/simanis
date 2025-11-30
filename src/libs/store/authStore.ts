@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { persist, createJSONStorage, devtools } from 'zustand/middleware'
 
 // Tipe data untuk User (sementara minimal, bisa dikembangkan)
 export interface User {
@@ -57,88 +57,94 @@ const customStorage = {
 
 // Store global untuk menyimpan status autentikasi pengguna SIMANIS
 export const useAuthStore = create<AuthState>()(
-  persist(
-    (set, get) => ({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      rememberMe: false,
+  devtools(
+    persist(
+      (set, get) => ({
+        user: null,
+        token: null,
+        isAuthenticated: false,
+        rememberMe: false,
 
-      // Fungsi login: menyimpan data user & token, set status authenticated
-      login: (user, token, rememberMe = false) => {
-        const storageKey = rememberMe
-          ? 'simanis-auth-storage'
-          : 'simanis-auth-session'
+        // Fungsi login: menyimpan data user & token, set status authenticated
+        login: (user, token, rememberMe = false) => {
+          const storageKey = rememberMe
+            ? 'simanis-auth-storage'
+            : 'simanis-auth-session'
 
-        // Store token with timestamp for expiry checking
-        const authData = {
-          user,
-          token,
-          isAuthenticated: true,
-          rememberMe,
-          tokenTimestamp: rememberMe ? Date.now() : undefined,
-        }
-
-        if (rememberMe) {
-          localStorage.setItem(storageKey, JSON.stringify({ state: authData }))
-        } else {
-          sessionStorage.setItem(
-            storageKey,
-            JSON.stringify({ state: authData })
-          )
-        }
-
-        set({ user, token, isAuthenticated: true, rememberMe })
-      },
-
-      // Fungsi logout: menghapus semua data sesi
-      logout: () => {
-        localStorage.removeItem('simanis-auth-storage')
-        localStorage.removeItem('simanis-auth-session')
-        sessionStorage.removeItem('simanis-auth-session')
-        set({
-          user: null,
-          token: null,
-          isAuthenticated: false,
-          rememberMe: false,
-        })
-      },
-
-      // Check if token is expired
-      checkTokenExpiry: () => {
-        const state = get()
-        if (!state.token || !state.rememberMe) return true
-
-        const storedData = localStorage.getItem('simanis-auth-storage')
-        if (!storedData) return false
-
-        try {
-          const parsed = JSON.parse(storedData)
-          const tokenTimestamp = parsed.state?.tokenTimestamp
-          if (!tokenTimestamp) return true
-
-          const isExpired =
-            Date.now() - tokenTimestamp > 30 * 24 * 60 * 60 * 1000
-          if (isExpired) {
-            get().logout()
+          // Store token with timestamp for expiry checking
+          const authData = {
+            user,
+            token,
+            isAuthenticated: true,
+            rememberMe,
+            tokenTimestamp: rememberMe ? Date.now() : undefined,
           }
-          return !isExpired
-        } catch {
-          get().logout()
-          return false
-        }
-      },
-    }),
-    {
-      name: 'simanis-auth-storage',
-      storage: createJSONStorage(() => customStorage),
-      partialize: (state) => ({
-        user: state.user,
-        token: state.token,
-        isAuthenticated: state.isAuthenticated,
-        rememberMe: state.rememberMe,
-        tokenTimestamp: state.rememberMe ? Date.now() : undefined,
+
+          if (rememberMe) {
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify({ state: authData })
+            )
+          } else {
+            sessionStorage.setItem(
+              storageKey,
+              JSON.stringify({ state: authData })
+            )
+          }
+
+          set({ user, token, isAuthenticated: true, rememberMe })
+        },
+
+        // Fungsi logout: menghapus semua data sesi
+        logout: () => {
+          localStorage.removeItem('simanis-auth-storage')
+          localStorage.removeItem('simanis-auth-session')
+          sessionStorage.removeItem('simanis-auth-session')
+          set({
+            user: null,
+            token: null,
+            isAuthenticated: false,
+            rememberMe: false,
+          })
+        },
+
+        // Check if token is expired
+        checkTokenExpiry: () => {
+          const state = get()
+          if (!state.token || !state.rememberMe) return true
+
+          const storedData = localStorage.getItem('simanis-auth-storage')
+          if (!storedData) return false
+
+          try {
+            const parsed = JSON.parse(storedData)
+            const tokenTimestamp = parsed.state?.tokenTimestamp
+            if (!tokenTimestamp) return true
+
+            const isExpired =
+              Date.now() - tokenTimestamp > 30 * 24 * 60 * 60 * 1000
+            if (isExpired) {
+              get().logout()
+            }
+            return !isExpired
+          } catch {
+            get().logout()
+            return false
+          }
+        },
       }),
-    }
+      {
+        name: 'simanis-auth-storage',
+        storage: createJSONStorage(() => customStorage),
+        partialize: (state) => ({
+          user: state.user,
+          token: state.token,
+          isAuthenticated: state.isAuthenticated,
+          rememberMe: state.rememberMe,
+          tokenTimestamp: state.rememberMe ? Date.now() : undefined,
+        }),
+      }
+    ),
+    { name: 'AuthStore', enabled: process.env.NODE_ENV === 'development' }
   )
 )

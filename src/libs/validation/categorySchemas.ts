@@ -1,20 +1,17 @@
 import { z } from 'zod'
+import type { AssetCategory } from '../../../shared/types/entities'
+
+// Re-export type
+export type { AssetCategory as Category }
 
 // Skema validasi untuk form kategori aset
-// Memastikan nama kategori diisi dan memiliki panjang minimal
 export const categorySchema = z.object({
   name: z
     .string()
     .min(1, 'Nama kategori wajib diisi')
-    .max(100, 'Nama kategori maksimal 100 karakter'),
+    .max(64, 'Nama kategori maksimal 64 karakter'),
+  description: z.string().optional(),
 })
 
+export type CategoryFormInput = z.input<typeof categorySchema>
 export type CategoryFormValues = z.infer<typeof categorySchema>
-
-// Tipe data Kategori dari Backend
-export interface Category {
-  id: number
-  name: string
-  created_at?: string
-  updated_at?: string
-}

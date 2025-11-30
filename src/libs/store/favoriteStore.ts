@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, devtools } from 'zustand/middleware'
 
 interface FavoriteStore {
   favoriteAssetIds: number[]
@@ -9,21 +9,24 @@ interface FavoriteStore {
 }
 
 export const useFavoriteStore = create<FavoriteStore>()(
-  persist(
-    (set, get) => ({
-      favoriteAssetIds: [],
-      toggleFavorite: (id) => {
-        const list = get().favoriteAssetIds
-        const exists = list.includes(id)
-        set({
-          favoriteAssetIds: exists
-            ? list.filter((x) => x !== id)
-            : [...list, id],
-        })
-      },
-      isFavorite: (id) => get().favoriteAssetIds.includes(id),
-      clearFavorites: () => set({ favoriteAssetIds: [] }),
-    }),
-    { name: 'simanis-favorites' }
+  devtools(
+    persist(
+      (set, get) => ({
+        favoriteAssetIds: [],
+        toggleFavorite: (id) => {
+          const list = get().favoriteAssetIds
+          const exists = list.includes(id)
+          set({
+            favoriteAssetIds: exists
+              ? list.filter((x) => x !== id)
+              : [...list, id],
+          })
+        },
+        isFavorite: (id) => get().favoriteAssetIds.includes(id),
+        clearFavorites: () => set({ favoriteAssetIds: [] }),
+      }),
+      { name: 'simanis-favorites' }
+    ),
+    { name: 'FavoriteStore', enabled: process.env.NODE_ENV === 'development' }
   )
 )

@@ -82,4 +82,9 @@ export interface IAssetRepository {
    * Count assets by filters
    */
   count(filters?: AssetFilters): Promise<number>;
+
+  /**
+   * Find last asset by kode pattern (for auto-generate)
+   */
+  findLastByKodePattern(pattern: string): Promise<Asset | null>;
 }
