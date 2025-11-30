@@ -1,5 +1,28 @@
 # Coding Standards
 
+## Naming Convention: camelCase
+
+Semua property di frontend dan backend menggunakan **camelCase** sesuai Prisma schema:
+
+```typescript
+// ✅ Benar - camelCase
+interface Asset {
+  id: number
+  kodeAset: string
+  namaBarang: string
+  categoryId: number
+  tahunPerolehan: Date
+  fotoUrl: string
+}
+
+// ❌ Salah - snake_case (JANGAN GUNAKAN)
+interface Asset {
+  kode_aset: string
+  nama_barang: string
+  category_id: number
+}
+```
+
 ## TypeScript & Zod Form Validation
 
 ### Pattern untuk React Hook Form + Zod
@@ -92,3 +115,48 @@ Sebelum commit, pastikan:
 ### 3. ESLint argsIgnorePattern
 - Pattern `^_` mengabaikan parameter dengan prefix underscore
 - Sudah dikonfigurasi di `eslint.config.js`
+
+### 4. Zod v4 Enum Validation
+Gunakan `message` bukan `errorMap` untuk custom error messages:
+
+```typescript
+// ✅ Benar - Zod v4
+z.enum(['Baik', 'Rusak Ringan', 'Rusak Berat'], {
+  message: 'Pilih kondisi yang valid',
+})
+
+// ❌ Salah - errorMap tidak didukung di Zod v4
+z.enum(['Baik', 'Rusak Ringan'], {
+  errorMap: () => ({ message: 'Invalid' }),
+})
+```
+
+### 5. API Response dengan PaginatedResponse
+Saat menggunakan `getAssets()` atau `getLoans()`, akses data melalui `.data`:
+
+```typescript
+// ✅ Benar
+const { data: response } = useQuery({
+  queryKey: ['assets'],
+  queryFn: () => getAssets(),
+})
+const assets = response?.data ?? []
+
+// ❌ Salah - response adalah PaginatedResponse, bukan array
+const { data: assets } = useQuery({
+  queryKey: ['assets'],
+  queryFn: getAssets,  // Harus () => getAssets()
+})
+```
+
+### 6. Vite Environment Variables
+Gunakan `import.meta.env` bukan `process.env` di frontend:
+
+```typescript
+// ✅ Benar - Vite
+const isDev = import.meta.env.DEV
+const apiUrl = import.meta.env.VITE_API_URL
+
+// ❌ Salah - Node.js (tidak tersedia di browser)
+const isDev = process.env.NODE_ENV === 'development'
+```

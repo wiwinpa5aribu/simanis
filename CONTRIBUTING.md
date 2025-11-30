@@ -75,31 +75,67 @@ Pre-commit hooks akan otomatis menjalankan lint dan format.
 
 ## 📐 Coding Standards
 
-### React Hook Form + Zod Pattern
+### Naming Convention: camelCase
 
-Untuk form dengan validasi Zod, gunakan pattern berikut:
+Semua property menggunakan **camelCase** sesuai Prisma schema:
 
 ```typescript
-// 1. Schema - gunakan .optional() untuk checkbox/optional fields
+// ✅ Benar
+asset.kodeAset
+asset.namaBarang
+asset.categoryId
+
+// ❌ Salah
+asset.kode_aset
+asset.nama_barang
+```
+
+### Zod v4 Enum Validation
+
+Gunakan `message` bukan `errorMap`:
+
+```typescript
+// ✅ Benar
+z.enum(['Baik', 'Rusak Ringan'], { message: 'Pilih kondisi valid' })
+
+// ❌ Salah
+z.enum(['Baik', 'Rusak Ringan'], { errorMap: () => ({ message: '...' }) })
+```
+
+### Vite Environment Variables
+
+```typescript
+// ✅ Benar (frontend)
+import.meta.env.DEV
+import.meta.env.VITE_API_URL
+
+// ❌ Salah (tidak tersedia di browser)
+process.env.NODE_ENV
+```
+
+### React Hook Form + Zod Pattern
+
+```typescript
+// 1. Schema
 export const mySchema = z.object({
   name: z.string().min(1, 'Wajib diisi'),
   rememberMe: z.boolean().optional(),
 })
 
-// 2. Buat 2 tipe: Input (form) dan Output (submit)
+// 2. Types
 export type MyFormInput = z.input<typeof mySchema>
 export type MyFormValues = {
   name: string
-  rememberMe: boolean  // Non-optional di output
+  rememberMe: boolean
 }
 
-// 3. Di component
+// 3. Component
 const { register, handleSubmit } = useForm<MyFormInput>({
   resolver: zodResolver(mySchema),
   defaultValues: { name: '', rememberMe: false },
 })
 
-// 4. Convert di onSubmit dengan nullish coalescing
+// 4. Submit dengan nullish coalescing
 const onSubmit = (data: MyFormInput) => {
   const formData: MyFormValues = {
     name: data.name,
