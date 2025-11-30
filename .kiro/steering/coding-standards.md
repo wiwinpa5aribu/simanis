@@ -160,3 +160,25 @@ const apiUrl = import.meta.env.VITE_API_URL
 // ❌ Salah - Node.js (tidak tersedia di browser)
 const isDev = process.env.NODE_ENV === 'development'
 ```
+
+### 7. Prisma Schema Naming Convention
+Database menggunakan snake_case, kode menggunakan camelCase. Prisma `@map` menangani konversi.
+
+Untuk memastikan konsistensi, jalankan setelah edit schema:
+```bash
+cd backend
+npm run prisma:format   # Auto-format dengan @map
+npm run prisma:generate # Generate client
+```
+
+Contoh schema yang benar:
+```prisma
+model Asset {
+  id         Int     @id @default(autoincrement())
+  kodeAset   String  @unique @map("kode_aset")   // camelCase → snake_case
+  namaBarang String  @map("nama_barang")
+  categoryId Int?    @map("category_id")
+  
+  @@map("assets")  // Table name tetap snake_case
+}
+```
