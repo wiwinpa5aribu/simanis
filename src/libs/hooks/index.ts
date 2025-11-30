@@ -5,3 +5,4 @@
 
 export { usePermission } from './usePermission'
 export { useDebouncedValue } from './useDebouncedValue'
+export { useMediaQuery } from './useMediaQuery'

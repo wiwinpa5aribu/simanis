@@ -73,14 +73,29 @@ Implementasi fitur manajemen aset sesuai dengan requirements dan design document
     - Tampilkan info bahwa kode akan di-generate otomatis
 
 
+
+
+
+
+
+
+
+
     - _Requirements: 2.2_
+
+
   - [ ] 4.2 Tambahkan FileUpload component untuk foto aset
     - Accept: image/jpeg, image/png
+
+
+
     - Max size: 2MB
     - Preview sebelum upload
+
     - _Requirements: 2.5_
   - [ ] 4.3 Update form layout responsive (grid 1 col mobile, 2 col desktop)
     - _Requirements: 2.1_
+
   - [ ]* 4.4 Write property test untuk validasi field wajib
     - **Property 7: Required Field Validation**
     - **Validates: Requirements 2.4**
