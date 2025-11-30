@@ -27,6 +27,7 @@ Implementasi fitur manajemen aset sesuai dengan requirements dan design document
 
 
 
+
     - **Validates: Requirements 1.2**
   - [x]* 1.4 Write property test untuk filter kategori dan kondisi
 
@@ -36,12 +37,20 @@ Implementasi fitur manajemen aset sesuai dengan requirements dan design document
 
     - **Validates: Requirements 1.3, 1.4**
 
+
+
+
+
+
+
 - [ ] 2. Implementasi responsive DataTable dengan card view mobile
-  - [ ] 2.1 Buat AssetCard component untuk tampilan mobile
+  - [x] 2.1 Buat AssetCard component untuk tampilan mobile
+
     - Tampilkan: kode aset, nama, kategori, lokasi, kondisi badge, nilai
     - Tombol detail dan favorite
     - _Requirements: 1.1_
-  - [ ] 2.2 Update DataTable untuk switch ke card view di breakpoint < md
+  - [x] 2.2 Update DataTable untuk switch ke card view di breakpoint < md
+
     - Gunakan mobileCardRenderer prop
     - _Requirements: 1.1_
   - [ ] 2.3 Buat FilterBar collapsible untuk mobile
@@ -49,7 +58,12 @@ Implementasi fitur manajemen aset sesuai dengan requirements dan design document
     - Default collapsed di mobile
     - _Requirements: 1.2, 1.3, 1.4_
 
-- [ ] 3. Checkpoint - Pastikan semua tests passing
+
+
+
+
+- [x] 3. Checkpoint - Pastikan semua tests passing
+
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 4. Update AssetCreatePage - Hapus input kode aset manual dan tambah foto upload
