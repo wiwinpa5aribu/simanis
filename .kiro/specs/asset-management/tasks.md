@@ -67,9 +67,12 @@ Implementasi fitur manajemen aset sesuai dengan requirements dan design document
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 4. Update AssetCreatePage - Hapus input kode aset manual dan tambah foto upload
-  - [ ] 4.1 Hapus field kode aset dari form (akan di-generate backend)
+  - [x] 4.1 Hapus field kode aset dari form (akan di-generate backend)
+
     - Update schema validation
     - Tampilkan info bahwa kode akan di-generate otomatis
+
+
     - _Requirements: 2.2_
   - [ ] 4.2 Tambahkan FileUpload component untuk foto aset
     - Accept: image/jpeg, image/png

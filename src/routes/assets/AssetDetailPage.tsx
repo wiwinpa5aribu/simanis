@@ -18,7 +18,7 @@ import { LoadingSpinner, ErrorAlert } from '../../components/ui/Feedback'
 import { Button } from '../../components/ui/button'
 import { showSuccessToast, showErrorToast } from '../../libs/ui/toast'
 import { useFavoriteStore } from '../../libs/store/favoriteStore'
-import { AssetActivityTimeline } from './components/AssetActivityTimeline'
+import { AssetActivityTimeline, QRCodeDisplay } from './components'
 import { usePermission } from '../../libs/hooks/usePermission'
 import { FileUpload } from '../../components/uploads/FileUpload'
 
@@ -249,8 +249,15 @@ export function AssetDetailPage() {
           </div>
         </div>
 
-        {/* Kolom Kanan: Lokasi & Mutasi */}
+        {/* Kolom Kanan: QR Code & Lokasi */}
         <div className="space-y-6">
+          {/* QR Code Display */}
+          <QRCodeDisplay
+            kodeAset={asset.kodeAset}
+            namaBarang={asset.namaBarang}
+            kategori={asset.category?.name}
+          />
+
           {/* Card Lokasi Saat Ini */}
           <div className="bg-white shadow rounded-xl overflow-hidden p-6">
             <div className="flex items-center gap-2 mb-4 border-b pb-2">
@@ -262,10 +269,11 @@ export function AssetDetailPage() {
 
             <div className="text-center py-4">
               <p className="text-lg font-medium text-gray-900">
-                Gudang Utama (Default)
+                {(asset as { currentRoom?: { name: string } }).currentRoom
+                  ?.name || 'Gudang Utama (Default)'}
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                Fitur mutasi lokasi akan segera hadir
+                Lokasi penempatan aset saat ini
               </p>
             </div>
           </div>
