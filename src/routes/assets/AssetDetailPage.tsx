@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
@@ -18,16 +19,28 @@ import { LoadingSpinner, ErrorAlert } from '../../components/ui/Feedback'
 import { Button } from '../../components/ui/button'
 import { showSuccessToast, showErrorToast } from '../../libs/ui/toast'
 import { useFavoriteStore } from '../../libs/store/favoriteStore'
-import { AssetActivityTimeline, QRCodeDisplay } from './components'
+import {
+  AssetActivityTimeline,
+  AssetMutationHistory,
+  QRCodeDisplay,
+  DeleteAssetDialog,
+} from './components'
 import { usePermission } from '../../libs/hooks/usePermission'
 import { FileUpload } from '../../components/uploads/FileUpload'
 import { useMediaQuery } from '../../libs/hooks/useMediaQuery'
+import { useAuthStore } from '../../libs/store/authStore'
 
 export function AssetDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { can } = usePermission()
   const queryClient = useQueryClient()
+
+  // Delete dialog state
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+
+  // Get user role for delete permission
+  const user = useAuthStore((state) => state.user)
 
   // Responsive breakpoint - true if mobile (< 1024px / lg breakpoint)
   const isMobile = useMediaQuery('(max-width: 1023px)')
@@ -60,15 +73,18 @@ export function AssetDetailPage() {
     },
   })
 
-  const handleDelete = async () => {
-    if (confirm('Apakah Anda yakin ingin menghapus aset ini?')) {
-      try {
-        await deleteAsset(Number(id))
-        navigate('/assets')
-      } catch (error) {
-        console.error('Gagal menghapus aset:', error)
-        alert('Gagal menghapus aset.')
-      }
+  // Handle delete with Berita Acara
+  const handleDeleteConfirm = async (_beritaAcaraFile: File) => {
+    try {
+      // TODO: Upload berita acara file to server along with delete request
+      // For now, just delete the asset
+      await deleteAsset(Number(id))
+      showSuccessToast('Aset berhasil dihapus')
+      navigate('/assets')
+    } catch (error) {
+      console.error('Gagal menghapus aset:', error)
+      showErrorToast('Gagal menghapus aset')
+      throw error
     }
   }
 
@@ -148,7 +164,7 @@ export function AssetDetailPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleDelete}
+                onClick={() => setIsDeleteDialogOpen(true)}
                 className="text-red-600 bg-red-50 hover:bg-red-100 border-red-200 flex-1 sm:flex-none"
               >
                 <Trash2 className="w-4 h-4 mr-1 lg:mr-2" />
@@ -326,6 +342,17 @@ export function AssetDetailPage() {
         )}
       </div>
 
+      {/* Riwayat Mutasi Lokasi */}
+      <div className="bg-white shadow rounded-xl overflow-hidden p-4 lg:p-6">
+        <div className="flex items-center gap-2 mb-4 border-b pb-2">
+          <MapPin className="w-5 h-5 text-purple-600" />
+          <h3 className="text-base lg:text-lg font-semibold text-gray-900">
+            Riwayat Mutasi Lokasi
+          </h3>
+        </div>
+        <AssetMutationHistory assetId={Number(id)} />
+      </div>
+
       {/* Riwayat Aktivitas Lengkap */}
       <div className="bg-white shadow rounded-xl overflow-hidden p-4 lg:p-6">
         <div className="flex items-center gap-2 mb-4 border-b pb-2">
@@ -336,6 +363,16 @@ export function AssetDetailPage() {
         </div>
         <AssetActivityTimeline assetId={Number(id)} />
       </div>
+
+      {/* Delete Asset Dialog */}
+      <DeleteAssetDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        assetName={asset.namaBarang}
+        assetCode={asset.kodeAset}
+        userRole={user?.role}
+      />
     </div>
   )
 }
