@@ -2,7 +2,10 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { PrismaClient } from '@prisma/client';
 import { GetAssetsUseCase } from '../../application/use-cases/assets/get-assets.use-case';
 import { CreateAssetUseCase } from '../../application/use-cases/assets/create-asset.use-case';
+import { UpdateAssetUseCase } from '../../application/use-cases/assets/update-asset.use-case';
 import { AssetRepositoryImpl } from '../../infrastructure/database/repositories/asset.repository.impl';
+import { AuditRepositoryImpl } from '../../infrastructure/database/repositories/audit.repository.impl';
+import { AssetCodeGeneratorService } from '../../infrastructure/services/asset-code-generator.service';
 import {
   createAssetSchema,
   updateAssetSchema,
@@ -14,6 +17,8 @@ import { sanitizePaginationParams } from '../../shared/utils/pagination.utils';
 
 const prisma = new PrismaClient();
 const assetRepository = new AssetRepositoryImpl(prisma);
+const auditRepository = new AuditRepositoryImpl(prisma);
+const assetCodeGenerator = new AssetCodeGeneratorService(prisma);
 
 export class AssetController {
   /**
@@ -49,7 +54,7 @@ export class AssetController {
     }
 
     const createdBy = request.user!.userId;
-    const createAssetUseCase = new CreateAssetUseCase(assetRepository);
+    const createAssetUseCase = new CreateAssetUseCase(assetRepository, assetCodeGenerator);
     const asset = await createAssetUseCase.execute(result.data, createdBy);
 
     return reply.status(201).send(createSuccessResponse(asset));
@@ -103,32 +108,40 @@ export class AssetController {
       throw new ValidationError('Input tidak valid', result.error.errors);
     }
 
-    const existing = await prisma.asset.findUnique({ where: { id: parseInt(id) } });
-    if (!existing) {
-      throw new NotFoundError('Aset tidak ditemukan');
-    }
+    const updatedBy = request.user!.userId;
+    const updateAssetUseCase = new UpdateAssetUseCase(assetRepository, auditRepository);
+    const asset = await updateAssetUseCase.execute(parseInt(id), result.data, updatedBy);
 
-    const asset = await prisma.asset.update({
-      where: { id: parseInt(id) },
-      data: result.data,
+    // Fetch with category relation
+    const assetWithCategory = await prisma.asset.findUnique({
+      where: { id: asset.id },
       include: { category: true },
     });
 
-    return reply.status(200).send(createSuccessResponse(asset));
+    return reply.status(200).send(createSuccessResponse(assetWithCategory));
   }
 
   /**
    * DELETE /api/assets/:id
+   * Requires: wakasek_sarpras or kepsek role
+   * Body: { beritaAcaraUrl: string }
    */
   static async delete(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     const { id } = request.params;
+    const { beritaAcaraUrl } = request.body as { beritaAcaraUrl?: string };
+    const deletedBy = request.user!.userId;
 
-    const existing = await prisma.asset.findUnique({ where: { id: parseInt(id) } });
-    if (!existing) {
-      throw new NotFoundError('Aset tidak ditemukan');
-    }
+    // Import use case lazily to avoid circular deps
+    const { DeleteAssetUseCase } = await import(
+      '../../application/use-cases/assets/delete-asset.use-case'
+    );
 
-    await prisma.asset.delete({ where: { id: parseInt(id) } });
+    const deleteAssetUseCase = new DeleteAssetUseCase(assetRepository, auditRepository);
+    await deleteAssetUseCase.execute(
+      parseInt(id),
+      { beritaAcaraUrl: beritaAcaraUrl || '' },
+      deletedBy
+    );
 
     return reply.status(200).send(createSuccessResponse({ message: 'Aset berhasil dihapus' }));
   }

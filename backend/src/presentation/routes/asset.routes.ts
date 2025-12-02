@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { AssetController } from '../controllers/asset.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
+import { rbacMiddleware } from '../middleware/rbac.middleware';
 
 export async function assetRoutes(fastify: FastifyInstance) {
   // All routes require authentication
@@ -11,7 +12,13 @@ export async function assetRoutes(fastify: FastifyInstance) {
   fastify.get('/by-code/:code', AssetController.getByCode);
   fastify.post('/', AssetController.create);
   fastify.put('/:id', AssetController.update);
-  fastify.delete('/:id', AssetController.delete);
+
+  // Delete requires wakasek_sarpras or kepsek role
+  fastify.delete(
+    '/:id',
+    { preHandler: rbacMiddleware(['wakasek_sarpras', 'kepsek']) },
+    AssetController.delete
+  );
 
   // Mutations (location changes)
   fastify.get('/:id/mutations', AssetController.getMutations);
