@@ -140,7 +140,7 @@ export class AssetController {
     await deleteAssetUseCase.execute(
       parseInt(id),
       { beritaAcaraUrl: beritaAcaraUrl || '' },
-      deletedBy
+      deletedBy,
     );
 
     return reply.status(200).send(createSuccessResponse({ message: 'Aset berhasil dihapus' }));

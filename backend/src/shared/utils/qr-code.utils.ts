@@ -52,7 +52,9 @@ export const validateAssetCode = (kodeAset: string): boolean => {
 /**
  * Parse kode aset into components
  */
-export const parseAssetCode = (kodeAset: string): {
+export const parseAssetCode = (
+  kodeAset: string,
+): {
   prefix: string;
   year: string;
   categoryCode: string;

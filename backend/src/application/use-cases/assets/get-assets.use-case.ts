@@ -6,11 +6,7 @@ import { calculatePagination } from '../../../shared/utils/pagination.utils';
 export class GetAssetsUseCase {
   constructor(private assetRepository: IAssetRepository) {}
 
-  async execute(params: {
-    page: number;
-    pageSize: number;
-    filters?: AssetFilters;
-  }): Promise<
+  async execute(params: { page: number; pageSize: number; filters?: AssetFilters }): Promise<
     AssetListDto & {
       meta: {
         page: number;

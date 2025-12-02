@@ -9,7 +9,7 @@ import { AssetCodeGeneratorService } from '../../../infrastructure/services/asse
 export class CreateAssetUseCase {
   constructor(
     private assetRepository: IAssetRepository,
-    private assetCodeGenerator?: AssetCodeGeneratorService
+    private assetCodeGenerator?: AssetCodeGeneratorService,
   ) {}
 
   async execute(data: CreateAssetInput, createdBy: number): Promise<AssetDto> {
@@ -58,7 +58,7 @@ export class CreateAssetUseCase {
    */
   private async generateKodeAsetFallback(categoryId?: number): Promise<string> {
     const year = new Date().getFullYear().toString().slice(-2);
-    
+
     // Get category code (default: GEN for general)
     const categoryMap: Record<number, string> = {
       1: 'ELK', // Elektronik
@@ -67,12 +67,14 @@ export class CreateAssetUseCase {
       4: 'OLR', // Alat Olahraga
       5: 'BKU', // Buku
     };
-    const categoryCode = categoryId ? (categoryMap[categoryId] || 'GEN') : 'GEN';
+    const categoryCode = categoryId ? categoryMap[categoryId] || 'GEN' : 'GEN';
 
     // Get next sequence number
-    const lastAsset = await this.assetRepository.findLastByKodePattern(`SCH/${year}/${categoryCode}/%`);
+    const lastAsset = await this.assetRepository.findLastByKodePattern(
+      `SCH/${year}/${categoryCode}/%`,
+    );
     let sequence = 1;
-    
+
     if (lastAsset) {
       const parts = lastAsset.kodeAset.split('/');
       const lastSeq = parseInt(parts[3], 10);

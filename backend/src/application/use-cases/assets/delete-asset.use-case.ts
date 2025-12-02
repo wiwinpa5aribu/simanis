@@ -20,14 +20,10 @@ export class DeleteAssetUseCase {
   constructor(
     private assetRepository: IAssetRepository,
     private auditRepository: IAuditRepository,
-    private documentRepository?: IAssetDocumentRepository
+    private documentRepository?: IAssetDocumentRepository,
   ) {}
 
-  async execute(
-    id: number,
-    data: DeleteAssetInput,
-    deletedBy: number
-  ): Promise<void> {
+  async execute(id: number, data: DeleteAssetInput, deletedBy: number): Promise<void> {
     // Validate berita acara is provided
     if (!data.beritaAcaraUrl || data.beritaAcaraUrl.trim() === '') {
       throw new ValidationError('Berita Acara wajib dilampirkan untuk menghapus aset');

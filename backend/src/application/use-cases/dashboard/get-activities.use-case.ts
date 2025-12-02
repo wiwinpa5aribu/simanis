@@ -67,7 +67,6 @@ export class GetActivitiesUseCase {
     entityType: string;
     entityId: number;
     user?: { name: string } | null;
-    fieldChanged: unknown;
   }): string {
     const userName = log.user?.name || 'Sistem';
     const entityName = this.getEntityDisplayName(log.entityType);

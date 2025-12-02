@@ -10,11 +10,11 @@
  * Example: SCH/25/ELK/001
  */
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
 export interface CategoryCodeMapping {
-  categoryId: number
-  code: string
+  categoryId: number;
+  code: string;
 }
 
 // Default category code mappings
@@ -29,21 +29,18 @@ const DEFAULT_CATEGORY_CODES: Record<number, string> = {
   8: 'MUS', // Alat Musik
   9: 'OPT', // Peralatan Optik
   10: 'MED', // Peralatan Medis
-}
+};
 
-const DEFAULT_CATEGORY_CODE = 'GEN' // General/Umum
-const SCHOOL_PREFIX = 'SCH'
+const DEFAULT_CATEGORY_CODE = 'GEN'; // General/Umum
+const SCHOOL_PREFIX = 'SCH';
 
 export class AssetCodeGeneratorService {
-  private prisma: PrismaClient
-  private categoryCodeMap: Record<number, string>
+  private prisma: PrismaClient;
+  private categoryCodeMap: Record<number, string>;
 
-  constructor(
-    prisma: PrismaClient,
-    customCategoryMap?: Record<number, string>
-  ) {
-    this.prisma = prisma
-    this.categoryCodeMap = customCategoryMap || DEFAULT_CATEGORY_CODES
+  constructor(prisma: PrismaClient, customCategoryMap?: Record<number, string>) {
+    this.prisma = prisma;
+    this.categoryCodeMap = customCategoryMap || DEFAULT_CATEGORY_CODES;
   }
 
   /**
@@ -51,18 +48,18 @@ export class AssetCodeGeneratorService {
    * Format: SCH/XX/YYY/NNN
    */
   async generateCode(categoryId?: number): Promise<string> {
-    const year = this.getYearCode()
-    const categoryCode = this.getCategoryCode(categoryId)
-    const sequenceNumber = await this.getNextSequenceNumber(year, categoryCode)
+    const year = this.getYearCode();
+    const categoryCode = this.getCategoryCode(categoryId);
+    const sequenceNumber = await this.getNextSequenceNumber(year, categoryCode);
 
-    return this.formatAssetCode(year, categoryCode, sequenceNumber)
+    return this.formatAssetCode(year, categoryCode, sequenceNumber);
   }
 
   /**
    * Get 2-digit year code (e.g., "25" for 2025)
    */
   private getYearCode(): string {
-    return new Date().getFullYear().toString().slice(-2)
+    return new Date().getFullYear().toString().slice(-2);
   }
 
   /**
@@ -70,18 +67,15 @@ export class AssetCodeGeneratorService {
    */
   private getCategoryCode(categoryId?: number): string {
     if (!categoryId) {
-      return DEFAULT_CATEGORY_CODE
+      return DEFAULT_CATEGORY_CODE;
     }
-    return this.categoryCodeMap[categoryId] || DEFAULT_CATEGORY_CODE
+    return this.categoryCodeMap[categoryId] || DEFAULT_CATEGORY_CODE;
   }
 
   /**
    * Get next sequence number for the given year and category
    */
-  private async getNextSequenceNumber(
-    year: string,
-    categoryCode: string
-  ): Promise<number> {
+  private async getNextSequenceNumber(year: string, categoryCode: string): Promise<number> {
     // Find the last asset with matching pattern
     const lastAsset = await this.prisma.asset.findFirst({
       where: {
@@ -95,36 +89,32 @@ export class AssetCodeGeneratorService {
       select: {
         kodeAset: true,
       },
-    })
+    });
 
     if (!lastAsset) {
-      return 1
+      return 1;
     }
 
     // Extract sequence number from last asset code
-    const parts = lastAsset.kodeAset.split('/')
+    const parts = lastAsset.kodeAset.split('/');
     if (parts.length !== 4) {
-      return 1
+      return 1;
     }
 
-    const lastSequence = parseInt(parts[3], 10)
+    const lastSequence = parseInt(parts[3], 10);
     if (isNaN(lastSequence)) {
-      return 1
+      return 1;
     }
 
-    return lastSequence + 1
+    return lastSequence + 1;
   }
 
   /**
    * Format asset code with proper padding
    */
-  private formatAssetCode(
-    year: string,
-    categoryCode: string,
-    sequenceNumber: number
-  ): string {
-    const paddedSequence = sequenceNumber.toString().padStart(3, '0')
-    return `${SCHOOL_PREFIX}/${year}/${categoryCode}/${paddedSequence}`
+  private formatAssetCode(year: string, categoryCode: string, sequenceNumber: number): string {
+    const paddedSequence = sequenceNumber.toString().padStart(3, '0');
+    return `${SCHOOL_PREFIX}/${year}/${categoryCode}/${paddedSequence}`;
   }
 
   /**
@@ -132,37 +122,37 @@ export class AssetCodeGeneratorService {
    * Returns true if code matches SCH/XX/YYY/NNN pattern
    */
   static validateFormat(kodeAset: string): boolean {
-    const pattern = /^SCH\/\d{2}\/[A-Z]{3}\/\d{3}$/
-    return pattern.test(kodeAset)
+    const pattern = /^SCH\/\d{2}\/[A-Z]{3}\/\d{3}$/;
+    return pattern.test(kodeAset);
   }
 
   /**
    * Parse asset code into components
    */
   static parseCode(kodeAset: string): {
-    prefix: string
-    year: string
-    categoryCode: string
-    sequence: number
+    prefix: string;
+    year: string;
+    categoryCode: string;
+    sequence: number;
   } | null {
     if (!this.validateFormat(kodeAset)) {
-      return null
+      return null;
     }
 
-    const parts = kodeAset.split('/')
+    const parts = kodeAset.split('/');
     return {
       prefix: parts[0],
       year: parts[1],
       categoryCode: parts[2],
       sequence: parseInt(parts[3], 10),
-    }
+    };
   }
 
   /**
    * Get category code for a given category ID
    */
   getCategoryCodeById(categoryId: number): string {
-    return this.categoryCodeMap[categoryId] || DEFAULT_CATEGORY_CODE
+    return this.categoryCodeMap[categoryId] || DEFAULT_CATEGORY_CODE;
   }
 
   /**
@@ -170,11 +160,11 @@ export class AssetCodeGeneratorService {
    */
   setCategoryCode(categoryId: number, code: string): void {
     if (code.length !== 3 || !/^[A-Z]{3}$/.test(code)) {
-      throw new Error('Category code must be exactly 3 uppercase letters')
+      throw new Error('Category code must be exactly 3 uppercase letters');
     }
-    this.categoryCodeMap[categoryId] = code
+    this.categoryCodeMap[categoryId] = code;
   }
 }
 
 // Export constants for testing
-export { DEFAULT_CATEGORY_CODES, DEFAULT_CATEGORY_CODE, SCHOOL_PREFIX }
+export { DEFAULT_CATEGORY_CODES, DEFAULT_CATEGORY_CODE, SCHOOL_PREFIX };
