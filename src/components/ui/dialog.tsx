@@ -20,6 +20,7 @@ interface DialogHeaderProps {
 
 interface DialogTitleProps {
   children: ReactNode
+  className?: string
 }
 
 interface DialogDescriptionProps {
@@ -72,8 +73,12 @@ export function DialogHeader({ children }: DialogHeaderProps) {
   return <div className="px-6 pt-6 pb-4 border-b">{children}</div>
 }
 
-export function DialogTitle({ children }: DialogTitleProps) {
-  return <h2 className="text-lg font-semibold text-gray-900">{children}</h2>
+export function DialogTitle({ children, className = '' }: DialogTitleProps) {
+  return (
+    <h2 className={`text-lg font-semibold text-gray-900 ${className}`}>
+      {children}
+    </h2>
+  )
 }
 
 export function DialogDescription({ children }: DialogDescriptionProps) {
@@ -91,9 +96,17 @@ export function DialogClose({ onClose }: { onClose: () => void }) {
   )
 }
 
-export function DialogFooter({ children }: { children: ReactNode }) {
+export function DialogFooter({
+  children,
+  className = '',
+}: {
+  children: ReactNode
+  className?: string
+}) {
   return (
-    <div className="px-6 py-4 border-t flex justify-end gap-2">{children}</div>
+    <div className={`px-6 py-4 border-t flex justify-end gap-2 ${className}`}>
+      {children}
+    </div>
   )
 }
 

@@ -88,7 +88,6 @@ jobs:
           path: dist/
           retention-days: 7
 
-
   # ============================================
   # Backend Checks
   # ============================================
@@ -118,10 +117,10 @@ jobs:
         run: npm run lint
 
       - name: Type check
-        run: npx tsc -p tsconfig.json --noEmit
+        run: npx tsc --noEmit
 
       - name: Check formatting
-        run: npm run format -- --check
+        run: npm run format:check
 
   backend-test:
     name: Backend Tests

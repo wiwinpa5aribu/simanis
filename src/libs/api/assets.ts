@@ -261,3 +261,50 @@ export const getAssetQrCode = async (id: number): Promise<string> => {
     throw new Error(getErrorMessage(error) || ERROR_MESSAGES.UNKNOWN_ERROR)
   }
 }
+
+/**
+ * Asset Mutation - Riwayat perpindahan lokasi aset
+ */
+export interface AssetMutation {
+  id: number
+  assetId: number
+  fromRoomId: number | null
+  toRoomId: number
+  mutatedAt: string
+  note: string | null
+  fromRoom?: { id: number; name: string } | null
+  toRoom?: { id: number; name: string }
+}
+
+/**
+ * Get Asset Mutations - Mengambil riwayat mutasi lokasi aset
+ */
+export const getAssetMutations = async (
+  assetId: number
+): Promise<AssetMutation[]> => {
+  try {
+    logger.info(
+      'Assets API',
+      `Mengambil riwayat mutasi untuk aset ID: ${assetId}`
+    )
+
+    const response = await api.get<AssetMutation[]>(
+      `/assets/${assetId}/mutations`
+    )
+
+    const data = Array.isArray(response.data) ? response.data : []
+
+    logger.success(
+      'Assets API',
+      `Berhasil mengambil ${data.length} riwayat mutasi`
+    )
+    return data
+  } catch (error: unknown) {
+    logger.error(
+      'Assets API',
+      `Gagal mengambil riwayat mutasi untuk aset ID: ${assetId}`,
+      error
+    )
+    throw new Error(getErrorMessage(error) || ERROR_MESSAGES.UNKNOWN_ERROR)
+  }
+}

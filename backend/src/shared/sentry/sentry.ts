@@ -60,7 +60,7 @@ export function captureException(error: Error, context?: Record<string, unknown>
  */
 export function captureMessage(
   message: string,
-  level: 'info' | 'warning' | 'error' = 'info'
+  level: 'info' | 'warning' | 'error' = 'info',
 ): void {
   Sentry.captureMessage(message, level);
 }

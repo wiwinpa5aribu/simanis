@@ -7,14 +7,10 @@ import { NotFoundError } from '../../../shared/errors/not-found-error';
 export class UpdateAssetUseCase {
   constructor(
     private assetRepository: IAssetRepository,
-    private auditRepository: IAuditRepository
+    private auditRepository: IAuditRepository,
   ) {}
 
-  async execute(
-    id: number,
-    data: UpdateAssetInput,
-    updatedBy: number
-  ): Promise<Asset> {
+  async execute(id: number, data: UpdateAssetInput, updatedBy: number): Promise<Asset> {
     // Find existing asset
     const existing = await this.assetRepository.findById(id);
     if (!existing) {
@@ -36,8 +32,6 @@ export class UpdateAssetUseCase {
         action: 'UPDATE',
         fieldChanged: changedFields,
       });
-
-
     }
 
     return updated;
@@ -48,7 +42,7 @@ export class UpdateAssetUseCase {
    */
   private getChangedFields(
     existing: Asset,
-    data: UpdateAssetInput
+    data: UpdateAssetInput,
   ): Record<string, { from: unknown; to: unknown }> {
     const changes: Record<string, { from: unknown; to: unknown }> = {};
 

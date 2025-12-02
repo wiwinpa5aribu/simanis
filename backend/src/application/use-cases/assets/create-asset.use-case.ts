@@ -4,15 +4,24 @@ import { ConflictError } from '../../../shared/errors/conflict-error';
 import { generateAssetQRCode } from '../../../shared/utils/qr-code.utils';
 import { AssetDto } from '../../dto/asset.dto';
 import { logger } from '../../../shared/logger/winston.logger';
+import { AssetCodeGeneratorService } from '../../../infrastructure/services/asset-code-generator.service';
 
 export class CreateAssetUseCase {
-  constructor(private assetRepository: IAssetRepository) {}
+  constructor(
+    private assetRepository: IAssetRepository,
+    private assetCodeGenerator?: AssetCodeGeneratorService,
+  ) {}
 
   async execute(data: CreateAssetInput, createdBy: number): Promise<AssetDto> {
-    // Generate kode aset if not provided
+    // Generate kode aset using AssetCodeGenerator service
     let kodeAset = data.kodeAset;
-    if (!kodeAset) {
-      kodeAset = await this.generateKodeAset(data.categoryId);
+    if (!kodeAset || kodeAset.startsWith('TEMP-')) {
+      if (this.assetCodeGenerator) {
+        kodeAset = await this.assetCodeGenerator.generateCode(data.categoryId);
+      } else {
+        // Fallback to simple generation if service not provided
+        kodeAset = await this.generateKodeAsetFallback(data.categoryId);
+      }
     }
 
     // Check if kode aset already exists
@@ -21,7 +30,7 @@ export class CreateAssetUseCase {
       throw new ConflictError('Kode aset sudah digunakan');
     }
 
-    // Generate QR code
+    // Generate QR code from kode aset
     const qrCode = await generateAssetQRCode(kodeAset);
 
     // Convert tahunPerolehan string to Date if provided
@@ -44,29 +53,28 @@ export class CreateAssetUseCase {
   }
 
   /**
-   * Generate kode aset dengan format: SCH/KD/KAT/NOURUT
-   * Contoh: SCH/2025/ELK/0001
+   * Fallback kode aset generation when AssetCodeGenerator service is not available
+   * Format: SCH/XX/YYY/NNN
    */
-  private async generateKodeAset(categoryId?: number): Promise<string> {
-    const year = new Date().getFullYear();
-    
+  private async generateKodeAsetFallback(categoryId?: number): Promise<string> {
+    const year = new Date().getFullYear().toString().slice(-2);
+
     // Get category code (default: GEN for general)
-    let categoryCode = 'GEN';
-    if (categoryId) {
-      const categoryMap: Record<number, string> = {
-        1: 'ELK', // Elektronik
-        2: 'FRN', // Furniture
-        3: 'KND', // Kendaraan
-        4: 'OLR', // Alat Olahraga
-        5: 'BKU', // Buku
-      };
-      categoryCode = categoryMap[categoryId] || 'GEN';
-    }
+    const categoryMap: Record<number, string> = {
+      1: 'ELK', // Elektronik
+      2: 'FRN', // Furniture
+      3: 'KND', // Kendaraan
+      4: 'OLR', // Alat Olahraga
+      5: 'BKU', // Buku
+    };
+    const categoryCode = categoryId ? categoryMap[categoryId] || 'GEN' : 'GEN';
 
     // Get next sequence number
-    const lastAsset = await this.assetRepository.findLastByKodePattern(`SCH/${year}/${categoryCode}/%`);
+    const lastAsset = await this.assetRepository.findLastByKodePattern(
+      `SCH/${year}/${categoryCode}/%`,
+    );
     let sequence = 1;
-    
+
     if (lastAsset) {
       const parts = lastAsset.kodeAset.split('/');
       const lastSeq = parseInt(parts[3], 10);
@@ -75,6 +83,6 @@ export class CreateAssetUseCase {
       }
     }
 
-    return `SCH/${year}/${categoryCode}/${sequence.toString().padStart(4, '0')}`;
+    return `SCH/${year}/${categoryCode}/${sequence.toString().padStart(3, '0')}`;
   }
 }

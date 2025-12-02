@@ -23,5 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Environment files (contains secrets)
+.env
+.env.local
+.env.*.local
+
 # MCP settings (contains credentials)
 .kiro/settings/mcp.json

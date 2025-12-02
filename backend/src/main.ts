@@ -10,7 +10,6 @@ import { errorHandler } from './presentation/middleware/error-handler.middleware
 import { loggerMiddleware } from './presentation/middleware/logger.middleware';
 import { registerRoutes } from './presentation/routes';
 import { initSentry, captureException } from './shared/sentry/sentry';
-// import { initializeJobs } from './infrastructure/jobs';
 
 async function bootstrap() {
   // Initialize Sentry for error tracking

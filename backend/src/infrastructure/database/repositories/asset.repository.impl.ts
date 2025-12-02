@@ -160,7 +160,7 @@ export class AssetRepositoryImpl implements IAssetRepository {
     // Convert SQL LIKE pattern to Prisma startsWith
     // Pattern: SCH/2025/ELK/% -> startsWith: SCH/2025/ELK/
     const prefix = pattern.replace(/%$/, '');
-    
+
     return this.prisma.asset.findFirst({
       where: {
         kodeAset: { startsWith: prefix },
