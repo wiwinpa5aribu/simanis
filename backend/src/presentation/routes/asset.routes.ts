@@ -14,11 +14,10 @@ export async function assetRoutes(fastify: FastifyInstance) {
   fastify.put('/:id', AssetController.update);
 
   // Delete requires wakasek_sarpras or kepsek role
-  fastify.delete(
-    '/:id',
-    { preHandler: rbacMiddleware(['wakasek_sarpras', 'kepsek']) },
-    AssetController.delete
-  );
+  fastify.delete('/:id', {
+    preHandler: rbacMiddleware(['wakasek_sarpras', 'kepsek']),
+    handler: AssetController.delete,
+  });
 
   // Mutations (location changes)
   fastify.get('/:id/mutations', AssetController.getMutations);
