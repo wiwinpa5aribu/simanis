@@ -82,8 +82,6 @@ export class AssetCodeGeneratorService {
     year: string,
     categoryCode: string
   ): Promise<number> {
-    const pattern = `${SCHOOL_PREFIX}/${year}/${categoryCode}/%`
-
     // Find the last asset with matching pattern
     const lastAsset = await this.prisma.asset.findFirst({
       where: {

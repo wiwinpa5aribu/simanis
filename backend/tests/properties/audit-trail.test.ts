@@ -1,7 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as fc from 'fast-check';
+import { Decimal } from '@prisma/client/runtime/library';
 import { UpdateAssetUseCase } from '../../src/application/use-cases/assets/update-asset.use-case';
-import { IAssetRepository, AssetWithRelations } from '../../src/domain/repositories/asset.repository';
+import {
+  IAssetRepository,
+  AssetWithRelations,
+} from '../../src/domain/repositories/asset.repository';
 import { IAuditRepository } from '../../src/domain/repositories/audit.repository';
 import { Asset, AuditLog } from '@prisma/client';
 
@@ -19,19 +23,18 @@ const createMockAsset = (overrides: Partial<Asset> = {}): AssetWithRelations => 
   merk: 'Dell',
   spesifikasi: 'Core i5, 8GB RAM',
   tahunPerolehan: new Date('2025-01-01'),
-  harga: 10000000,
+  harga: new Decimal(10000000),
   sumberDana: 'BOS',
   kondisi: 'Baik',
   fotoUrl: null,
   qrCode: 'data:image/png;base64,xxx',
+  tanggalPencatatan: new Date(),
   isDeleted: false,
   deletedAt: null,
   createdBy: 1,
   categoryId: 1,
   masaManfaatTahun: 4,
   currentRoomId: 1,
-  createdAt: new Date(),
-  updatedAt: new Date(),
   category: null,
   mutations: [],
   ...overrides,
@@ -58,7 +61,7 @@ describe('Audit Trail on Update (Property 9)', () => {
     };
 
     mockAuditRepository = {
-      create: auditCreateSpy,
+      create: auditCreateSpy as IAuditRepository['create'],
       findAll: vi.fn(),
     };
   });
