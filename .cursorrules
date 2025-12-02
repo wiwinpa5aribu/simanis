@@ -1,0 +1,265 @@
+# SIMANIS - AI Coding Rules
+# File ini WAJIB dibaca oleh semua AI coding tools (Cursor, Claude, Copilot, dll)
+# Last Updated: 2025-12-02
+
+## IDENTITAS PROJECT
+
+Nama: SIMANIS (Sistem Manajemen Aset Sekolah)
+Bahasa UI: Indonesia (Bahasa Indonesia)
+Bahasa Code: English (camelCase)
+Tipe: Progressive Web App (PWA)
+Target User: Guru dan Staff Sekolah Indonesia
+
+## TECH STACK
+
+### Frontend (Root Directory)
+- React 19 + TypeScript
+- Vite (rolldown-vite) untuk build
+- Tailwind CSS 4
+- Zustand untuk client state
+- TanStack Query untuk server state
+- React Hook Form + Zod untuk forms
+- React Router DOM 7
+- PWA via vite-plugin-pwa
+
+### Backend (/backend)
+- Fastify 4 + TypeScript
+- MySQL 8.0 + Prisma ORM
+- JWT authentication (@fastify/jwt)
+- Argon2 untuk password hashing
+- BullMQ + Redis untuk job queues
+
+### Shared (/shared)
+- TypeScript types dan constants
+- Digunakan oleh frontend DAN backend
+
+## ARSITEKTUR
+
+### Frontend Structure
+```
+src/
+├── components/ui/       # Base components (button, input)
+├── components/layout/   # Layout components
+├── routes/              # Page components
+├── libs/api/            # API client functions
+├── libs/store/          # Zustand stores
+├── libs/hooks/          # Custom React hooks
+├── libs/validation/     # Zod schemas
+└── contexts/            # React contexts
+```
+
+### Backend Structure (Clean Architecture)
+```
+backend/src/
+├── presentation/        # HTTP layer (controllers, routes, middleware)
+├── application/         # Business logic (use-cases, DTOs, validators)
+├── domain/              # Core entities dan repository interfaces
+├── infrastructure/      # External services (database, storage, crypto)
+└── shared/              # Config, errors, utils
+```
+
+## CODING STANDARDS
+
+### 1. Naming Convention: camelCase EVERYWHERE
+```typescript
+// ✅ BENAR
+interface Asset {
+  id: number
+  kodeAset: string
+  namaBarang: string
+  categoryId: number
+}
+
+// ❌ SALAH - JANGAN GUNAKAN snake_case
+interface Asset {
+  kode_aset: string
+  nama_barang: string
+}
+```
+
+### 2. Zod + React Hook Form Pattern
+```typescript
+// Schema
+export const mySchema = z.object({
+  requiredField: z.string().min(1, 'Wajib diisi'),
+  optionalField: z.boolean().optional(),
+})
+
+// Types
+export type MyFormInput = z.input<typeof mySchema>
+export type MyFormValues = z.output<typeof mySchema>
+
+// Component
+const { register, handleSubmit } = useForm<MyFormInput>({
+  resolver: zodResolver(mySchema),
+  defaultValues: { requiredField: '', optionalField: false },
+})
+```
+
+### 3. API Response Pattern
+```typescript
+// ✅ BENAR - akses .data untuk paginated response
+const { data: response } = useQuery({
+  queryKey: ['assets'],
+  queryFn: () => getAssets(),
+})
+const assets = response?.data ?? []
+```
+
+### 4. Environment Variables
+```typescript
+// ✅ Frontend - gunakan import.meta.env
+const apiUrl = import.meta.env.VITE_API_URL
+
+// ❌ SALAH - process.env tidak tersedia di browser
+const apiUrl = process.env.API_URL
+```
+
+### 5. Unused Parameters
+```typescript
+// ✅ Gunakan underscore prefix untuk unused params
+constructor(_callback: SomeType, _options?: OptionsType) {}
+```
+
+## COMMANDS
+
+### Frontend (dari root)
+```bash
+npm run dev          # Start dev server (port 5000)
+npm run build        # Build production
+npm run lint         # Run ESLint
+npm run test:run     # Run tests
+npm run format       # Format dengan Prettier
+```
+
+### Backend (dari /backend)
+```bash
+npm run dev              # Start dev server
+npm run build            # Compile TypeScript
+npm run prisma:migrate   # Run migrations
+npm run prisma:generate  # Generate Prisma client
+npm run prisma:seed      # Seed database
+```
+
+## AI BEHAVIOR RULES
+
+### WAJIB DILAKUKAN
+1. Baca `docs/progress/CURRENT_STATUS.md` sebelum mulai task apapun
+2. Update `docs/progress/CURRENT_STATUS.md` setelah selesai task
+3. Gunakan camelCase untuk semua property
+4. Validasi dengan Zod di frontend DAN backend
+5. Handle error dengan proper error messages dalam Bahasa Indonesia
+6. Test code sebelum commit
+
+### DILARANG
+1. Menggunakan snake_case untuk property
+2. Menggunakan process.env di frontend
+3. Skip dokumentasi setelah selesai task
+4. Membuat breaking changes tanpa update docs
+5. Ignore TypeScript errors
+6. Commit langsung ke `main` atau `develop` branch
+7. Push tanpa PR review
+
+### DOKUMENTASI WAJIB
+Setelah menyelesaikan task, AI HARUS update file berikut:
+
+```markdown
+# docs/progress/CURRENT_STATUS.md
+
+## Status Terakhir
+- Tanggal: [YYYY-MM-DD]
+- AI Tool: [Kiro/Cursor/Claude]
+- Task: [Deskripsi singkat]
+
+## Yang Sudah Selesai
+- [x] Task 1
+- [x] Task 2
+
+## Yang Belum Selesai
+- [ ] Task 3
+
+## Files yang Diubah
+- `path/to/file.ts` - deskripsi perubahan
+
+## Catatan untuk Session Berikutnya
+- Context penting yang perlu diketahui
+```
+
+## GIT WORKFLOW
+
+### Branch Strategy
+- `main` - Production (protected)
+- `develop` - Integration (protected)
+- `feature/*` - New features
+- `fix/*` - Bug fixes
+- `refactor/*` - Code improvements
+
+### Rules
+1. JANGAN commit langsung ke main/develop
+2. SELALU buat feature branch
+3. SELALU buat PR untuk merge
+
+### Commit Format
+```
+feat: add new feature
+fix: resolve bug
+docs: update documentation
+refactor: improve code
+chore: maintenance task
+```
+
+Lihat `docs/development/GIT_WORKFLOW.md` untuk detail lengkap.
+
+## ROADMAP PROJECT
+
+### Phase 0: Documentation ✅ COMPLETE
+- [x] Setup .cursorrules
+- [x] Setup docs/progress/
+- [x] Setup CLAUDE.md
+- [x] Update .kiro/steering/
+
+### Phase 1: Tooling Foundation
+- [ ] Migrate npm → pnpm
+- [ ] Migrate ESLint+Prettier → Biome
+- [ ] Setup Turborepo
+
+### Phase 2: Monorepo Migration
+- [ ] Restructure ke apps/web, apps/api
+- [ ] Setup packages/shared, packages/database
+- [ ] Update semua imports
+
+### Phase 3: Quality Gates
+- [ ] Test coverage ≥ 80%
+- [ ] CI/CD pipeline
+- [ ] Automated deployment
+
+### Phase 4: Production Ready
+- [ ] Docker setup
+- [ ] Monitoring (GlitchTip)
+- [ ] Backup automation
+
+### Phase 5: Tauri Integration (Optional)
+- [ ] Service layer abstraction
+- [ ] Desktop app wrapper
+
+## PATH ALIASES
+- `@/` → `src/` (frontend)
+- `@shared/` → `shared/` (shared types)
+
+## PRISMA SCHEMA CONVENTION
+```prisma
+model Asset {
+  id         Int     @id @default(autoincrement())
+  kodeAset   String  @unique @map("kode_aset")   // camelCase di code
+  namaBarang String  @map("nama_barang")         // snake_case di DB
+  
+  @@map("assets")
+}
+```
+
+Setelah edit schema:
+```bash
+cd backend
+npm run prisma:format
+npm run prisma:generate
+```
