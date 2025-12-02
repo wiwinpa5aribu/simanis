@@ -3,7 +3,7 @@
  * Data simulasi sesuai dengan struktur database simanis_dev
  */
 
-import type { DashboardStats, RecentActivity } from '../dashboard'
+import type { DashboardStats, RecentActivity } from '../types/dashboard.types'
 
 export const mockDashboardStats: DashboardStats = {
   total_assets: 156,

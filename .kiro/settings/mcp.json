@@ -1,10 +1,38 @@
 {
   "mcpServers": {
+    "sequential-thinking": {
+      "command": "mcp-server-sequential-thinking",
+      "args": [],
+      "disabled": false,
+      "autoApprove": []
+    },
+    "context7": {
+      "command": "context7-mcp",
+      "args": [],
+      "disabled": false,
+      "autoApprove": ["resolve-library-id", "get-library-docs"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "disabled": false,
+      "autoApprove": []
+    },
+    "TestSprite": {
+      "command": "npx",
+      "args": ["@testsprite/testsprite-mcp@latest"],
+      "env": {
+        "API_KEY": "${TESTSPRITE_API_KEY}"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "testsprite_generate_frontend_test_plan",
+        "testsprite_generate_standardized_prd"
+      ]
+    },
     "mysql": {
       "command": "uvx",
-      "args": [
-        "mcp-server-mysql"
-      ],
+      "args": ["mcp-server-mysql"],
       "env": {
         "MYSQL_HOST": "localhost",
         "MYSQL_PORT": "3306",
@@ -16,29 +44,34 @@
       "autoApprove": [
         "list_tables",
         "describe_table",
-        "describe_table",
         "fetch_data",
-        "fetch_data",
-        "fetch_data"
+        "execute_query"
       ]
     },
     "github": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
       },
       "disabled": false,
-      "autoApprove": []
+      "autoApprove": [
+        "list_issues",
+        "list_commits",
+        "search_repositories",
+        "create_pull_request",
+        "list_pull_requests",
+        "get_pull_request_status",
+        "merge_pull_request",
+        "get_file_contents",
+        "create_branch",
+        "create_or_update_file",
+        "get_pull_request"
+      ]
     },
     "brave-search": {
       "command": "uvx",
-      "args": [
-        "mcp-server-brave-search"
-      ],
+      "args": ["mcp-server-brave-search"],
       "env": {
         "BRAVE_API_KEY": "${BRAVE_API_KEY}"
       },
@@ -47,9 +80,7 @@
     },
     "aws-docs": {
       "command": "uvx",
-      "args": [
-        "awslabs.aws-documentation-mcp-server@latest"
-      ],
+      "args": ["awslabs.aws-documentation-mcp-server@latest"],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
