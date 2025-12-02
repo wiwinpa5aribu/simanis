@@ -80,7 +80,7 @@
     "lint-staged": "^16.2.7",
     "madge": "^8.0.0",
     "postcss": "^8.5.6",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.3",
     "tailwindcss": "^4.1.17",
     "ts-prune": "^0.10.3",
     "typescript": "~5.9.3",
