@@ -1,83 +1,66 @@
 # Project Structure
 
-## Monorepo Layout
 ```
 simanis/
-├── shared/                 # Shared types & constants (frontend + backend)
-├── src/                    # Frontend React application
-├── backend/                # Backend Fastify API
-├── docs/                   # Documentation
-├── scripts/                # Utility scripts
-└── public/                 # Static assets
+├── shared/                    # Shared code between frontend & backend
+│   ├── types/                 # Entity types, API types
+│   └── constants/             # Roles, status enums
+│
+├── src/                       # Frontend (React)
+│   ├── components/            # Reusable UI components
+│   │   ├── ui/                # Base components (button, input, etc.)
+│   │   ├── layout/            # Layout components
+│   │   ├── table/             # DataTable component
+│   │   └── filters/           # Filter components
+│   ├── routes/                # Page components (route-based)
+│   ├── libs/
+│   │   ├── api/               # API client functions
+│   │   ├── store/             # Zustand stores
+│   │   ├── hooks/             # Custom React hooks
+│   │   ├── utils/             # Utility functions
+│   │   └── validation/        # Zod schemas for forms
+│   ├── contexts/              # React contexts
+│   └── test/                  # Test setup and utilities
+│
+├── backend/                   # Backend (Fastify) - Clean Architecture
+│   ├── src/
+│   │   ├── presentation/      # HTTP layer
+│   │   │   ├── controllers/   # Request handlers
+│   │   │   ├── routes/        # Route definitions
+│   │   │   └── middleware/    # Auth, RBAC, error handling
+│   │   ├── application/       # Business logic
+│   │   │   ├── use-cases/     # Use case implementations
+│   │   │   ├── dto/           # Data transfer objects
+│   │   │   └── validators/    # Zod validators
+│   │   ├── domain/            # Core domain
+│   │   │   ├── entities/      # Domain entities
+│   │   │   └── repositories/  # Repository interfaces
+│   │   ├── infrastructure/    # External services
+│   │   │   ├── database/      # Prisma repository implementations
+│   │   │   ├── storage/       # File storage (local/R2)
+│   │   │   ├── crypto/        # JWT, password services
+│   │   │   └── jobs/          # BullMQ job processors
+│   │   └── shared/            # Shared utilities
+│   │       ├── config/        # Configuration
+│   │       ├── errors/        # Custom error classes
+│   │       └── utils/         # Helpers (pagination, response)
+│   ├── prisma/                # Database
+│   │   ├── schema.prisma      # Database schema
+│   │   ├── migrations/        # Migration files
+│   │   └── seed.ts            # Database seeder
+│   └── tests/                 # Backend tests
+│
+├── docs/                      # Documentation
+└── scripts/                   # Setup and utility scripts
 ```
 
-## Frontend Structure (`src/`)
-```
-src/
-├── components/
-│   ├── ui/                 # Reusable UI primitives (Button, Input, Card, etc.)
-│   ├── layout/             # App shell, navigation, protected routes
-│   ├── dashboard/          # Dashboard-specific components
-│   ├── filters/            # Filter bar components
-│   ├── table/              # DataTable component
-│   └── uploads/            # File upload components
-├── routes/                 # Page components organized by feature
-│   ├── assets/             # Asset CRUD pages
-│   ├── loans/              # Loan management pages
-│   ├── inventory/          # Inventory check pages
-│   ├── depreciation/       # Depreciation pages
-│   ├── reports/            # Report generation
-│   └── auth/               # Login page
-├── libs/
-│   ├── api/                # API client functions per domain
-│   ├── store/              # Zustand stores (auth, filters, favorites)
-│   ├── hooks/              # Custom React hooks
-│   ├── validation/         # Zod schemas per domain
-│   ├── utils/              # Utility functions
-│   └── auth/               # Permission helpers
-├── contexts/               # React contexts (NetworkContext)
-├── constants/              # App constants
-└── test/                   # Test setup and property tests
-```
+## Architecture Pattern (Backend)
+The backend follows Clean Architecture with 4 layers:
+1. **Presentation**: HTTP concerns (controllers, routes, middleware)
+2. **Application**: Business logic (use cases, DTOs, validators)
+3. **Domain**: Core entities and repository interfaces
+4. **Infrastructure**: External implementations (database, storage, queues)
 
-## Backend Structure (`backend/src/`)
-Uses Clean Architecture / Layered Architecture:
-
-```
-backend/src/
-├── application/            # Application layer
-│   ├── dto/                # Data Transfer Objects
-│   ├── use-cases/          # Business logic organized by domain
-│   │   ├── assets/
-│   │   ├── auth/
-│   │   ├── loans/
-│   │   └── ...
-│   └── validators/         # Zod validation schemas
-├── domain/                 # Domain layer
-│   ├── entities/           # Domain entities (currently using Prisma types)
-│   └── repositories/       # Repository interfaces
-├── infrastructure/         # Infrastructure layer
-│   ├── database/
-│   │   └── repositories/   # Repository implementations
-│   ├── crypto/             # JWT and password services
-│   ├── storage/            # File storage (local, R2)
-│   ├── jobs/               # Background job processors
-│   └── queue/              # Queue configuration
-├── presentation/           # Presentation layer
-│   ├── controllers/        # HTTP request handlers
-│   ├── middleware/         # Auth, RBAC, error handling, logging
-│   └── routes/             # Route definitions
-├── shared/                 # Shared utilities
-│   ├── config/             # Environment configuration
-│   ├── errors/             # Custom error classes
-│   ├── logger/             # Winston logger setup
-│   └── utils/              # Pagination, response helpers
-└── main.ts                 # Application entry point
-```
-
-## Key Conventions
-- Controllers instantiate use cases with repository implementations
-- Repository interfaces in `domain/`, implementations in `infrastructure/`
-- Validation happens at controller level using Zod schemas
-- Custom error classes extend base `AppError` for consistent error handling
-- API responses use `createSuccessResponse()` utility for consistent format
+## Path Aliases
+- `@/` → `src/` (frontend)
+- `@shared/` → `shared/` (shared types)

@@ -1,65 +1,55 @@
-# Tech Stack & Build System
+# Tech Stack
 
 ## Frontend (Root Directory)
-- **Framework**: React 19 with TypeScript
-- **Build Tool**: Vite (rolldown-vite)
-- **Styling**: Tailwind CSS 4
-- **State Management**: Zustand
-- **Data Fetching**: TanStack React Query
-- **Forms**: React Hook Form + Zod validation
-- **Routing**: React Router DOM 7
-- **UI Components**: Custom components in `src/components/ui/`
-- **Icons**: Lucide React
-- **Notifications**: Sonner (toast)
-- **PWA**: vite-plugin-pwa with offline support
-- **Error Tracking**: Sentry
+- React 19 + TypeScript
+- Vite (rolldown-vite) for build
+- Tailwind CSS 4
+- Zustand for client state
+- TanStack Query for server state
+- React Hook Form + Zod for forms
+- React Router DOM 7
+- PWA support via vite-plugin-pwa
 
-## Backend (`backend/` Directory)
-- **Framework**: Fastify 4
-- **Database**: MySQL 8.0 with Prisma ORM
-- **Authentication**: JWT (@fastify/jwt)
-- **Password Hashing**: Argon2
-- **File Upload**: @fastify/multipart
-- **Queue**: BullMQ with Redis (ioredis)
-- **Storage**: Local or Cloudflare R2 (S3-compatible)
-- **Logging**: Winston
-- **Reports**: ExcelJS, PDFKit
-- **QR Codes**: qrcode library
+## Backend (`/backend`)
+- Fastify 4 + TypeScript
+- MySQL 8.0 + Prisma ORM
+- JWT authentication (@fastify/jwt) + Argon2 password hashing
+- BullMQ + Redis for job queues
+- Local storage or Cloudflare R2 for file uploads
 
-## Testing
-- **Test Runner**: Vitest
-- **Property Testing**: fast-check
-- **React Testing**: @testing-library/react
-- **DOM Environment**: jsdom
-
-## Code Quality
-- **Linting**: ESLint 9 with TypeScript and accessibility rules (jsx-a11y)
-- **Formatting**: Prettier
-- **Git Hooks**: Husky + lint-staged
-- **Commits**: Conventional Commits format required
+## Shared (`/shared`)
+- Common TypeScript types and constants used by both frontend and backend
 
 ## Common Commands
 
-### Frontend
+### Frontend (run from root)
 ```bash
 npm run dev          # Start dev server (port 5000)
 npm run build        # Build for production
 npm run lint         # Run ESLint
-npm run format       # Format with Prettier
 npm run test:run     # Run tests once
-npm run test:coverage # Run tests with coverage
+npm run format       # Format with Prettier
 ```
 
-### Backend
+### Backend (run from `/backend`)
 ```bash
-cd backend
-npm run dev              # Start dev server (port 3000)
+npm run dev              # Start dev server with tsx watch
 npm run build            # Compile TypeScript
+npm run lint             # Run ESLint
+npm run test             # Run tests
 npm run prisma:migrate   # Run database migrations
+npm run prisma:generate  # Generate Prisma client
 npm run prisma:seed      # Seed database
 npm run prisma:studio    # Open Prisma Studio
-npm test                 # Run tests
+npm run prisma:format    # Format schema with @map conventions
 ```
 
-## Path Aliases
-- Frontend uses `@/` alias pointing to `./src/`
+## Environment Variables
+- Frontend: Use `import.meta.env.VITE_*` (not `process.env`)
+- Backend: Use `.env` file with `DATABASE_URL`, JWT secrets, etc.
+- See `.env.example` files in root and `/backend`
+
+## Testing
+- Vitest for both frontend and backend
+- fast-check for property-based testing
+- Testing Library for React component tests

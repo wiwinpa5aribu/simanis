@@ -1,26 +1,22 @@
-# SIMANIS - Sistem Manajemen Aset Sekolah
+# Product Overview
 
-## Overview
-SIMANIS is a school asset management system (Indonesian: Sistem Manajemen Aset Sekolah) designed to track, manage, and report on school assets throughout their lifecycle.
+SIMANIS (Sistem Manajemen Aset Sekolah) is a school asset management system built as a Progressive Web App.
 
 ## Core Features
-- Asset registration with QR codes for tracking
+- Asset registration and tracking with QR codes
 - Asset categorization and location management (buildings, floors, rooms)
-- Loan management for borrowing/returning assets
-- Inventory checks with QR scanning
-- Depreciation tracking and calculations
-- KIB (Kartu Inventaris Barang) report generation
-- Audit trail logging
-- Role-based access control (Admin, Staff)
+- Loan/borrowing management for school equipment
+- Inventory checks with photo documentation
+- Asset depreciation calculation
+- Audit trail for all changes
+- Role-based access control (RBAC)
+- Report generation (KIB reports)
 
-## Domain Concepts
-- **Asset (Aset)**: Physical items tracked by the system with unique codes and QR identifiers
-- **Mutation (Mutasi)**: Movement of assets between rooms/locations
-- **Loan (Peminjaman)**: Temporary borrowing of assets with return tracking
-- **Inventory Check (Opname)**: Periodic verification of asset condition and location
-- **Depreciation (Penyusutan)**: Value reduction calculation over asset lifetime
-- **KIB Report**: Official Indonesian government asset inventory card format
+## Target Users
+- School administrators managing physical assets
+- Staff who borrow and return equipment
+- Inventory auditors performing periodic checks
 
-## User Roles
-- **Admin**: Full system access including user management
-- **Staff**: Asset operations, loans, inventory checks
+## Language
+- UI and domain terminology are in Indonesian (Bahasa Indonesia)
+- Code uses camelCase naming convention throughout
