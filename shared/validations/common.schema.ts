@@ -18,7 +18,11 @@ export const ASSET_CONDITIONS = [
 
 export const SUMBER_DANA_VALUES = ['BOS', 'APBD', 'Hibah'] as const
 
-export const LOAN_STATUS_VALUES = ['Dipinjam', 'Dikembalikan', 'Terlambat'] as const
+export const LOAN_STATUS_VALUES = [
+  'Dipinjam',
+  'Dikembalikan',
+  'Terlambat',
+] as const
 
 // ============================================
 // Base Schemas
@@ -62,10 +66,9 @@ export const idSchema = z.coerce.number().int().positive('ID tidak valid')
 // ============================================
 
 /** Schema untuk tanggal dalam format string (YYYY-MM-DD) */
-export const dateStringSchema = z.string().regex(
-  /^\d{4}-\d{2}-\d{2}$/,
-  'Format tanggal harus YYYY-MM-DD'
-)
+export const dateStringSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format tanggal harus YYYY-MM-DD')
 
 /** Schema untuk tanggal opsional */
 export const optionalDateStringSchema = z.string().optional()

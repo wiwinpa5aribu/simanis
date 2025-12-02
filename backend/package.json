@@ -12,19 +12,13 @@
     "prisma:seed": "tsx prisma/seed.ts",
     "prisma:studio": "prisma studio",
     "prisma:format": "prisma-case-format --file prisma/schema.prisma",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\"",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
     "test": "vitest --run"
   },
-  "keywords": [
-    "simanis",
-    "asset-management",
-    "school",
-    "fastify",
-    "prisma"
-  ],
+  "keywords": ["simanis", "asset-management", "school", "fastify", "prisma"],
   "author": "Wiwin Pasaribu <wiwinpa5aribu>",
   "license": "ISC",
   "repository": {
@@ -58,18 +52,14 @@
     "zod": "^3.22.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.1",
     "@types/qrcode": "^1.5.6",
     "@vitest/ui": "^4.0.13",
-    "eslint": "^9.39.1",
     "fast-check": "^4.3.0",
-    "prettier": "^3.6.2",
     "prisma-case-format": "^2.2.1",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.3",
     "vitest": "^4.0.13"
   }
 }

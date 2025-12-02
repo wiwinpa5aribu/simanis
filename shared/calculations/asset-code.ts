@@ -26,7 +26,7 @@ export interface AssetCodeParts {
  * Generate kode aset berdasarkan konfigurasi
  * @param config - Konfigurasi kode aset
  * @returns Kode aset terformat
- * 
+ *
  * @example
  * generateAssetCode({ categoryPrefix: 'ELK', year: 2024, sequence: 1 })
  * // Returns: 'ELK-2024-0001'
@@ -35,7 +35,11 @@ export function generateAssetCode(config: AssetCodeConfig): string {
   const { categoryPrefix, year, sequence, sequenceLength = 4 } = config
 
   // Validasi
-  if (!categoryPrefix || categoryPrefix.length < 2 || categoryPrefix.length > 5) {
+  if (
+    !categoryPrefix ||
+    categoryPrefix.length < 2 ||
+    categoryPrefix.length > 5
+  ) {
     throw new Error('Category prefix harus 2-5 karakter')
   }
   if (year < 1900 || year > 2100) {
@@ -55,7 +59,7 @@ export function generateAssetCode(config: AssetCodeConfig): string {
  * Parse kode aset menjadi komponen-komponennya
  * @param code - Kode aset
  * @returns Komponen kode aset atau null jika tidak valid
- * 
+ *
  * @example
  * parseAssetCode('ELK-2024-0001')
  * // Returns: { categoryPrefix: 'ELK', year: 2024, sequence: 1 }
@@ -90,11 +94,11 @@ export function isValidAssetCode(code: string): boolean {
  * @param categoryPrefix - Prefix kategori
  * @param year - Tahun (default: tahun sekarang)
  * @returns Kode aset berikutnya
- * 
+ *
  * @example
  * getNextAssetCode('ELK-2024-0005', 'ELK')
  * // Returns: 'ELK-2024-0006'
- * 
+ *
  * getNextAssetCode(null, 'FRN', 2024)
  * // Returns: 'FRN-2024-0001'
  */
@@ -108,7 +112,7 @@ export function getNextAssetCode(
   }
 
   const parts = parseAssetCode(lastCode)
-  
+
   if (!parts) {
     return generateAssetCode({ categoryPrefix, year, sequence: 1 })
   }
@@ -131,11 +135,11 @@ export function getNextAssetCode(
  * Bisa di-extend sesuai kebutuhan
  */
 export const CATEGORY_PREFIXES: Record<string, string> = {
-  'Elektronik': 'ELK',
-  'Furniture': 'FRN',
-  'Buku': 'BKU',
+  Elektronik: 'ELK',
+  Furniture: 'FRN',
+  Buku: 'BKU',
   'Alat Olahraga': 'OLR',
-  'Kendaraan': 'KND',
+  Kendaraan: 'KND',
   'Alat Laboratorium': 'LAB',
   'Alat Musik': 'MSK',
   'Peralatan Kantor': 'KNT',
@@ -151,7 +155,7 @@ export function getCategoryPrefix(categoryName: string): string {
   if (prefix) {
     return prefix
   }
-  
+
   // Fallback: ambil 3 huruf pertama dan uppercase
   return categoryName
     .replace(/[^a-zA-Z]/g, '')

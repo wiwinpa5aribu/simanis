@@ -3,20 +3,20 @@
  */
 
 export interface LoginResponseDto {
-  token: string;
+  token: string
   user: {
-    id: number;
-    name: string;
-    username: string;
-    email: string | null;
-    roles: string[];
-  };
+    id: number
+    name: string
+    username: string
+    email: string | null
+    roles: string[]
+  }
 }
 
 export interface CurrentUserDto {
-  id: number;
-  name: string;
-  username: string;
-  email: string | null;
-  roles: string[];
+  id: number
+  name: string
+  username: string
+  email: string | null
+  roles: string[]
 }

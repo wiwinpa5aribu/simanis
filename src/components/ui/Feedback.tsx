@@ -1,4 +1,4 @@
-import { Loader2, AlertCircle } from 'lucide-react'
+import { AlertCircle, Loader2 } from 'lucide-react'
 
 // Komponen Loading Spinner
 export function LoadingSpinner({ text = 'Memuat data...' }: { text?: string }) {

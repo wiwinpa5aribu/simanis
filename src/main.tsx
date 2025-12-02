@@ -3,22 +3,22 @@
  * Menginisialisasi React, React Query, Router, dan Error Tracking
  */
 
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import {
+  MutationCache,
+  QueryCache,
   QueryClient,
   QueryClientProvider,
-  QueryCache,
-  MutationCache,
 } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './styles/index.css'
 import App from './App.tsx'
+import { ErrorBoundary } from './components/ErrorBoundary'
+import { initSentry } from './libs/sentry'
 import { logEnvironment } from './libs/utils/env'
 import { logger } from './libs/utils/logger'
-import { initSentry } from './libs/sentry'
-import { ErrorBoundary } from './components/ErrorBoundary'
 
 // Initialize Sentry for error tracking (production only)
 initSentry()

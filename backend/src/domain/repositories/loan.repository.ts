@@ -1,38 +1,38 @@
-import { Loan, LoanItem, Asset, User } from '@prisma/client';
+import { Asset, Loan, LoanItem, User } from '@prisma/client'
 
 export type LoanWithRelations = Loan & {
-  requester: User;
-  items: (LoanItem & { asset: Asset })[];
-};
+  requester: User
+  items: (LoanItem & { asset: Asset })[]
+}
 
 export interface ILoanRepository {
   /**
    * Find all loans with pagination
    */
   findAll(params: {
-    page: number;
-    pageSize: number;
-    status?: string;
-  }): Promise<{ loans: LoanWithRelations[]; total: number }>;
+    page: number
+    pageSize: number
+    status?: string
+  }): Promise<{ loans: LoanWithRelations[]; total: number }>
 
   /**
    * Find loan by ID
    */
-  findById(id: number): Promise<LoanWithRelations | null>;
+  findById(id: number): Promise<LoanWithRelations | null>
 
   /**
    * Create loan with items
    */
   create(data: {
-    requestedBy: number;
-    tanggalPinjam: Date;
-    tujuanPinjam?: string;
-    catatan?: string;
+    requestedBy: number
+    tanggalPinjam: Date
+    tujuanPinjam?: string
+    catatan?: string
     items: {
-      assetId: number;
-      conditionBefore?: string;
-    }[];
-  }): Promise<Loan>;
+      assetId: number
+      conditionBefore?: string
+    }[]
+  }): Promise<Loan>
 
   /**
    * Return loan (update status and condition after)
@@ -40,13 +40,13 @@ export interface ILoanRepository {
   returnLoan(
     loanId: number,
     items: {
-      assetId: number;
-      conditionAfter: string;
-    }[],
-  ): Promise<Loan>;
+      assetId: number
+      conditionAfter: string
+    }[]
+  ): Promise<Loan>
 
   /**
    * Count loans by status
    */
-  countByStatus(status: string): Promise<number>;
+  countByStatus(status: string): Promise<number>
 }

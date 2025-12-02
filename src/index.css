@@ -49,9 +49,9 @@
 
   /* Typography - Font Families */
   --font-family-base:
-    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
     sans-serif;
-  --font-family-mono: 'Courier New', Courier, monospace;
+  --font-family-mono: "Courier New", Courier, monospace;
 
   /* Typography - Font Sizes (Mobile First) */
   --font-size-xs: 0.75rem; /* 12px */

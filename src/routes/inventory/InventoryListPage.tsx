@@ -1,21 +1,20 @@
-import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { id as localeId } from 'date-fns/locale'
-import { QrCode, Search, Calendar } from 'lucide-react'
-
+import { Calendar, QrCode, Search } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { FilterBar } from '@/components/filters/FilterBar'
+import type { Column } from '@/components/table/DataTable'
+import { DataTable } from '@/components/table/DataTable'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   getInventoryList,
   type InventoryListParams,
   type InventoryRecord,
 } from '@/libs/api/inventory'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { DataTable } from '@/components/table/DataTable'
-import type { Column } from '@/components/table/DataTable'
-import { FilterBar } from '@/components/filters/FilterBar'
 import { useFilterStore } from '@/libs/store/filterStore'
 import { logger } from '@/libs/utils/logger'
 

@@ -3,11 +3,11 @@
  * Berisi Sidebar navigasi dan Header dengan area konten utama
  */
 
+import { Bell, LogOut, Menu, Search, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../libs/store/authStore'
-import { LogOut, Bell, Search, Menu, X } from 'lucide-react'
 import { logger } from '../../libs/utils/logger'
-import { useEffect, useState } from 'react'
 import { OfflineBanner } from './OfflineBanner'
 import { Sidebar } from './Sidebar'
 

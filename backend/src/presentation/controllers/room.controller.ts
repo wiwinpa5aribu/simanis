@@ -1,15 +1,15 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
-import { PrismaClient } from '@prisma/client';
-import { createSuccessResponse } from '../../shared/utils/response.utils';
-import { NotFoundError } from '../../shared/errors/not-found-error';
-import { ConflictError } from '../../shared/errors/conflict-error';
-import { ValidationError } from '../../shared/errors/validation-error';
+import { PrismaClient } from '@prisma/client'
+import { FastifyReply, FastifyRequest } from 'fastify'
 import {
   createRoomSchema,
   updateRoomSchema,
-} from '../../application/validators/location.validators';
+} from '../../application/validators/location.validators'
+import { ConflictError } from '../../shared/errors/conflict-error'
+import { NotFoundError } from '../../shared/errors/not-found-error'
+import { ValidationError } from '../../shared/errors/validation-error'
+import { createSuccessResponse } from '../../shared/utils/response.utils'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export class RoomController {
   /**
@@ -27,7 +27,7 @@ export class RoomController {
         { floor: { levelNumber: 'asc' } },
         { name: 'asc' },
       ],
-    });
+    })
 
     // Transform to simpler format for frontend
     const result = rooms.map((room) => ({
@@ -35,17 +35,17 @@ export class RoomController {
       name: `${room.floor.building.name} - Lt.${room.floor.levelNumber} - ${room.name}`,
       code: room.code,
       description: `${room.floor.building.name}, Lantai ${room.floor.levelNumber}`,
-    }));
+    }))
 
-    return reply.status(200).send(createSuccessResponse(result));
+    return reply.status(200).send(createSuccessResponse(result))
   }
 
   /**
    * GET /api/rooms/:id - Get room by ID with floor and building info
    */
   static async getById(request: FastifyRequest, reply: FastifyReply) {
-    const { id } = request.params as { id: string };
-    const roomId = parseInt(id);
+    const { id } = request.params as { id: string }
+    const roomId = parseInt(id)
 
     const room = await prisma.room.findUnique({
       where: { id: roomId },
@@ -58,10 +58,10 @@ export class RoomController {
           },
         },
       },
-    });
+    })
 
     if (!room) {
-      throw new NotFoundError('Ruangan tidak ditemukan');
+      throw new NotFoundError('Ruangan tidak ditemukan')
     }
 
     const result = {
@@ -73,29 +73,29 @@ export class RoomController {
         levelNumber: room.floor.levelNumber,
         building: room.floor.building,
       },
-    };
+    }
 
-    return reply.status(200).send(createSuccessResponse(result));
+    return reply.status(200).send(createSuccessResponse(result))
   }
 
   /**
    * POST /api/floors/:floorId/rooms - Create room in floor
    */
   static async create(request: FastifyRequest, reply: FastifyReply) {
-    const { floorId } = request.params as { floorId: string };
-    const floorIdNum = parseInt(floorId);
+    const { floorId } = request.params as { floorId: string }
+    const floorIdNum = parseInt(floorId)
 
-    const result = createRoomSchema.safeParse(request.body);
+    const result = createRoomSchema.safeParse(request.body)
     if (!result.success) {
-      throw new ValidationError('Data tidak valid', result.error.errors);
+      throw new ValidationError('Data tidak valid', result.error.errors)
     }
 
     // Check if floor exists
     const floor = await prisma.floor.findUnique({
       where: { id: floorIdNum },
-    });
+    })
     if (!floor) {
-      throw new NotFoundError('Lantai tidak ditemukan');
+      throw new NotFoundError('Lantai tidak ditemukan')
     }
 
     // Check for duplicate room name in same floor
@@ -104,9 +104,9 @@ export class RoomController {
         floorId: floorIdNum,
         name: result.data.name,
       },
-    });
+    })
     if (existing) {
-      throw new ConflictError('Nama ruangan sudah ada di lantai ini');
+      throw new ConflictError('Nama ruangan sudah ada di lantai ini')
     }
 
     const room = await prisma.room.create({
@@ -122,29 +122,29 @@ export class RoomController {
           },
         },
       },
-    });
+    })
 
-    return reply.status(201).send(createSuccessResponse(room));
+    return reply.status(201).send(createSuccessResponse(room))
   }
 
   /**
    * PUT /api/rooms/:id - Update room
    */
   static async update(request: FastifyRequest, reply: FastifyReply) {
-    const { id } = request.params as { id: string };
-    const roomId = parseInt(id);
+    const { id } = request.params as { id: string }
+    const roomId = parseInt(id)
 
-    const result = updateRoomSchema.safeParse(request.body);
+    const result = updateRoomSchema.safeParse(request.body)
     if (!result.success) {
-      throw new ValidationError('Data tidak valid', result.error.errors);
+      throw new ValidationError('Data tidak valid', result.error.errors)
     }
 
     // Check if room exists
     const existing = await prisma.room.findUnique({
       where: { id: roomId },
-    });
+    })
     if (!existing) {
-      throw new NotFoundError('Ruangan tidak ditemukan');
+      throw new NotFoundError('Ruangan tidak ditemukan')
     }
 
     // Check for duplicate room name in same floor (if name is being updated)
@@ -155,9 +155,9 @@ export class RoomController {
           name: result.data.name,
           id: { not: roomId },
         },
-      });
+      })
       if (duplicate) {
-        throw new ConflictError('Nama ruangan sudah ada di lantai ini');
+        throw new ConflictError('Nama ruangan sudah ada di lantai ini')
       }
     }
 
@@ -174,25 +174,25 @@ export class RoomController {
           },
         },
       },
-    });
+    })
 
-    return reply.status(200).send(createSuccessResponse(room));
+    return reply.status(200).send(createSuccessResponse(room))
   }
 
   /**
    * DELETE /api/rooms/:id - Delete room
    */
   static async delete(request: FastifyRequest, reply: FastifyReply) {
-    const { id } = request.params as { id: string };
-    const roomId = parseInt(id);
+    const { id } = request.params as { id: string }
+    const roomId = parseInt(id)
 
     // Check if room exists
     const room = await prisma.room.findUnique({
       where: { id: roomId },
-    });
+    })
 
     if (!room) {
-      throw new NotFoundError('Ruangan tidak ditemukan');
+      throw new NotFoundError('Ruangan tidak ditemukan')
     }
 
     // Check if room has assets
@@ -203,19 +203,21 @@ export class RoomController {
       },
       select: { id: true, kodeAset: true, namaBarang: true },
       take: 5,
-    });
+    })
 
     if (assetsInRoom.length > 0) {
-      const assetList = assetsInRoom.map((a) => `${a.kodeAset} - ${a.namaBarang}`).join(', ');
+      const assetList = assetsInRoom
+        .map((a) => `${a.kodeAset} - ${a.namaBarang}`)
+        .join(', ')
       throw new ConflictError(
-        `Ruangan tidak dapat dihapus karena masih memiliki aset: ${assetList}`,
-      );
+        `Ruangan tidak dapat dihapus karena masih memiliki aset: ${assetList}`
+      )
     }
 
     await prisma.room.delete({
       where: { id: roomId },
-    });
+    })
 
-    return reply.status(200).send(createSuccessResponse({ deleted: true }));
+    return reply.status(200).send(createSuccessResponse({ deleted: true }))
   }
 }

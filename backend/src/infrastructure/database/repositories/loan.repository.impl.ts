@@ -1,22 +1,25 @@
-import { PrismaClient } from '@prisma/client';
-import { ILoanRepository, LoanWithRelations } from '../../../domain/repositories/loan.repository';
-import { calculateSkip } from '../../../shared/utils/pagination.utils';
+import { PrismaClient } from '@prisma/client'
+import {
+  ILoanRepository,
+  LoanWithRelations,
+} from '../../../domain/repositories/loan.repository'
+import { calculateSkip } from '../../../shared/utils/pagination.utils'
 
 export class LoanRepositoryImpl implements ILoanRepository {
   constructor(private prisma: PrismaClient) {}
 
   async findAll(params: {
-    page: number;
-    pageSize: number;
-    status?: string;
+    page: number
+    pageSize: number
+    status?: string
   }): Promise<{ loans: LoanWithRelations[]; total: number }> {
-    const { page, pageSize, status } = params;
-    const skip = calculateSkip(page, pageSize);
+    const { page, pageSize, status } = params
+    const skip = calculateSkip(page, pageSize)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where: any = {};
+    const where: any = {}
     if (status) {
-      where.status = status;
+      where.status = status
     }
 
     const [loans, total] = await Promise.all([
@@ -35,9 +38,9 @@ export class LoanRepositoryImpl implements ILoanRepository {
         orderBy: { tanggalPinjam: 'desc' },
       }),
       this.prisma.loan.count({ where }),
-    ]);
+    ])
 
-    return { loans, total };
+    return { loans, total }
   }
 
   async findById(id: number): Promise<LoanWithRelations | null> {
@@ -51,18 +54,18 @@ export class LoanRepositoryImpl implements ILoanRepository {
           },
         },
       },
-    });
+    })
   }
 
   async create(data: {
-    requestedBy: number;
-    tanggalPinjam: Date;
-    tujuanPinjam?: string;
-    catatan?: string;
+    requestedBy: number
+    tanggalPinjam: Date
+    tujuanPinjam?: string
+    catatan?: string
     items: {
-      assetId: number;
-      conditionBefore?: string;
-    }[];
+      assetId: number
+      conditionBefore?: string
+    }[]
   }) {
     return this.prisma.loan.create({
       data: {
@@ -75,15 +78,15 @@ export class LoanRepositoryImpl implements ILoanRepository {
           create: data.items,
         },
       },
-    });
+    })
   }
 
   async returnLoan(
     loanId: number,
     items: {
-      assetId: number;
-      conditionAfter: string;
-    }[],
+      assetId: number
+      conditionAfter: string
+    }[]
   ) {
     // Update loan items with condition after
     await Promise.all(
@@ -98,9 +101,9 @@ export class LoanRepositoryImpl implements ILoanRepository {
           data: {
             conditionAfter: item.conditionAfter,
           },
-        }),
-      ),
-    );
+        })
+      )
+    )
 
     // Update loan status and return date
     return this.prisma.loan.update({
@@ -109,12 +112,12 @@ export class LoanRepositoryImpl implements ILoanRepository {
         tanggalKembali: new Date(),
         status: 'Dikembalikan',
       },
-    });
+    })
   }
 
   async countByStatus(status: string): Promise<number> {
     return this.prisma.loan.count({
       where: { status },
-    });
+    })
   }
 }

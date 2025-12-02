@@ -3,5 +3,5 @@
  * Mempermudah import dan menjaga enkapsulasi
  */
 
-export { DataTable } from './DataTable'
 export type { Column, RowAction } from './DataTable'
+export { DataTable } from './DataTable'

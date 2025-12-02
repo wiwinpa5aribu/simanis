@@ -16,14 +16,12 @@
  * ```
  */
 
-// Export types
-export * from './types'
-
 // Export services
 export { assetService } from './asset.service'
-export { loanService } from './loan.service'
 export { categoryService } from './category.service'
-export { locationService } from './location.service'
-
 // Export service factory for custom adapters
 export { createServices, type ServiceAdapter } from './factory'
+export { loanService } from './loan.service'
+export { locationService } from './location.service'
+// Export types
+export * from './types'

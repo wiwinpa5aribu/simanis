@@ -3,18 +3,18 @@
  * Service layer untuk operasi peminjaman menggunakan HTTP/REST API
  */
 
-import { api } from '../client'
-import { logger } from '../../utils/logger'
-import { getErrorMessage } from '../../utils/errorHandling'
 import { ERROR_MESSAGES } from '../../../constants'
+import { getErrorMessage } from '../../utils/errorHandling'
+import { logger } from '../../utils/logger'
+import { api } from '../client'
 import type {
+  CreateLoanData,
   ILoanService,
   Loan,
   LoanDetail,
   LoanFilters,
-  CreateLoanData,
-  ReturnLoanData,
   PaginatedResponse,
+  ReturnLoanData,
 } from './types'
 
 class HttpLoanService implements ILoanService {

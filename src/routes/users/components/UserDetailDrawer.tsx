@@ -1,4 +1,4 @@
-import { X, User, Mail, Calendar, Shield } from 'lucide-react'
+import { Calendar, Mail, Shield, User, X } from 'lucide-react'
 import type { User as UserType } from '../../../libs/api/users'
 
 interface UserDetailDrawerProps {

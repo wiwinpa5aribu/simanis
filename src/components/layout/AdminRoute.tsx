@@ -1,7 +1,7 @@
+import { useEffect, useRef } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuthStore } from '../../libs/store/authStore'
 import { showErrorToast } from '../../libs/ui/toast'
-import { useEffect, useRef } from 'react'
 
 /**
  * AdminRoute - Protects routes that require admin role

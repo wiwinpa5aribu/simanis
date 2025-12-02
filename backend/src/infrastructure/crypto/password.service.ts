@@ -1,4 +1,4 @@
-import * as argon2 from 'argon2';
+import * as argon2 from 'argon2'
 
 /**
  * Password service menggunakan Argon2 untuk hashing
@@ -14,10 +14,10 @@ export class PasswordService {
         memoryCost: 65536, // 64 MB
         timeCost: 3,
         parallelism: 4,
-      });
-      return hash;
+      })
+      return hash
     } catch (error) {
-      throw new Error(`Failed to hash password: ${error}`);
+      throw new Error(`Failed to hash password: ${error}`)
     }
   }
 
@@ -26,12 +26,12 @@ export class PasswordService {
    */
   async verify(hash: string, password: string): Promise<boolean> {
     try {
-      return await argon2.verify(hash, password);
+      return await argon2.verify(hash, password)
     } catch (error) {
-      throw new Error(`Failed to verify password: ${error}`);
+      throw new Error(`Failed to verify password: ${error}`)
     }
   }
 }
 
 // Export singleton instance
-export const passwordService = new PasswordService();
+export const passwordService = new PasswordService()

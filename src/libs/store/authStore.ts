@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist, createJSONStorage, devtools } from 'zustand/middleware'
+import { createJSONStorage, devtools, persist } from 'zustand/middleware'
 
 // Tipe data untuk User (sementara minimal, bisa dikembangkan)
 export interface User {

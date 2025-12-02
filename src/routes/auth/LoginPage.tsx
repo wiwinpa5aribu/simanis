@@ -3,32 +3,32 @@
  * Design modern dengan branding sekolah Indonesia
  */
 
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
 import {
-  LogIn,
   AlertCircle,
-  Package,
-  Eye,
-  EyeOff,
-  Shield,
   Building2,
   CheckCircle,
-  QrCode,
-  FileText,
   ClipboardCheck,
+  Eye,
+  EyeOff,
+  FileText,
+  LogIn,
+  Package,
+  QrCode,
+  Shield,
 } from 'lucide-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { login as loginApi } from '../../libs/api/auth'
-import {
-  loginSchema,
-  type LoginFormInput,
-  type LoginFormValues,
-} from '../../libs/validation/authSchemas'
 import { useAuthStore } from '../../libs/store/authStore'
 import { getErrorMessage } from '../../libs/utils/errorHandling'
+import {
+  type LoginFormInput,
+  type LoginFormValues,
+  loginSchema,
+} from '../../libs/validation/authSchemas'
 
 const features = [
   {

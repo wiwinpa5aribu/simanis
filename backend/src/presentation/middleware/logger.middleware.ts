@@ -1,15 +1,18 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
-import { logger } from '../../shared/logger/winston.logger';
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { logger } from '../../shared/logger/winston.logger'
 
 /**
  * Logger middleware
  * Logs all incoming requests
  */
-export async function loggerMiddleware(request: FastifyRequest, reply: FastifyReply) {
-  const start = Date.now();
+export async function loggerMiddleware(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const start = Date.now()
 
   reply.raw.on('finish', () => {
-    const duration = Date.now() - start;
+    const duration = Date.now() - start
 
     logger.info('Request completed', {
       method: request.method,
@@ -18,6 +21,6 @@ export async function loggerMiddleware(request: FastifyRequest, reply: FastifyRe
       duration: `${duration}ms`,
       userId: request.user?.userId,
       ip: request.ip,
-    });
-  });
+    })
+  })
 }

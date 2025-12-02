@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-import ExcelJS from 'exceljs';
-import { NotFoundError } from '../../../shared/errors/not-found-error';
+import { PrismaClient } from '@prisma/client'
+import ExcelJS from 'exceljs'
+import { NotFoundError } from '../../../shared/errors/not-found-error'
 
 export interface KibReportFilters {
-  categoryId?: number;
-  year?: number;
-  roomId?: number;
+  categoryId?: number
+  year?: number
+  roomId?: number
 }
 
 export class GenerateKibReportUseCase {
@@ -15,23 +15,23 @@ export class GenerateKibReportUseCase {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {
       isDeleted: false,
-    };
+    }
 
     if (filters.categoryId) {
-      where.categoryId = filters.categoryId;
+      where.categoryId = filters.categoryId
     }
 
     if (filters.year) {
-      const startDate = new Date(filters.year, 0, 1);
-      const endDate = new Date(filters.year, 11, 31);
+      const startDate = new Date(filters.year, 0, 1)
+      const endDate = new Date(filters.year, 11, 31)
       where.tahunPerolehan = {
         gte: startDate,
         lte: endDate,
-      };
+      }
     }
 
     if (filters.roomId) {
-      where.currentRoomId = filters.roomId;
+      where.currentRoomId = filters.roomId
     }
 
     const assets = await this.prisma.asset.findMany({
@@ -42,15 +42,15 @@ export class GenerateKibReportUseCase {
       orderBy: {
         kodeAset: 'asc',
       },
-    });
+    })
 
     if (assets.length === 0) {
-      throw new NotFoundError('Tidak ada data aset untuk laporan ini');
+      throw new NotFoundError('Tidak ada data aset untuk laporan ini')
     }
 
     // Create Workbook
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('KIB Report');
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('KIB Report')
 
     // Define Columns
     worksheet.columns = [
@@ -64,7 +64,7 @@ export class GenerateKibReportUseCase {
       { header: 'Harga', key: 'harga', width: 15 },
       { header: 'Sumber Dana', key: 'sumberDana', width: 15 },
       { header: 'Kategori', key: 'kategori', width: 20 },
-    ];
+    ]
 
     // Add Data
     assets.forEach((asset, index) => {
@@ -74,20 +74,22 @@ export class GenerateKibReportUseCase {
         namaBarang: asset.namaBarang,
         merk: asset.merk || '-',
         spesifikasi: asset.spesifikasi || '-',
-        tahun: asset.tahunPerolehan ? new Date(asset.tahunPerolehan).getFullYear() : '-',
+        tahun: asset.tahunPerolehan
+          ? new Date(asset.tahunPerolehan).getFullYear()
+          : '-',
         kondisi: asset.kondisi,
         harga: Number(asset.harga),
         sumberDana: asset.sumberDana,
         kategori: asset.category?.name || '-',
-      });
-    });
+      })
+    })
 
     // Style Header
-    worksheet.getRow(1).font = { bold: true };
-    worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getRow(1).font = { bold: true }
+    worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' }
 
     // Generate Buffer
-    const buffer = await workbook.xlsx.writeBuffer();
-    return Buffer.from(buffer);
+    const buffer = await workbook.xlsx.writeBuffer()
+    return Buffer.from(buffer)
   }
 }

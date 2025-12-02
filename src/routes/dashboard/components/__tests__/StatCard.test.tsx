@@ -2,10 +2,10 @@
  * Tests untuk StatCard Component
  */
 
-import { describe, it, expect } from 'vitest'
+import { Package } from 'lucide-react'
+import { describe, expect, it } from 'vitest'
 import { render, screen } from '@/test/utils'
 import { StatCard } from '../StatCard'
-import { Package } from 'lucide-react'
 
 describe('StatCard Component', () => {
   it('should render title and value', () => {

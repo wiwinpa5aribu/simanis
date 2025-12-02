@@ -1,7 +1,6 @@
-import React from 'react'
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
-import { act } from 'react'
+import React, { act } from 'react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 /**
  * **Property 4: Offline Detection Consistency**

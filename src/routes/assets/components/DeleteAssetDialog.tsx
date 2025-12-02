@@ -1,7 +1,7 @@
+import { AlertTriangle, FileText, Loader2, Trash2, X } from 'lucide-react'
 import { useState } from 'react'
-import { AlertTriangle, Trash2, X, FileText, Loader2 } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { FileUpload } from '@/components/uploads/FileUpload'
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { FileUpload } from '@/components/uploads/FileUpload'
 
 interface DeleteAssetDialogProps {
   isOpen: boolean

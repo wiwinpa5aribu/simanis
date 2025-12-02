@@ -3,11 +3,11 @@
  * Fungsi-fungsi untuk mengambil daftar dan detail pengguna
  */
 
-import { api } from './client'
-import { logger } from '../utils/logger'
 import { ERROR_MESSAGES } from '../../constants'
 import { getErrorMessage } from '../utils/errorHandling'
 import { assertValidId, isDefined } from '../utils/guards'
+import { logger } from '../utils/logger'
+import { api } from './client'
 
 // Types
 export interface User {

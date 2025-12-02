@@ -9,14 +9,12 @@
  * 4. Submit inventarisasi
  */
 
-import { useState, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { ArrowLeft, CheckCircle, Clock, Loader2 } from 'lucide-react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { logger } from '@/libs/utils/logger'
-
-import { QRScanner } from './components/QRScanner'
-import { InventoryForm } from './components/InventoryForm'
-import { getAssetByCode } from '@/libs/api/assets'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -24,9 +22,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
-import { Loader2, ArrowLeft, CheckCircle, Clock } from 'lucide-react'
+import { getAssetByCode } from '@/libs/api/assets'
+import { logger } from '@/libs/utils/logger'
+import { InventoryForm } from './components/InventoryForm'
+import { QRScanner } from './components/QRScanner'
 
 export default function InventoryScanPage() {
   const [scannedCode, setScannedCode] = useState<string | null>(null)
@@ -205,9 +204,7 @@ export default function InventoryScanPage() {
                     ✓ Performa optimal
                   </span>
                 ) : (
-                  <span className="text-yellow-700 ml-2">
-                    ⚠ Koneksi lambat
-                  </span>
+                  <span className="text-yellow-700 ml-2">⚠ Koneksi lambat</span>
                 )}
               </AlertDescription>
             </Alert>

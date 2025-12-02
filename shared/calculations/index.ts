@@ -4,5 +4,5 @@
  * Memastikan konsistensi perhitungan di seluruh aplikasi
  */
 
-export * from './depreciation'
 export * from './asset-code'
+export * from './depreciation'

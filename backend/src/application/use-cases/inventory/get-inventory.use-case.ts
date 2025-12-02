@@ -1,26 +1,33 @@
 import {
   IInventoryRepository,
   InventoryFilters,
-} from '../../../domain/repositories/inventory.repository';
-import { InventoryListDto } from '../../dto/inventory.dto';
-import { calculatePagination, calculateSkip } from '../../../shared/utils/pagination.utils';
+} from '../../../domain/repositories/inventory.repository'
+import {
+  calculatePagination,
+  calculateSkip,
+} from '../../../shared/utils/pagination.utils'
+import { InventoryListDto } from '../../dto/inventory.dto'
 
 export class GetInventoryUseCase {
   constructor(private inventoryRepository: IInventoryRepository) {}
 
   async execute(params: {
-    page?: number;
-    pageSize?: number;
-    filters?: InventoryFilters;
+    page?: number
+    pageSize?: number
+    filters?: InventoryFilters
   }): Promise<InventoryListDto> {
-    const page = params.page || 1;
-    const pageSize = params.pageSize || 10;
-    const skip = calculateSkip(page, pageSize);
-    const filters = params.filters || {};
+    const page = params.page || 1
+    const pageSize = params.pageSize || 10
+    const skip = calculateSkip(page, pageSize)
+    const filters = params.filters || {}
 
-    const { checks, total } = await this.inventoryRepository.findAll(skip, pageSize, filters);
+    const { checks, total } = await this.inventoryRepository.findAll(
+      skip,
+      pageSize,
+      filters
+    )
 
-    const meta = calculatePagination(total, page, pageSize);
+    const meta = calculatePagination(total, page, pageSize)
 
     // Map to DTO - use type assertion for included relations
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,11 +54,11 @@ export class GetInventoryUseCase {
             username: check.checker.username,
           }
         : undefined,
-    }));
+    }))
 
     return {
       checks: checksDto,
       meta,
-    };
+    }
   }
 }

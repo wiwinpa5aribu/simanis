@@ -5,7 +5,7 @@
  * Property 4: Loan Return Button Visibility
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 // Mock loan data types
 interface LoanItem {

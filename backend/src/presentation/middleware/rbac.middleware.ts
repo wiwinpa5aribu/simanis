@@ -1,5 +1,5 @@
-import { FastifyRequest } from 'fastify';
-import { ForbiddenError } from '../../shared/errors/forbidden-error';
+import { FastifyRequest } from 'fastify'
+import { ForbiddenError } from '../../shared/errors/forbidden-error'
 
 /**
  * RBAC middleware factory
@@ -7,16 +7,16 @@ import { ForbiddenError } from '../../shared/errors/forbidden-error';
  */
 export function rbacMiddleware(allowedRoles: string[]) {
   return async (request: FastifyRequest) => {
-    const user = request.user;
+    const user = request.user
 
     if (!user) {
-      throw new ForbiddenError('Unauthorized');
+      throw new ForbiddenError('Unauthorized')
     }
 
-    const hasRole = user.roles.some((role) => allowedRoles.includes(role));
+    const hasRole = user.roles.some((role) => allowedRoles.includes(role))
 
     if (!hasRole) {
-      throw new ForbiddenError('Anda tidak memiliki akses untuk fitur ini');
+      throw new ForbiddenError('Anda tidak memiliki akses untuk fitur ini')
     }
-  };
+  }
 }

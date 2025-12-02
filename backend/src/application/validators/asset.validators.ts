@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 /**
  * Create asset schema
@@ -20,7 +20,7 @@ export const createAssetSchema = z.object({
   categoryId: z.number().int().positive().optional(),
   masaManfaatTahun: z.number().int().min(0).default(0),
   currentRoomId: z.number().int().positive().optional(),
-});
+})
 
 /**
  * Update asset schema
@@ -33,7 +33,7 @@ export const updateAssetSchema = z.object({
   fotoUrl: z.string().url().optional(),
   categoryId: z.number().int().positive().optional(),
   currentRoomId: z.number().int().positive().optional(),
-});
+})
 
-export type CreateAssetInput = z.infer<typeof createAssetSchema>;
-export type UpdateAssetInput = z.infer<typeof updateAssetSchema>;
+export type CreateAssetInput = z.infer<typeof createAssetSchema>
+export type UpdateAssetInput = z.infer<typeof updateAssetSchema>

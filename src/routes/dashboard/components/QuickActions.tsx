@@ -3,14 +3,14 @@
  * Aksi cepat untuk operasi umum manajemen aset sekolah
  */
 
-import { Link } from 'react-router-dom'
 import {
+  ArrowRightLeft,
+  ClipboardList,
+  FileText,
   Plus,
   QrCode,
-  FileText,
-  ClipboardList,
-  ArrowRightLeft,
 } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface QuickActionItem {

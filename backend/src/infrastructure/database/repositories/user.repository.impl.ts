@@ -1,5 +1,8 @@
-import { PrismaClient } from '@prisma/client';
-import { IUserRepository, UserWithRoles } from '../../../domain/repositories/user.repository';
+import { PrismaClient } from '@prisma/client'
+import {
+  IUserRepository,
+  UserWithRoles,
+} from '../../../domain/repositories/user.repository'
 
 export class UserRepositoryImpl implements IUserRepository {
   constructor(private prisma: PrismaClient) {}
@@ -14,7 +17,7 @@ export class UserRepositoryImpl implements IUserRepository {
           },
         },
       },
-    });
+    })
   }
 
   async findById(id: number): Promise<UserWithRoles | null> {
@@ -27,7 +30,7 @@ export class UserRepositoryImpl implements IUserRepository {
           },
         },
       },
-    });
+    })
   }
 
   async findByEmail(email: string): Promise<UserWithRoles | null> {
@@ -40,27 +43,32 @@ export class UserRepositoryImpl implements IUserRepository {
           },
         },
       },
-    });
+    })
   }
 
-  async create(data: { name: string; username: string; email?: string; password: string }) {
+  async create(data: {
+    name: string
+    username: string
+    email?: string
+    password: string
+  }) {
     return this.prisma.user.create({
       data,
-    });
+    })
   }
 
   async update(
     id: number,
     data: {
-      name?: string;
-      email?: string;
-      password?: string;
-    },
+      name?: string
+      email?: string
+      password?: string
+    }
   ) {
     return this.prisma.user.update({
       where: { id },
       data,
-    });
+    })
   }
 
   async assignRole(userId: number, roleId: number): Promise<void> {
@@ -69,7 +77,7 @@ export class UserRepositoryImpl implements IUserRepository {
         userId,
         roleId,
       },
-    });
+    })
   }
 
   async removeRole(userId: number, roleId: number): Promise<void> {
@@ -80,6 +88,6 @@ export class UserRepositoryImpl implements IUserRepository {
           roleId,
         },
       },
-    });
+    })
   }
 }

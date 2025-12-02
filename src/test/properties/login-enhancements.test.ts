@@ -3,10 +3,10 @@
  * Using fast-check library for property testing
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { act, renderHook } from '@testing-library/react'
 import fc from 'fast-check'
-import { renderHook, act } from '@testing-library/react'
-import { useAuthStore, type User } from '../../libs/store/authStore'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { type User, useAuthStore } from '../../libs/store/authStore'
 
 // Mock localStorage and sessionStorage
 const localStorageMock = (() => {

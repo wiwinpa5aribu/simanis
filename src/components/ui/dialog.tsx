@@ -1,7 +1,8 @@
 // Komponen dialog/modal sederhana
-import { useEffect } from 'react'
-import type { ReactNode } from 'react'
+
 import { X } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { useEffect } from 'react'
 
 interface DialogProps {
   open: boolean

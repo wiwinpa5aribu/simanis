@@ -1,30 +1,28 @@
-import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
-import {
-  Activity,
-  FileText,
-  MapPin,
-  Clock,
-  Edit,
-  Trash2,
-  PlusCircle,
-  CheckCircle,
-  ArrowLeft,
-  Filter,
-} from 'lucide-react'
-import { getAuditLogs, type AuditLog } from '../../libs/api/audit'
 import { formatDistanceToNow } from 'date-fns'
 import { id as idLocale } from 'date-fns/locale'
-import { LoadingSpinner, ErrorAlert } from '../../components/ui/Feedback'
+import {
+  Activity,
+  ArrowLeft,
+  CheckCircle,
+  Clock,
+  Edit,
+  FileText,
+  Filter,
+  MapPin,
+  PlusCircle,
+  Trash2,
+} from 'lucide-react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/ui/button'
-import { useAuthStore } from '../../libs/store/authStore'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '../../components/ui/card'
+import { ErrorAlert, LoadingSpinner } from '../../components/ui/Feedback'
 import {
   Select,
   SelectContent,
@@ -32,6 +30,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../components/ui/select'
+import { type AuditLog, getAuditLogs } from '../../libs/api/audit'
+import { useAuthStore } from '../../libs/store/authStore'
 
 export function UserActivityPage() {
   const navigate = useNavigate()

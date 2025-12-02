@@ -4,7 +4,7 @@
  * Disesuaikan dengan Prisma Schema (camelCase)
  */
 
-import type { AssetCondition, SumberDana, LoanStatus } from './entities'
+import type { AssetCondition, LoanStatus, SumberDana } from './entities'
 
 // ============================================
 // Generic API Response

@@ -30,7 +30,14 @@ export interface Role {
   name: string
 }
 
-export type RoleName = 'admin' | 'staff' | 'kepsek' | 'wakasek_sarpras' | 'bendahara_bos' | 'operator' | 'guru'
+export type RoleName =
+  | 'admin'
+  | 'staff'
+  | 'kepsek'
+  | 'wakasek_sarpras'
+  | 'bendahara_bos'
+  | 'operator'
+  | 'guru'
 
 // ============================================
 // Asset (Aset)

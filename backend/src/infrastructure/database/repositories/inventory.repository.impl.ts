@@ -1,13 +1,15 @@
-import { PrismaClient, InventoryCheck, Prisma } from '@prisma/client';
+import { InventoryCheck, Prisma, PrismaClient } from '@prisma/client'
 import {
   IInventoryRepository,
   InventoryFilters,
-} from '../../../domain/repositories/inventory.repository';
+} from '../../../domain/repositories/inventory.repository'
 
 export class InventoryRepositoryImpl implements IInventoryRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async create(data: Prisma.InventoryCheckCreateInput): Promise<InventoryCheck> {
+  async create(
+    data: Prisma.InventoryCheckCreateInput
+  ): Promise<InventoryCheck> {
     return this.prisma.inventoryCheck.create({
       data,
       include: {
@@ -20,35 +22,35 @@ export class InventoryRepositoryImpl implements IInventoryRepository {
           },
         },
       },
-    });
+    })
   }
 
   async findAll(
     skip: number,
     take: number,
-    filters: InventoryFilters,
+    filters: InventoryFilters
   ): Promise<{ checks: InventoryCheck[]; total: number }> {
-    const where: Prisma.InventoryCheckWhereInput = {};
+    const where: Prisma.InventoryCheckWhereInput = {}
 
     if (filters.assetId) {
-      where.assetId = filters.assetId;
+      where.assetId = filters.assetId
     }
 
     if (filters.checkerId) {
-      where.checkedBy = filters.checkerId;
+      where.checkedBy = filters.checkerId
     }
 
     if (filters.condition) {
-      where.kondisi = filters.condition;
+      where.kondisi = filters.condition
     }
 
     if (filters.startDate || filters.endDate) {
-      where.checkedAt = {};
+      where.checkedAt = {}
       if (filters.startDate) {
-        where.checkedAt.gte = filters.startDate;
+        where.checkedAt.gte = filters.startDate
       }
       if (filters.endDate) {
-        where.checkedAt.lte = filters.endDate;
+        where.checkedAt.lte = filters.endDate
       }
     }
 
@@ -79,9 +81,9 @@ export class InventoryRepositoryImpl implements IInventoryRepository {
         },
       }),
       this.prisma.inventoryCheck.count({ where }),
-    ]);
+    ])
 
-    return { checks, total };
+    return { checks, total }
   }
 
   async findById(id: number): Promise<InventoryCheck | null> {
@@ -97,6 +99,6 @@ export class InventoryRepositoryImpl implements IInventoryRepository {
           },
         },
       },
-    });
+    })
   }
 }

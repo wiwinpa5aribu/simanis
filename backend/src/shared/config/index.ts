@@ -1,9 +1,11 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 // Zod schema untuk validasi environment variables
 const envSchema = z.object({
   // Application
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  NODE_ENV: z
+    .enum(['development', 'production', 'test'])
+    .default('development'),
   PORT: z.string().transform(Number).default('3000'),
   API_BASE_URL: z.string().url().optional(),
 
@@ -31,25 +33,25 @@ const envSchema = z.object({
   // Logging
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   LOG_FILE_PATH: z.string().default('./logs'),
-});
+})
 
 // Parse dan validate environment variables
 const parseEnv = () => {
   try {
-    return envSchema.parse(process.env);
+    return envSchema.parse(process.env)
   } catch (error) {
     if (error instanceof z.ZodError) {
-      console.error('❌ Invalid environment variables:');
+      console.error('❌ Invalid environment variables:')
       error.errors.forEach((err) => {
-        console.error(`  - ${err.path.join('.')}: ${err.message}`);
-      });
-      process.exit(1);
+        console.error(`  - ${err.path.join('.')}: ${err.message}`)
+      })
+      process.exit(1)
     }
-    throw error;
+    throw error
   }
-};
+}
 
-const env = parseEnv();
+const env = parseEnv()
 
 // Export typed config object
 export const config = {
@@ -90,7 +92,7 @@ export const config = {
     level: env.LOG_LEVEL,
     filePath: env.LOG_FILE_PATH,
   },
-} as const;
+} as const
 
 // Type export untuk TypeScript autocomplete
-export type Config = typeof config;
+export type Config = typeof config

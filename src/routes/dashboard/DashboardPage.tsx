@@ -4,26 +4,26 @@
  * Menampilkan statistik kunci dan aktivitas terbaru sistem SIMANIS
  */
 
-import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
-  Package,
-  CheckCircle,
   AlertTriangle,
-  XCircle,
-  HelpCircle,
-  HandCoins,
+  CheckCircle,
   ClipboardCheck,
+  HandCoins,
+  HelpCircle,
+  Package,
+  XCircle,
 } from 'lucide-react'
-import { getDashboardStats, getRecentActivities } from '@/libs/api/dashboard'
-import { StatCard } from './components/StatCard'
-import { RecentActivities } from './components/RecentActivities'
-import { QuickActions } from './components/QuickActions'
-import { AssetValueSummary } from './components/AssetValueSummary'
+import { useEffect } from 'react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { logger } from '@/libs/utils/logger'
+import { getDashboardStats, getRecentActivities } from '@/libs/api/dashboard'
 import { useAuthStore } from '@/libs/store/authStore'
+import { logger } from '@/libs/utils/logger'
+import { AssetValueSummary } from './components/AssetValueSummary'
+import { QuickActions } from './components/QuickActions'
+import { RecentActivities } from './components/RecentActivities'
+import { StatCard } from './components/StatCard'
 
 export default function DashboardPage() {
   const user = useAuthStore((state) => state.user)

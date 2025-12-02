@@ -1,33 +1,33 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 import {
-  IAssetRepository,
   AssetFilters,
   AssetWithRelations,
-} from '../../../domain/repositories/asset.repository';
-import { calculateSkip } from '../../../shared/utils/pagination.utils';
+  IAssetRepository,
+} from '../../../domain/repositories/asset.repository'
+import { calculateSkip } from '../../../shared/utils/pagination.utils'
 
 export class AssetRepositoryImpl implements IAssetRepository {
   constructor(private prisma: PrismaClient) {}
 
   async findAll(params: {
-    page: number;
-    pageSize: number;
-    filters?: AssetFilters;
+    page: number
+    pageSize: number
+    filters?: AssetFilters
   }): Promise<{ assets: AssetWithRelations[]; total: number }> {
-    const { page, pageSize, filters } = params;
-    const skip = calculateSkip(page, pageSize);
+    const { page, pageSize, filters } = params
+    const skip = calculateSkip(page, pageSize)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {
       isDeleted: filters?.isDeleted ?? false,
-    };
+    }
 
     if (filters?.categoryId) {
-      where.categoryId = filters.categoryId;
+      where.categoryId = filters.categoryId
     }
 
     if (filters?.kondisi) {
-      where.kondisi = filters.kondisi;
+      where.kondisi = filters.kondisi
     }
 
     if (filters?.search) {
@@ -35,7 +35,7 @@ export class AssetRepositoryImpl implements IAssetRepository {
         { kodeAset: { contains: filters.search } },
         { namaBarang: { contains: filters.search } },
         { merk: { contains: filters.search } },
-      ];
+      ]
     }
 
     const [assets, total] = await Promise.all([
@@ -53,9 +53,9 @@ export class AssetRepositoryImpl implements IAssetRepository {
         orderBy: { tanggalPencatatan: 'desc' },
       }),
       this.prisma.asset.count({ where }),
-    ]);
+    ])
 
-    return { assets, total };
+    return { assets, total }
   }
 
   async findById(id: number): Promise<AssetWithRelations | null> {
@@ -67,58 +67,58 @@ export class AssetRepositoryImpl implements IAssetRepository {
           orderBy: { mutatedAt: 'desc' },
         },
       },
-    });
+    })
   }
 
   async findByKodeAset(kodeAset: string) {
     return this.prisma.asset.findUnique({
       where: { kodeAset },
-    });
+    })
   }
 
   async findByQRCode(qrCode: string) {
     return this.prisma.asset.findUnique({
       where: { qrCode },
-    });
+    })
   }
 
   async create(data: {
-    kodeAset: string;
-    namaBarang: string;
-    merk?: string;
-    spesifikasi?: string;
-    tahunPerolehan?: Date;
-    harga: number;
-    sumberDana: string;
-    kondisi: string;
-    fotoUrl?: string;
-    qrCode: string;
-    createdBy?: number;
-    categoryId?: number;
-    masaManfaatTahun?: number;
-    currentRoomId?: number;
+    kodeAset: string
+    namaBarang: string
+    merk?: string
+    spesifikasi?: string
+    tahunPerolehan?: Date
+    harga: number
+    sumberDana: string
+    kondisi: string
+    fotoUrl?: string
+    qrCode: string
+    createdBy?: number
+    categoryId?: number
+    masaManfaatTahun?: number
+    currentRoomId?: number
   }) {
     return this.prisma.asset.create({
       data,
-    });
+    })
   }
 
   async update(
     id: number,
     data: {
-      namaBarang?: string;
-      merk?: string;
-      spesifikasi?: string;
-      kondisi?: string;
-      fotoUrl?: string;
-      categoryId?: number;
-      currentRoomId?: number;
-    },
+      namaBarang?: string
+      merk?: string
+      spesifikasi?: string
+      kondisi?: string
+      fotoUrl?: string
+      categoryId?: number
+      currentRoomId?: number
+    }
   ) {
     return this.prisma.asset.update({
       where: { id },
       data,
-    });
+    })
   }
 
   async softDelete(id: number, deletedBy: number): Promise<void> {
@@ -128,7 +128,7 @@ export class AssetRepositoryImpl implements IAssetRepository {
         isDeleted: true,
         deletedAt: new Date(),
       },
-    });
+    })
 
     // Create deletion record
     await this.prisma.assetDeletion.create({
@@ -136,36 +136,36 @@ export class AssetRepositoryImpl implements IAssetRepository {
         assetId: id,
         deletedBy,
       },
-    });
+    })
   }
 
   async count(filters?: AssetFilters): Promise<number> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {
       isDeleted: filters?.isDeleted ?? false,
-    };
+    }
 
     if (filters?.categoryId) {
-      where.categoryId = filters.categoryId;
+      where.categoryId = filters.categoryId
     }
 
     if (filters?.kondisi) {
-      where.kondisi = filters.kondisi;
+      where.kondisi = filters.kondisi
     }
 
-    return this.prisma.asset.count({ where });
+    return this.prisma.asset.count({ where })
   }
 
   async findLastByKodePattern(pattern: string) {
     // Convert SQL LIKE pattern to Prisma startsWith
     // Pattern: SCH/2025/ELK/% -> startsWith: SCH/2025/ELK/
-    const prefix = pattern.replace(/%$/, '');
+    const prefix = pattern.replace(/%$/, '')
 
     return this.prisma.asset.findFirst({
       where: {
         kodeAset: { startsWith: prefix },
       },
       orderBy: { kodeAset: 'desc' },
-    });
+    })
   }
 }

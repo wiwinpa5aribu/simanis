@@ -6,9 +6,9 @@
 import { z } from 'zod'
 import {
   assetConditionSchema,
-  sumberDanaSchema,
-  paginationSchema,
   idSchema,
+  paginationSchema,
+  sumberDanaSchema,
 } from './common.schema'
 
 // ============================================
@@ -30,7 +30,11 @@ export const createAssetSchema = z.object({
   harga: z.coerce.number().min(0, 'Harga tidak boleh negatif'),
   sumberDana: sumberDanaSchema,
   kondisi: assetConditionSchema,
-  categoryId: z.coerce.number().int().positive('Kategori wajib dipilih').optional(),
+  categoryId: z.coerce
+    .number()
+    .int()
+    .positive('Kategori wajib dipilih')
+    .optional(),
   masaManfaatTahun: z.coerce.number().int().min(0).default(0),
   currentRoomId: z.coerce.number().int().positive().optional(),
 })

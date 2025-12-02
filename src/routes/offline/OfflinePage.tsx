@@ -2,7 +2,7 @@
  * Offline Page - Halaman yang ditampilkan saat aplikasi dimuat dalam kondisi offline
  */
 
-import { WifiOff, RefreshCw } from 'lucide-react'
+import { RefreshCw, WifiOff } from 'lucide-react'
 
 export function OfflinePage() {
   const handleRetry = () => {

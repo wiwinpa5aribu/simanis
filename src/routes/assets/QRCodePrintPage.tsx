@@ -1,9 +1,9 @@
-import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, Printer } from 'lucide-react'
-import { getAssets } from '../../libs/api/assets'
-import { LoadingSpinner, ErrorAlert } from '../../components/ui/Feedback'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '../../components/ui/button'
+import { ErrorAlert, LoadingSpinner } from '../../components/ui/Feedback'
+import { getAssets } from '../../libs/api/assets'
 import { QRCodeCard } from './components/QRCodeCard'
 import './print-qr.css'
 

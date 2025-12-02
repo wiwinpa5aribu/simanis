@@ -17,7 +17,10 @@ export const ASSET_CONDITIONS = {
 export type AssetConditionKey = keyof typeof ASSET_CONDITIONS
 export type AssetConditionValue = (typeof ASSET_CONDITIONS)[AssetConditionKey]
 
-export const ASSET_CONDITION_OPTIONS: { value: AssetConditionValue; label: string }[] = [
+export const ASSET_CONDITION_OPTIONS: {
+  value: AssetConditionValue
+  label: string
+}[] = [
   { value: 'Baik', label: 'Baik' },
   { value: 'Rusak Ringan', label: 'Rusak Ringan' },
   { value: 'Rusak Berat', label: 'Rusak Berat' },
@@ -25,10 +28,10 @@ export const ASSET_CONDITION_OPTIONS: { value: AssetConditionValue; label: strin
 ]
 
 export const ASSET_CONDITION_COLORS: Record<AssetConditionValue, string> = {
-  'Baik': 'green',
+  Baik: 'green',
   'Rusak Ringan': 'yellow',
   'Rusak Berat': 'red',
-  'Hilang': 'gray',
+  Hilang: 'gray',
 }
 
 // ============================================
@@ -43,11 +46,12 @@ export const SUMBER_DANA = {
 export type SumberDanaKey = keyof typeof SUMBER_DANA
 export type SumberDanaValue = (typeof SUMBER_DANA)[SumberDanaKey]
 
-export const SUMBER_DANA_OPTIONS: { value: SumberDanaValue; label: string }[] = [
-  { value: 'BOS', label: 'BOS' },
-  { value: 'APBD', label: 'APBD' },
-  { value: 'Hibah', label: 'Hibah' },
-]
+export const SUMBER_DANA_OPTIONS: { value: SumberDanaValue; label: string }[] =
+  [
+    { value: 'BOS', label: 'BOS' },
+    { value: 'APBD', label: 'APBD' },
+    { value: 'Hibah', label: 'Hibah' },
+  ]
 
 // ============================================
 // Loan Status (Status Peminjaman)
@@ -61,16 +65,17 @@ export const LOAN_STATUS = {
 export type LoanStatusKey = keyof typeof LOAN_STATUS
 export type LoanStatusValue = (typeof LOAN_STATUS)[LoanStatusKey]
 
-export const LOAN_STATUS_OPTIONS: { value: LoanStatusValue; label: string }[] = [
-  { value: 'Dipinjam', label: 'Dipinjam' },
-  { value: 'Dikembalikan', label: 'Dikembalikan' },
-  { value: 'Terlambat', label: 'Terlambat' },
-]
+export const LOAN_STATUS_OPTIONS: { value: LoanStatusValue; label: string }[] =
+  [
+    { value: 'Dipinjam', label: 'Dipinjam' },
+    { value: 'Dikembalikan', label: 'Dikembalikan' },
+    { value: 'Terlambat', label: 'Terlambat' },
+  ]
 
 export const LOAN_STATUS_COLORS: Record<LoanStatusValue, string> = {
-  'Dipinjam': 'blue',
-  'Dikembalikan': 'green',
-  'Terlambat': 'red',
+  Dipinjam: 'blue',
+  Dikembalikan: 'green',
+  Terlambat: 'red',
 }
 
 // ============================================

@@ -1,20 +1,20 @@
-import { FastifyInstance } from 'fastify';
-import { authMiddleware } from '../middleware/auth.middleware';
-import { FloorController } from '../controllers/floor.controller';
+import { FastifyInstance } from 'fastify'
+import { FloorController } from '../controllers/floor.controller'
+import { authMiddleware } from '../middleware/auth.middleware'
 
 export async function floorRoutes(fastify: FastifyInstance) {
   // All routes require authentication
-  fastify.addHook('preHandler', authMiddleware);
+  fastify.addHook('preHandler', authMiddleware)
 
   /**
    * PUT /api/floors/:id - Update floor
    */
-  fastify.put('/:id', FloorController.update);
+  fastify.put('/:id', FloorController.update)
 
   /**
    * DELETE /api/floors/:id - Delete floor
    */
-  fastify.delete('/:id', FloorController.delete);
+  fastify.delete('/:id', FloorController.delete)
 }
 
 /**
@@ -23,15 +23,15 @@ export async function floorRoutes(fastify: FastifyInstance) {
  */
 export async function buildingFloorRoutes(fastify: FastifyInstance) {
   // All routes require authentication
-  fastify.addHook('preHandler', authMiddleware);
+  fastify.addHook('preHandler', authMiddleware)
 
   /**
    * GET /api/buildings/:buildingId/floors - Get floors for a building
    */
-  fastify.get('/', FloorController.getByBuilding);
+  fastify.get('/', FloorController.getByBuilding)
 
   /**
    * POST /api/buildings/:buildingId/floors - Create floor in building
    */
-  fastify.post('/', FloorController.create);
+  fastify.post('/', FloorController.create)
 }

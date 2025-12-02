@@ -59,6 +59,9 @@ export const ROLE_PERMISSIONS: Record<UserRoleValue, string[]> = {
 /**
  * Check if role has permission
  */
-export function hasPermission(role: UserRoleValue, permission: string): boolean {
+export function hasPermission(
+  role: UserRoleValue,
+  permission: string
+): boolean {
   return ROLE_PERMISSIONS[role]?.includes(permission) ?? false
 }

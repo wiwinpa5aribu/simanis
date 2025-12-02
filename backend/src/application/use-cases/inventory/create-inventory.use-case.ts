@@ -1,22 +1,27 @@
-import { IInventoryRepository } from '../../../domain/repositories/inventory.repository';
-import { IAssetRepository } from '../../../domain/repositories/asset.repository';
-import { IAuditRepository } from '../../../domain/repositories/audit.repository';
-import { CreateInventoryInput } from '../../validators/inventory.validators';
-import { NotFoundError } from '../../../shared/errors/not-found-error';
-import { InventoryCheck } from '@prisma/client';
+import { InventoryCheck } from '@prisma/client'
+import { IAssetRepository } from '../../../domain/repositories/asset.repository'
+import { IAuditRepository } from '../../../domain/repositories/audit.repository'
+import { IInventoryRepository } from '../../../domain/repositories/inventory.repository'
+import { NotFoundError } from '../../../shared/errors/not-found-error'
+import { CreateInventoryInput } from '../../validators/inventory.validators'
 
 export class CreateInventoryUseCase {
   constructor(
     private inventoryRepository: IInventoryRepository,
     private assetRepository: IAssetRepository,
-    private auditRepository: IAuditRepository,
+    private auditRepository: IAuditRepository
   ) {}
 
-  async execute(data: CreateInventoryInput, checkerId: number): Promise<InventoryCheck> {
+  async execute(
+    data: CreateInventoryInput,
+    checkerId: number
+  ): Promise<InventoryCheck> {
     // 1. Find asset by QR code
-    const asset = await this.assetRepository.findByQRCode(data.qrCodeScanned);
+    const asset = await this.assetRepository.findByQRCode(data.qrCodeScanned)
     if (!asset) {
-      throw new NotFoundError(`Asset dengan QR Code ${data.qrCodeScanned} tidak ditemukan`);
+      throw new NotFoundError(
+        `Asset dengan QR Code ${data.qrCodeScanned} tidak ditemukan`
+      )
     }
 
     // 2. Create inventory check record
@@ -27,13 +32,13 @@ export class CreateInventoryUseCase {
       photoUrl: data.photoUrl,
       note: data.note,
       qrCodeScanned: data.qrCodeScanned,
-    });
+    })
 
     // 3. Update asset condition if changed
     if (asset.kondisi !== data.kondisi) {
       await this.assetRepository.update(asset.id, {
         kondisi: data.kondisi,
-      });
+      })
 
       // Log asset update
       await this.auditRepository.create({
@@ -47,7 +52,7 @@ export class CreateInventoryUseCase {
           newValue: data.kondisi,
           reason: 'Inventory Check',
         },
-      });
+      })
     }
 
     // 4. Log inventory check creation
@@ -60,8 +65,8 @@ export class CreateInventoryUseCase {
         assetId: asset.id,
         kondisi: data.kondisi,
       },
-    });
+    })
 
-    return inventoryCheck;
+    return inventoryCheck
   }
 }

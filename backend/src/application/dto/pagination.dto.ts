@@ -1,3 +1,3 @@
-import { PaginationMeta } from '../../shared/utils/pagination.utils';
+import { PaginationMeta } from '../../shared/utils/pagination.utils'
 
-export type PaginationDto = PaginationMeta;
+export type PaginationDto = PaginationMeta

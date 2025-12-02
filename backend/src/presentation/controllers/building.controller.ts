@@ -1,15 +1,15 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
-import { PrismaClient } from '@prisma/client';
-import { createSuccessResponse } from '../../shared/utils/response.utils';
-import { NotFoundError } from '../../shared/errors/not-found-error';
-import { ConflictError } from '../../shared/errors/conflict-error';
-import { ValidationError } from '../../shared/errors/validation-error';
+import { PrismaClient } from '@prisma/client'
+import { FastifyReply, FastifyRequest } from 'fastify'
 import {
   createBuildingSchema,
   updateBuildingSchema,
-} from '../../application/validators/location.validators';
+} from '../../application/validators/location.validators'
+import { ConflictError } from '../../shared/errors/conflict-error'
+import { NotFoundError } from '../../shared/errors/not-found-error'
+import { ValidationError } from '../../shared/errors/validation-error'
+import { createSuccessResponse } from '../../shared/utils/response.utils'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export class BuildingController {
   /**
@@ -33,17 +33,17 @@ export class BuildingController {
         },
       },
       orderBy: { name: 'asc' },
-    });
+    })
 
-    return reply.status(200).send(createSuccessResponse(buildings));
+    return reply.status(200).send(createSuccessResponse(buildings))
   }
 
   /**
    * GET /api/buildings/:id - Get building by ID with nested data
    */
   static async getById(request: FastifyRequest, reply: FastifyReply) {
-    const { id } = request.params as { id: string };
-    const buildingId = parseInt(id);
+    const { id } = request.params as { id: string }
+    const buildingId = parseInt(id)
 
     const building = await prisma.building.findUnique({
       where: { id: buildingId },
@@ -62,30 +62,30 @@ export class BuildingController {
           orderBy: { levelNumber: 'asc' },
         },
       },
-    });
+    })
 
     if (!building) {
-      throw new NotFoundError('Gedung tidak ditemukan');
+      throw new NotFoundError('Gedung tidak ditemukan')
     }
 
-    return reply.status(200).send(createSuccessResponse(building));
+    return reply.status(200).send(createSuccessResponse(building))
   }
 
   /**
    * POST /api/buildings - Create new building
    */
   static async create(request: FastifyRequest, reply: FastifyReply) {
-    const result = createBuildingSchema.safeParse(request.body);
+    const result = createBuildingSchema.safeParse(request.body)
     if (!result.success) {
-      throw new ValidationError('Data tidak valid', result.error.errors);
+      throw new ValidationError('Data tidak valid', result.error.errors)
     }
 
     // Check for duplicate name
     const existing = await prisma.building.findUnique({
       where: { name: result.data.name },
-    });
+    })
     if (existing) {
-      throw new ConflictError('Nama gedung sudah digunakan');
+      throw new ConflictError('Nama gedung sudah digunakan')
     }
 
     const building = await prisma.building.create({
@@ -95,29 +95,29 @@ export class BuildingController {
           include: { rooms: true },
         },
       },
-    });
+    })
 
-    return reply.status(201).send(createSuccessResponse(building));
+    return reply.status(201).send(createSuccessResponse(building))
   }
 
   /**
    * PUT /api/buildings/:id - Update building
    */
   static async update(request: FastifyRequest, reply: FastifyReply) {
-    const { id } = request.params as { id: string };
-    const buildingId = parseInt(id);
+    const { id } = request.params as { id: string }
+    const buildingId = parseInt(id)
 
-    const result = updateBuildingSchema.safeParse(request.body);
+    const result = updateBuildingSchema.safeParse(request.body)
     if (!result.success) {
-      throw new ValidationError('Data tidak valid', result.error.errors);
+      throw new ValidationError('Data tidak valid', result.error.errors)
     }
 
     // Check if building exists
     const existing = await prisma.building.findUnique({
       where: { id: buildingId },
-    });
+    })
     if (!existing) {
-      throw new NotFoundError('Gedung tidak ditemukan');
+      throw new NotFoundError('Gedung tidak ditemukan')
     }
 
     // Check for duplicate name (excluding current)
@@ -126,9 +126,9 @@ export class BuildingController {
         name: result.data.name,
         id: { not: buildingId },
       },
-    });
+    })
     if (duplicate) {
-      throw new ConflictError('Nama gedung sudah digunakan');
+      throw new ConflictError('Nama gedung sudah digunakan')
     }
 
     const building = await prisma.building.update({
@@ -139,17 +139,17 @@ export class BuildingController {
           include: { rooms: true },
         },
       },
-    });
+    })
 
-    return reply.status(200).send(createSuccessResponse(building));
+    return reply.status(200).send(createSuccessResponse(building))
   }
 
   /**
    * DELETE /api/buildings/:id - Delete building
    */
   static async delete(request: FastifyRequest, reply: FastifyReply) {
-    const { id } = request.params as { id: string };
-    const buildingId = parseInt(id);
+    const { id } = request.params as { id: string }
+    const buildingId = parseInt(id)
 
     // Check if building exists
     const building = await prisma.building.findUnique({
@@ -161,31 +161,33 @@ export class BuildingController {
           },
         },
       },
-    });
+    })
 
     if (!building) {
-      throw new NotFoundError('Gedung tidak ditemukan');
+      throw new NotFoundError('Gedung tidak ditemukan')
     }
 
     // Check if any room in this building has assets
-    const roomIds = building.floors.flatMap((f) => f.rooms.map((r) => r.id));
+    const roomIds = building.floors.flatMap((f) => f.rooms.map((r) => r.id))
     if (roomIds.length > 0) {
       const assetsInBuilding = await prisma.asset.count({
         where: {
           currentRoomId: { in: roomIds },
           isDeleted: false,
         },
-      });
+      })
 
       if (assetsInBuilding > 0) {
-        throw new ConflictError('Gedung tidak dapat dihapus karena masih memiliki aset');
+        throw new ConflictError(
+          'Gedung tidak dapat dihapus karena masih memiliki aset'
+        )
       }
     }
 
     await prisma.building.delete({
       where: { id: buildingId },
-    });
+    })
 
-    return reply.status(200).send(createSuccessResponse({ deleted: true }));
+    return reply.status(200).send(createSuccessResponse({ deleted: true }))
   }
 }

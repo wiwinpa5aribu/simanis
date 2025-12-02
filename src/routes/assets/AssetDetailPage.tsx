@@ -1,34 +1,34 @@
-import { useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+  Activity,
   ArrowLeft,
-  Pencil,
-  Trash2,
   ImageIcon,
   MapPin,
-  Activity,
+  Pencil,
   Star,
+  Trash2,
 } from 'lucide-react'
+import { useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Button } from '../../components/ui/button'
+import { ErrorAlert, LoadingSpinner } from '../../components/ui/Feedback'
+import { FileUpload } from '../../components/uploads/FileUpload'
 import {
-  getAssetById,
   deleteAsset,
+  getAssetById,
   updateAssetPhoto,
 } from '../../libs/api/assets'
-import { LoadingSpinner, ErrorAlert } from '../../components/ui/Feedback'
-import { Button } from '../../components/ui/button'
-import { showSuccessToast, showErrorToast } from '../../libs/ui/toast'
+import { useMediaQuery } from '../../libs/hooks/useMediaQuery'
+import { usePermission } from '../../libs/hooks/usePermission'
+import { useAuthStore } from '../../libs/store/authStore'
 import { useFavoriteStore } from '../../libs/store/favoriteStore'
+import { showErrorToast, showSuccessToast } from '../../libs/ui/toast'
 import {
   AssetActivityTimeline,
   AssetMutationHistory,
-  QRCodeDisplay,
   DeleteAssetDialog,
+  QRCodeDisplay,
 } from './components'
-import { usePermission } from '../../libs/hooks/usePermission'
-import { FileUpload } from '../../components/uploads/FileUpload'
-import { useMediaQuery } from '../../libs/hooks/useMediaQuery'
-import { useAuthStore } from '../../libs/store/authStore'
 
 export function AssetDetailPage() {
   const { id } = useParams()

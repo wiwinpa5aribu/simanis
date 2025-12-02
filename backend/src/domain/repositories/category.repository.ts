@@ -1,33 +1,36 @@
-import { AssetCategory } from '@prisma/client';
+import { AssetCategory } from '@prisma/client'
 
 export interface IAssetCategoryRepository {
   /**
    * Find all categories
    */
-  findAll(): Promise<AssetCategory[]>;
+  findAll(): Promise<AssetCategory[]>
 
   /**
    * Find category by ID
    */
-  findById(id: number): Promise<AssetCategory | null>;
+  findById(id: number): Promise<AssetCategory | null>
 
   /**
    * Find category by name
    */
-  findByName(name: string): Promise<AssetCategory | null>;
+  findByName(name: string): Promise<AssetCategory | null>
 
   /**
    * Create category
    */
-  create(data: { name: string; description?: string }): Promise<AssetCategory>;
+  create(data: { name: string; description?: string }): Promise<AssetCategory>
 
   /**
    * Update category
    */
-  update(id: number, data: { name?: string; description?: string }): Promise<AssetCategory>;
+  update(
+    id: number,
+    data: { name?: string; description?: string }
+  ): Promise<AssetCategory>
 
   /**
    * Delete category
    */
-  delete(id: number): Promise<void>;
+  delete(id: number): Promise<void>
 }

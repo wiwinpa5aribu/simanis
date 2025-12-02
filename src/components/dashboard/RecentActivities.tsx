@@ -5,11 +5,11 @@
  * Setiap aktivitas dapat diklik untuk navigasi ke detail terkait
  */
 
-import { useNavigate } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
 import { id as localeId } from 'date-fns/locale'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Activity } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { RecentActivity } from '@/libs/api/dashboard'
 
 interface RecentActivitiesProps {

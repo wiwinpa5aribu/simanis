@@ -1,11 +1,11 @@
-import { AppError } from './app-error';
+import { AppError } from './app-error'
 
 export class ValidationError extends AppError {
-  public readonly details?: unknown;
+  public readonly details?: unknown
 
   constructor(message: string, details?: unknown) {
-    super(message, 400);
-    this.name = 'ValidationError';
-    this.details = details;
+    super(message, 400)
+    this.name = 'ValidationError'
+    this.details = details
   }
 }

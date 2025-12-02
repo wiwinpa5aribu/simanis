@@ -6,7 +6,7 @@
  * Property 11: Loading State Display
  */
 
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 // Mock asset data types
 interface Asset {

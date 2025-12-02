@@ -3,5 +3,5 @@
  * Mempermudah import dan menjaga enkapsulasi
  */
 
-export { QRScanner } from './QRScanner'
 export { InventoryForm } from './InventoryForm'
+export { QRScanner } from './QRScanner'

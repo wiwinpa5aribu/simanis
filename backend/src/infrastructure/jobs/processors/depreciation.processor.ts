@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client';
-import { logger } from '../../../shared/logger/winston.logger';
+import { PrismaClient } from '@prisma/client'
+import { logger } from '../../../shared/logger/winston.logger'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export const depreciationProcessor = async () => {
-  logger.info('Starting depreciation calculation job');
+  logger.info('Starting depreciation calculation job')
 
   try {
     // 1. Get all assets that need depreciation
@@ -15,21 +15,21 @@ export const depreciationProcessor = async () => {
         masaManfaatTahun: { gt: 0 },
         isDeleted: false,
       },
-    });
+    })
 
-    logger.info(`Found ${assets.length} assets for depreciation calculation`);
+    logger.info(`Found ${assets.length} assets for depreciation calculation`)
 
-    let processedCount = 0;
+    let processedCount = 0
 
     for (const asset of assets) {
       // Simple straight-line depreciation for now
       // Annual Depreciation = (Cost - Residual Value) / Useful Life
       // Assuming Residual Value = 0 for now
 
-      const cost = Number(asset.harga);
-      const usefulLife = asset.masaManfaatTahun;
-      const annualDepreciation = cost / usefulLife;
-      const monthlyDepreciation = annualDepreciation / 12;
+      const cost = Number(asset.harga)
+      const usefulLife = asset.masaManfaatTahun
+      const annualDepreciation = cost / usefulLife
+      const monthlyDepreciation = annualDepreciation / 12
 
       // Calculate current book value
       // This is simplified. In real app, we need to sum up previous depreciations.
@@ -44,15 +44,17 @@ export const depreciationProcessor = async () => {
           nilaiBuku: cost - monthlyDepreciation, // Simplified
           masaManfaatTahunSnapshot: usefulLife,
         },
-      });
+      })
 
-      processedCount++;
+      processedCount++
     }
 
-    logger.info(`Depreciation calculation completed. Processed ${processedCount} assets.`);
-    return { processed: processedCount };
+    logger.info(
+      `Depreciation calculation completed. Processed ${processedCount} assets.`
+    )
+    return { processed: processedCount }
   } catch (error) {
-    logger.error('Depreciation calculation failed', { error });
-    throw error;
+    logger.error('Depreciation calculation failed', { error })
+    throw error
   }
-};
+}

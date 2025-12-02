@@ -1,8 +1,8 @@
-import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { ErrorAlert, LoadingSpinner } from '../../components/ui/Feedback'
 import { getAssetById } from '../../libs/api/assets'
-import { LoadingSpinner, ErrorAlert } from '../../components/ui/Feedback'
 import { AssetEditForm } from './components/AssetEditForm'
 
 export function AssetEditPage() {

@@ -1,6 +1,6 @@
-import { useAuthStore } from '@/libs/store/authStore'
-import { ROLE_PERMISSIONS } from '@/libs/auth/permissions'
 import type { Permission, Role } from '@/libs/auth/permissions'
+import { ROLE_PERMISSIONS } from '@/libs/auth/permissions'
+import { useAuthStore } from '@/libs/store/authStore'
 
 export function usePermission() {
   const user = useAuthStore((state) => state.user)

@@ -13,13 +13,13 @@
  * - disabled: status disabled
  */
 
-import { useState, useRef, type ChangeEvent } from 'react'
+import { FileIcon, Upload, X } from 'lucide-react'
+import { type ChangeEvent, useRef, useState } from 'react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Upload, X, FileIcon } from 'lucide-react'
 
 interface FileUploadProps {
   accept?: string

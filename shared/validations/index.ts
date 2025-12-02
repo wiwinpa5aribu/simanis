@@ -5,5 +5,5 @@
  */
 
 export * from './asset.schema'
-export * from './loan.schema'
 export * from './common.schema'
+export * from './loan.schema'

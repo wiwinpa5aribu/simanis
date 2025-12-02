@@ -3,7 +3,7 @@
  * Menampilkan ringkasan nilai aset untuk keperluan KIB
  */
 
-import { Banknote, TrendingDown, Calculator } from 'lucide-react'
+import { Banknote, Calculator, TrendingDown } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface AssetValueSummaryProps {

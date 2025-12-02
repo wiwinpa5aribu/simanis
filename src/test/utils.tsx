@@ -5,9 +5,9 @@
  * Helper functions untuk testing React components
  */
 
-import type { ReactElement } from 'react'
-import { render, type RenderOptions } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { type RenderOptions, render } from '@testing-library/react'
+import type { ReactElement } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 
 // Create a custom render function yang include providers
@@ -34,11 +34,11 @@ const customRender = (
 
 // Re-export specific items from testing-library (not using export *)
 export {
-  screen,
+  cleanup,
   fireEvent,
+  screen,
   waitFor as waitForElement,
   within,
-  cleanup,
 } from '@testing-library/react'
 export { customRender as render }
 

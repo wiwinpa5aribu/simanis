@@ -3,16 +3,16 @@
  * Error tracking dan performance monitoring
  */
 
-import * as Sentry from '@sentry/node';
-import { config } from '../config';
+import * as Sentry from '@sentry/node'
+import { config } from '../config'
 
 export function initSentry(): void {
   // Only initialize if DSN is provided
-  const dsn = process.env.SENTRY_DSN_BACKEND;
+  const dsn = process.env.SENTRY_DSN_BACKEND
 
   if (!dsn) {
-    console.log('⚠️  Sentry DSN not configured. Error tracking disabled.');
-    return;
+    console.log('⚠️  Sentry DSN not configured. Error tracking disabled.')
+    return
   }
 
   Sentry.init({
@@ -27,10 +27,10 @@ export function initSentry(): void {
     beforeSend(event) {
       // Remove sensitive headers
       if (event.request?.headers) {
-        delete event.request.headers['authorization'];
-        delete event.request.headers['cookie'];
+        delete event.request.headers['authorization']
+        delete event.request.headers['cookie']
       }
-      return event;
+      return event
     },
 
     // Ignore certain errors
@@ -38,21 +38,24 @@ export function initSentry(): void {
       'ECONNREFUSED', // Redis connection errors in dev
       'ENOTFOUND',
     ],
-  });
+  })
 
-  console.log('✅ Sentry initialized for error tracking');
+  console.log('✅ Sentry initialized for error tracking')
 }
 
 /**
  * Capture exception dengan context tambahan
  */
-export function captureException(error: Error, context?: Record<string, unknown>): void {
+export function captureException(
+  error: Error,
+  context?: Record<string, unknown>
+): void {
   Sentry.withScope((scope) => {
     if (context) {
-      scope.setExtras(context);
+      scope.setExtras(context)
     }
-    Sentry.captureException(error);
-  });
+    Sentry.captureException(error)
+  })
 }
 
 /**
@@ -60,9 +63,9 @@ export function captureException(error: Error, context?: Record<string, unknown>
  */
 export function captureMessage(
   message: string,
-  level: 'info' | 'warning' | 'error' = 'info',
+  level: 'info' | 'warning' | 'error' = 'info'
 ): void {
-  Sentry.captureMessage(message, level);
+  Sentry.captureMessage(message, level)
 }
 
 /**
@@ -72,14 +75,14 @@ export function setUserContext(user: { id: number; username: string }): void {
   Sentry.setUser({
     id: user.id.toString(),
     username: user.username,
-  });
+  })
 }
 
 /**
  * Clear user context (on logout)
  */
 export function clearUserContext(): void {
-  Sentry.setUser(null);
+  Sentry.setUser(null)
 }
 
-export { Sentry };
+export { Sentry }

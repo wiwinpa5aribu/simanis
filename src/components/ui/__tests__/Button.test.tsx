@@ -2,9 +2,9 @@
  * Tests untuk Button Component
  */
 
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@/test/utils'
 import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
+import { render, screen } from '@/test/utils'
 import { Button } from '../button'
 
 describe('Button Component', () => {

@@ -1,7 +1,7 @@
-import { useState, type ReactNode } from 'react'
+import { ChevronDown, ChevronUp, Filter, X } from 'lucide-react'
+import { type ReactNode, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Filter, X, ChevronDown, ChevronUp } from 'lucide-react'
 
 interface FilterBarProps {
   children: ReactNode

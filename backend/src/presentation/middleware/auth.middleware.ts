@@ -1,15 +1,15 @@
-import { FastifyRequest } from 'fastify';
-import { jwtService } from '../../infrastructure/crypto/jwt.service';
-import { UnauthorizedError } from '../../shared/errors/unauthorized-error';
+import { FastifyRequest } from 'fastify'
+import { jwtService } from '../../infrastructure/crypto/jwt.service'
+import { UnauthorizedError } from '../../shared/errors/unauthorized-error'
 
 // Extend Fastify request type to include user
 declare module 'fastify' {
   interface FastifyRequest {
     user?: {
-      userId: number;
-      username: string;
-      roles: string[];
-    };
+      userId: number
+      username: string
+      roles: string[]
+    }
   }
 }
 
@@ -19,21 +19,21 @@ declare module 'fastify' {
  */
 export async function authMiddleware(request: FastifyRequest) {
   try {
-    const authHeader = request.headers.authorization;
+    const authHeader = request.headers.authorization
 
     if (!authHeader) {
-      throw new UnauthorizedError('Token tidak ditemukan');
+      throw new UnauthorizedError('Token tidak ditemukan')
     }
 
-    const token = authHeader.replace('Bearer ', '');
-    const payload = jwtService.verify(token);
+    const token = authHeader.replace('Bearer ', '')
+    const payload = jwtService.verify(token)
 
     // Attach user to request
-    request.user = payload;
+    request.user = payload
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      throw error;
+      throw error
     }
-    throw new UnauthorizedError('Token tidak valid');
+    throw new UnauthorizedError('Token tidak valid')
   }
 }

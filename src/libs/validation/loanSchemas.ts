@@ -1,9 +1,9 @@
 import { z } from 'zod'
 import type {
+  AssetCondition,
   Loan,
   LoanItem,
   LoanStatus,
-  AssetCondition,
 } from '../../../shared/types/entities'
 
 // Re-export types

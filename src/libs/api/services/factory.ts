@@ -6,10 +6,10 @@
 
 import type {
   IAssetService,
-  ILoanService,
-  ICategoryService,
-  ILocationService,
   IAuthService,
+  ICategoryService,
+  ILoanService,
+  ILocationService,
 } from './types'
 
 // ============================================

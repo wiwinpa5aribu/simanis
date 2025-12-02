@@ -1,12 +1,12 @@
-import winston from 'winston';
-import { config } from '../config';
-import path from 'path';
-import fs from 'fs';
+import fs from 'fs'
+import path from 'path'
+import winston from 'winston'
+import { config } from '../config'
 
 // Ensure logs directory exists
-const logsDir = config.logging.filePath;
+const logsDir = config.logging.filePath
 if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
+  fs.mkdirSync(logsDir, { recursive: true })
 }
 
 // Custom format untuk console (colorized)
@@ -14,20 +14,20 @@ const consoleFormat = winston.format.combine(
   winston.format.colorize(),
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.printf(({ timestamp, level, message, ...meta }) => {
-    let metaStr = '';
+    let metaStr = ''
     if (Object.keys(meta).length > 0) {
-      metaStr = '\n' + JSON.stringify(meta, null, 2);
+      metaStr = '\n' + JSON.stringify(meta, null, 2)
     }
-    return `${timestamp} [${level}]: ${message}${metaStr}`;
-  }),
-);
+    return `${timestamp} [${level}]: ${message}${metaStr}`
+  })
+)
 
 // JSON format untuk file (structured logging)
 const fileFormat = winston.format.combine(
   winston.format.timestamp(),
   winston.format.errors({ stack: true }),
-  winston.format.json(),
-);
+  winston.format.json()
+)
 
 // Create Winston logger
 export const logger = winston.createLogger({
@@ -56,18 +56,18 @@ export const logger = winston.createLogger({
       maxFiles: 5,
     }),
   ],
-});
+})
 
 // Production: disable console logging
 if (config.env === 'production') {
-  logger.remove(logger.transports[0]); // Remove console transport
+  logger.remove(logger.transports[0]) // Remove console transport
 }
 
 // Helper function untuk log dengan context
 export const logWithContext = (
   level: 'info' | 'warn' | 'error' | 'debug',
   message: string,
-  context?: Record<string, unknown>,
+  context?: Record<string, unknown>
 ) => {
-  logger.log(level, message, context);
-};
+  logger.log(level, message, context)
+}

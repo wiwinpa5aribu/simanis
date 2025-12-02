@@ -32,16 +32,18 @@ export interface DepreciationResult {
 
 /**
  * Menghitung penyusutan aset menggunakan metode garis lurus
- * 
+ *
  * Formula:
  * - Penyusutan per tahun = Harga Perolehan / Masa Manfaat
  * - Akumulasi Penyusutan = Penyusutan per tahun × Umur Aset
  * - Nilai Buku = Harga Perolehan - Akumulasi Penyusutan
- * 
+ *
  * @param input - Parameter perhitungan penyusutan
  * @returns Hasil perhitungan penyusutan
  */
-export function calculateDepreciation(input: DepreciationInput): DepreciationResult {
+export function calculateDepreciation(
+  input: DepreciationInput
+): DepreciationResult {
   const {
     hargaPerolehan,
     masaManfaatTahun,
@@ -84,9 +86,8 @@ export function calculateDepreciation(input: DepreciationInput): DepreciationRes
   const nilaiBuku = Math.max(0, hargaPerolehan - akumulasiPenyusutan)
 
   // Hitung persentase penyusutan
-  const persentasePenyusutan = hargaPerolehan > 0
-    ? (akumulasiPenyusutan / hargaPerolehan) * 100
-    : 0
+  const persentasePenyusutan =
+    hargaPerolehan > 0 ? (akumulasiPenyusutan / hargaPerolehan) * 100 : 0
 
   // Cek apakah sudah habis masa manfaat
   const sudahHabis = umurAset >= masaManfaatTahun

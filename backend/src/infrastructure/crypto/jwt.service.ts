@@ -1,22 +1,22 @@
-import jwt from 'jsonwebtoken';
-import { config } from '../../shared/config';
+import jwt from 'jsonwebtoken'
+import { config } from '../../shared/config'
 
 export interface JwtPayload {
-  userId: number;
-  username: string;
-  roles: string[];
+  userId: number
+  username: string
+  roles: string[]
 }
 
 /**
  * JWT service untuk sign dan verify tokens
  */
 export class JwtService {
-  private readonly secret: string;
-  private readonly expiresIn: string;
+  private readonly secret: string
+  private readonly expiresIn: string
 
   constructor() {
-    this.secret = config.jwt.secret;
-    this.expiresIn = config.jwt.expiresIn;
+    this.secret = config.jwt.secret
+    this.expiresIn = config.jwt.expiresIn
   }
 
   /**
@@ -26,9 +26,9 @@ export class JwtService {
     try {
       return jwt.sign(payload, this.secret, {
         expiresIn: this.expiresIn as jwt.SignOptions['expiresIn'],
-      });
+      })
     } catch (error) {
-      throw new Error(`Failed to sign JWT: ${error}`);
+      throw new Error(`Failed to sign JWT: ${error}`)
     }
   }
 
@@ -37,16 +37,16 @@ export class JwtService {
    */
   verify(token: string): JwtPayload {
     try {
-      const decoded = jwt.verify(token, this.secret) as JwtPayload;
-      return decoded;
+      const decoded = jwt.verify(token, this.secret) as JwtPayload
+      return decoded
     } catch (error) {
       if (error instanceof jwt.TokenExpiredError) {
-        throw new Error('Token expired');
+        throw new Error('Token expired')
       }
       if (error instanceof jwt.JsonWebTokenError) {
-        throw new Error('Invalid token');
+        throw new Error('Invalid token')
       }
-      throw new Error(`Failed to verify JWT: ${error}`);
+      throw new Error(`Failed to verify JWT: ${error}`)
     }
   }
 
@@ -54,9 +54,9 @@ export class JwtService {
    * Decode JWT without verification (for debugging)
    */
   decode(token: string): JwtPayload | null {
-    return jwt.decode(token) as JwtPayload;
+    return jwt.decode(token) as JwtPayload
   }
 }
 
 // Export singleton instance
-export const jwtService = new JwtService();
+export const jwtService = new JwtService()

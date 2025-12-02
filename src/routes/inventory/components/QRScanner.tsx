@@ -12,14 +12,14 @@
  * - onError: callback saat terjadi error
  */
 
-import { useEffect, useRef, useState } from 'react'
 import { Html5Qrcode, Html5QrcodeScannerState } from 'html5-qrcode'
-import { logger } from '@/libs/utils/logger'
+import { Camera, CameraOff, Keyboard } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Camera, CameraOff, Keyboard } from 'lucide-react'
+import { logger } from '@/libs/utils/logger'
 
 interface QRScannerProps {
   onScanSuccess: (decodedText: string) => void

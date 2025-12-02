@@ -1,13 +1,13 @@
-import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Search, Users } from 'lucide-react'
-import { getUsers, type User } from '../../libs/api/users'
-import { LoadingSpinner, ErrorAlert } from '../../components/ui/Feedback'
-import { Input } from '../../components/ui/input'
-import { DataTable, type Column } from '../../components/table/DataTable'
+import { useState } from 'react'
 import { FilterBar } from '../../components/filters/FilterBar'
-import { UserDetailDrawer } from './components/UserDetailDrawer'
+import { type Column, DataTable } from '../../components/table/DataTable'
+import { ErrorAlert, LoadingSpinner } from '../../components/ui/Feedback'
+import { Input } from '../../components/ui/input'
+import { getUsers, type User } from '../../libs/api/users'
 import { useDebouncedValue } from '../../libs/hooks/useDebouncedValue'
+import { UserDetailDrawer } from './components/UserDetailDrawer'
 
 export function UsersListPage() {
   const [searchTerm, setSearchTerm] = useState('')
