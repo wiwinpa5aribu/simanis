@@ -14,12 +14,12 @@ Upgrade tooling untuk:
 
 ---
 
-## Status: ⬜ Not Started
+## Status: 🟡 In Progress (66% Complete)
 
 | Task | Status | Estimated Time |
 |------|--------|----------------|
-| Migrate npm → pnpm | ⬜ Pending | 1-2 hours |
-| Migrate ESLint+Prettier → Biome | ⬜ Pending | 2-3 hours |
+| Migrate npm → pnpm | ✅ Done | Completed by Rovo Dev |
+| Migrate ESLint+Prettier → Biome | ✅ Done | Completed by Rovo Dev |
 | Setup Turborepo | ⬜ Pending | 1-2 hours |
 | Update CI/CD for new tools | ⬜ Pending | 1 hour |
 | Verify all tests pass | ⬜ Pending | 30 mins |
