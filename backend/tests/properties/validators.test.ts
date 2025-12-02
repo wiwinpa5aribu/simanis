@@ -5,6 +5,7 @@ import {
     createFloorSchema,
     createRoomSchema,
 } from '../../src/application/validators/location.validators';
+// Note: updateBuildingSchema, updateFloorSchema, updateRoomSchema available but not used in current tests
 import { userQuerySchema } from '../../src/application/validators/user.validators';
 
 /**

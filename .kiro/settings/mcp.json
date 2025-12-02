@@ -10,17 +10,25 @@
       "command": "context7-mcp",
       "args": [],
       "disabled": false,
-      "autoApprove": ["resolve-library-id", "get-library-docs"]
+      "autoApprove": [
+        "resolve-library-id",
+        "get-library-docs"
+      ]
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"],
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ],
       "disabled": false,
       "autoApprove": []
     },
     "TestSprite": {
       "command": "npx",
-      "args": ["@testsprite/testsprite-mcp@latest"],
+      "args": [
+        "@testsprite/testsprite-mcp@latest"
+      ],
       "env": {
         "API_KEY": "${TESTSPRITE_API_KEY}"
       },
@@ -32,7 +40,9 @@
     },
     "mysql": {
       "command": "uvx",
-      "args": ["mcp-server-mysql"],
+      "args": [
+        "mcp-server-mysql"
+      ],
       "env": {
         "MYSQL_HOST": "localhost",
         "MYSQL_PORT": "3306",
@@ -50,9 +60,12 @@
     },
     "github": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "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"
       },
       "disabled": false,
       "autoApprove": [
@@ -66,12 +79,17 @@
         "get_file_contents",
         "create_branch",
         "create_or_update_file",
-        "get_pull_request"
+        "get_pull_request",
+        "update_pull_request_branch",
+        "create_issue",
+        "update_issue"
       ]
     },
     "brave-search": {
       "command": "uvx",
-      "args": ["mcp-server-brave-search"],
+      "args": [
+        "mcp-server-brave-search"
+      ],
       "env": {
         "BRAVE_API_KEY": "${BRAVE_API_KEY}"
       },
@@ -80,12 +98,31 @@
     },
     "aws-docs": {
       "command": "uvx",
-      "args": ["awslabs.aws-documentation-mcp-server@latest"],
+      "args": [
+        "awslabs.aws-documentation-mcp-server@latest"
+      ],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
       "disabled": true,
       "autoApprove": []
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "D:/simanis/.kiro/memory/simanis-memory.jsonl"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "search_nodes",
+        "open_nodes",
+        "read_graph",
+        "add_observations"
+      ]
     }
   }
 }
