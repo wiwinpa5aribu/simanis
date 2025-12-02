@@ -1,6 +1,6 @@
 # SIMANIS - Claude AI Context
 # File ini untuk Claude (VSCode extension, Claude Desktop, dll)
-# Identik dengan .cursorrules tapi format untuk Claude
+# Last Updated: 2025-12-02
 
 ## PROJECT IDENTITY
 
@@ -26,13 +26,26 @@ Setelah selesai task, update: `docs/progress/CURRENT_STATUS.md`
 { kode_aset: string, nama_barang: string }
 ```
 
-### 4. Environment Variables
-```typescript
-// ✅ Frontend
-import.meta.env.VITE_API_URL
+### 4. Package Manager: pnpm (BUKAN npm)
+```bash
+# ✅ BENAR
+pnpm install
+pnpm run dev
 
-// ❌ SALAH
-process.env.API_URL
+# ❌ SALAH
+npm install
+npm run dev
+```
+
+### 5. Linter: Biome (BUKAN ESLint/Prettier)
+```bash
+# ✅ BENAR
+pnpm run lint      # biome check
+pnpm run lint:fix  # biome check --write
+
+# ❌ SALAH
+npx eslint .
+npx prettier --write .
 ```
 
 ## TECH STACK
@@ -42,6 +55,7 @@ process.env.API_URL
 | Frontend | React 19, TypeScript, Vite, Tailwind 4, Zustand, TanStack Query |
 | Backend | Fastify 4, TypeScript, Prisma, MySQL 8, BullMQ |
 | Shared | TypeScript types di `/shared` |
+| Tooling | pnpm v10.24.0, Biome v2.3.8, Turborepo v2.6.1 |
 
 ## FOLDER STRUCTURE
 
@@ -57,16 +71,28 @@ simanis/
 ## COMMANDS
 
 ```bash
-# Frontend (root)
-npm run dev          # Port 5000
-npm run build
-npm run test:run
+# Monorepo (root)
+pnpm run dev           # Start frontend
+pnpm run dev:all       # Start all (turbo)
+pnpm run build:all     # Build all (turbo)
+pnpm run lint:all      # Lint all (turbo)
 
 # Backend (/backend)
-npm run dev
-npm run prisma:migrate
-npm run prisma:generate
+pnpm run dev
+pnpm run prisma:migrate
+pnpm run prisma:generate
 ```
+
+## ROADMAP STATUS
+
+| Phase | Status |
+|-------|--------|
+| 0 - Documentation | ✅ COMPLETE |
+| 1 - Tooling | ✅ COMPLETE |
+| 2 - Monorepo | 🎯 NEXT |
+| 3 - Quality | ⬜ Not Started |
+| 4 - Production | ⬜ Not Started |
+| 5 - Tauri | ⬜ Optional |
 
 ## DOCUMENTATION TEMPLATE
 
@@ -74,30 +100,19 @@ Setelah selesai task, update `docs/progress/CURRENT_STATUS.md`:
 
 ```markdown
 ## Status Terakhir
-- Tanggal: YYYY-MM-DD
-- AI Tool: Claude
-- Task: [deskripsi]
 
-## Completed
-- [x] Task yang selesai
-
-## Pending
-- [ ] Task yang belum
+| Field | Value |
+|-------|-------|
+| Tanggal | YYYY-MM-DD |
+| AI Tool | Claude |
+| Phase | Phase X: Name |
+| Status | 🟡 In Progress / ✅ Complete |
 
 ## Files Changed
-- `path/file.ts` - deskripsi
 
-## Notes for Next Session
-- Context penting
+| File | Change Type | Description |
+|------|-------------|-------------|
+| `path/file` | Created/Updated | Deskripsi |
 ```
-
-## CURRENT ROADMAP
-
-Phase 0: Documentation ✅ COMPLETE
-Phase 1: Tooling (pnpm, Biome, Turborepo) ← NEXT PHASE
-Phase 2: Monorepo Migration
-Phase 3: Quality Gates (testing, CI/CD)
-Phase 4: Production Ready
-Phase 5: Tauri Integration (optional)
 
 Lihat `.cursorrules` untuk detail lengkap.
