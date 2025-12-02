@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Dokumentasi
+    url: https://github.com/wiwinpa5aribu/simanis/tree/main/docs
+    about: Baca dokumentasi sebelum membuat issue
+  - name: 💬 Diskusi
+    url: https://github.com/wiwinpa5aribu/simanis/discussions
+    about: Tanyakan pertanyaan atau diskusi fitur di GitHub Discussions
