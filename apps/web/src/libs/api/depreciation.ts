@@ -62,7 +62,7 @@ export const getDepreciationList = async (
       categoryId: params.category_id,
     })
 
-    const response = await api.get<DepreciationListResponse>('/depreciations', {
+    const response = await api.get<DepreciationListResponse>('/depreciation', {
       params: {
         asset_id: params.asset_id,
         category_id: params.category_id,

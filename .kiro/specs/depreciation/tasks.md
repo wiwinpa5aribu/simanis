@@ -72,11 +72,18 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
     - Riwayat penyusutan per aset
     - _Requirements: 2.2_
 
-- [ ] 4. Checkpoint - Pastikan semua backend tests passing
+- [x] 4. Checkpoint - Pastikan semua backend tests passing
+
+
+
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. Backend - Implementasi Calculate Depreciation Use Case
-  - [ ] 5.1 Implementasi CalculateDepreciationUseCase
+- [x] 5. Backend - Implementasi Calculate Depreciation Use Case
+
+
+
+  - [x] 5.1 Implementasi CalculateDepreciationUseCase
+
     - Kalkulasi penyusutan untuk semua aset aktif
     - Skip aset dengan nilai buku = 0
     - Create depreciation entries

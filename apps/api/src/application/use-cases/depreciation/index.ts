@@ -1,3 +1,4 @@
+export * from './calculate-depreciation.use-case'
 export * from './get-asset-depreciation-history.use-case'
 export * from './get-depreciation.use-case'
 export {
