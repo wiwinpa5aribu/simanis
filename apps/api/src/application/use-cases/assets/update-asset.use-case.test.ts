@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { UpdateAssetUseCase } from './update-asset.use-case'
+import type { Asset } from '@simanis/database'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { IAssetRepository } from '../../../domain/repositories/asset.repository'
 import type { IAuditRepository } from '../../../domain/repositories/audit.repository'
-import type { Asset } from '@simanis/database'
 import { NotFoundError } from '../../../shared/errors/not-found-error'
 import type { UpdateAssetInput } from '../../validators/asset.validators'
+import { UpdateAssetUseCase } from './update-asset.use-case'
 
 describe('UpdateAssetUseCase', () => {
   let updateAssetUseCase: UpdateAssetUseCase
@@ -123,9 +123,7 @@ describe('UpdateAssetUseCase', () => {
       vi.mocked(mockAssetRepository.findById).mockResolvedValue(
         mockExistingAsset
       )
-      vi.mocked(mockAssetRepository.update).mockResolvedValue(
-        mockExistingAsset
-      )
+      vi.mocked(mockAssetRepository.update).mockResolvedValue(mockExistingAsset)
 
       // Act
       await updateAssetUseCase.execute(1, updateData, 1)

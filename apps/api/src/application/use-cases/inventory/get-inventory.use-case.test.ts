@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { GetInventoryUseCase } from './get-inventory.use-case'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { IInventoryRepository } from '../../../domain/repositories/inventory.repository'
+import { GetInventoryUseCase } from './get-inventory.use-case'
 
 describe('GetInventoryUseCase', () => {
   let getInventoryUseCase: GetInventoryUseCase

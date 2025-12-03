@@ -1,9 +1,12 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { LoginUseCase } from './login.use-case'
-import type { IUserRepository, UserWithRoles } from '../../../domain/repositories/user.repository'
-import { UnauthorizedError } from '../../../shared/errors/unauthorized-error'
-import { passwordService } from '../../../infrastructure/crypto/password.service'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import type {
+  IUserRepository,
+  UserWithRoles,
+} from '../../../domain/repositories/user.repository'
 import { jwtService } from '../../../infrastructure/crypto/jwt.service'
+import { passwordService } from '../../../infrastructure/crypto/password.service'
+import { UnauthorizedError } from '../../../shared/errors/unauthorized-error'
+import { LoginUseCase } from './login.use-case'
 
 // Mock dependencies
 vi.mock('../../../infrastructure/crypto/password.service', () => ({

@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { CreateLoanUseCase } from './create-loan.use-case'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { ILoanRepository } from '../../../domain/repositories/loan.repository'
-import type { CreateLoanInput } from '../../validators/loan.validators'
 import type { LoanDto } from '../../dto/loan.dto'
+import type { CreateLoanInput } from '../../validators/loan.validators'
+import { CreateLoanUseCase } from './create-loan.use-case'
 
 vi.mock('../../../shared/logger/winston.logger', () => ({
   logger: {

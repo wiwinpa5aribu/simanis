@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { GetCategoriesUseCase } from './get-categories.use-case'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { IAssetCategoryRepository } from '../../../domain/repositories/category.repository'
 import type { CategoryDto } from '../../dto/category.dto'
+import { GetCategoriesUseCase } from './get-categories.use-case'
 
 describe('GetCategoriesUseCase', () => {
   let getCategoriesUseCase: GetCategoriesUseCase

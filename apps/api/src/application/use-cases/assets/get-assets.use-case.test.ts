@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { GetAssetsUseCase } from './get-assets.use-case'
-import type {
-  IAssetRepository,
-  AssetFilters,
-} from '../../../domain/repositories/asset.repository'
 import type { Asset } from '@simanis/database'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import type {
+  AssetFilters,
+  IAssetRepository,
+} from '../../../domain/repositories/asset.repository'
+import { GetAssetsUseCase } from './get-assets.use-case'
 
 describe('GetAssetsUseCase', () => {
   let getAssetsUseCase: GetAssetsUseCase

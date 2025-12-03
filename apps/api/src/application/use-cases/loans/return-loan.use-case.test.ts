@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { ReturnLoanUseCase } from './return-loan.use-case'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { ILoanRepository } from '../../../domain/repositories/loan.repository'
-import type { ReturnLoanInput } from '../../validators/loan.validators'
-import type { LoanDto } from '../../dto/loan.dto'
 import { NotFoundError } from '../../../shared/errors/not-found-error'
+import type { LoanDto } from '../../dto/loan.dto'
+import type { ReturnLoanInput } from '../../validators/loan.validators'
+import { ReturnLoanUseCase } from './return-loan.use-case'
 
 vi.mock('../../../shared/logger/winston.logger', () => ({
   logger: {

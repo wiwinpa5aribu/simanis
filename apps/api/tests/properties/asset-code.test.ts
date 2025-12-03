@@ -170,37 +170,33 @@ describe('Asset Code Format Validation (Property 5)', () => {
 })
 
 describe('QR Code Round Trip (Property 6)', () => {
-  it(
-    'should generate valid data URL for any valid asset code',
-    async () => {
-      await fc.assert(
-        fc.asyncProperty(
-          fc.integer({ min: 0, max: 99 }),
-          fc.constantFrom(...Object.values(DEFAULT_CATEGORY_CODES)),
-          fc.integer({ min: 1, max: 999 }),
-          async (year, categoryCode, sequence) => {
-            const yearStr = year.toString().padStart(2, '0')
-            const seqStr = sequence.toString().padStart(3, '0')
-            const code = `${SCHOOL_PREFIX}/${yearStr}/${categoryCode}/${seqStr}`
+  it('should generate valid data URL for any valid asset code', async () => {
+    await fc.assert(
+      fc.asyncProperty(
+        fc.integer({ min: 0, max: 99 }),
+        fc.constantFrom(...Object.values(DEFAULT_CATEGORY_CODES)),
+        fc.integer({ min: 1, max: 999 }),
+        async (year, categoryCode, sequence) => {
+          const yearStr = year.toString().padStart(2, '0')
+          const seqStr = sequence.toString().padStart(3, '0')
+          const code = `${SCHOOL_PREFIX}/${yearStr}/${categoryCode}/${seqStr}`
 
-            const qrDataUrl = await generateAssetQRCode(code)
+          const qrDataUrl = await generateAssetQRCode(code)
 
-            // Should be a valid data URL
-            expect(qrDataUrl).toMatch(/^data:image\/png;base64,/)
+          // Should be a valid data URL
+          expect(qrDataUrl).toMatch(/^data:image\/png;base64,/)
 
-            // Should have base64 content
-            const base64Part = qrDataUrl.split(',')[1]
-            expect(base64Part.length).toBeGreaterThan(0)
+          // Should have base64 content
+          const base64Part = qrDataUrl.split(',')[1]
+          expect(base64Part.length).toBeGreaterThan(0)
 
-            // Should be valid base64
-            expect(() => Buffer.from(base64Part, 'base64')).not.toThrow()
-          }
-        ),
-        { numRuns: 10 }
-      )
-    },
-    15000
-  )
+          // Should be valid base64
+          expect(() => Buffer.from(base64Part, 'base64')).not.toThrow()
+        }
+      ),
+      { numRuns: 10 }
+    )
+  }, 15000)
 
   it('should generate consistent QR codes for same input', async () => {
     const testCode = 'SCH/25/ELK/001'
@@ -211,24 +207,20 @@ describe('QR Code Round Trip (Property 6)', () => {
     expect(qr1).toBe(qr2)
   })
 
-  it(
-    'should generate different QR codes for different inputs',
-    async () => {
-      await fc.assert(
-        fc.asyncProperty(fc.integer({ min: 1, max: 998 }), async (seq1) => {
-          const code1 = `SCH/25/ELK/${seq1.toString().padStart(3, '0')}`
-          const code2 = `SCH/25/ELK/${(seq1 + 1).toString().padStart(3, '0')}`
+  it('should generate different QR codes for different inputs', async () => {
+    await fc.assert(
+      fc.asyncProperty(fc.integer({ min: 1, max: 998 }), async (seq1) => {
+        const code1 = `SCH/25/ELK/${seq1.toString().padStart(3, '0')}`
+        const code2 = `SCH/25/ELK/${(seq1 + 1).toString().padStart(3, '0')}`
 
-          const qr1 = await generateAssetQRCode(code1)
-          const qr2 = await generateAssetQRCode(code2)
+        const qr1 = await generateAssetQRCode(code1)
+        const qr2 = await generateAssetQRCode(code2)
 
-          expect(qr1).not.toBe(qr2)
-        }),
-        { numRuns: 5 }
-      )
-    },
-    10000
-  )
+        expect(qr1).not.toBe(qr2)
+      }),
+      { numRuns: 5 }
+    )
+  }, 10000)
 
   it('should handle special characters in asset code gracefully', async () => {
     const specialCode = 'TEST/25/ABC/001'

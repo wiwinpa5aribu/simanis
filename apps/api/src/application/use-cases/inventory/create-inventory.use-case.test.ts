@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { CreateInventoryUseCase } from './create-inventory.use-case'
-import type { IInventoryRepository } from '../../../domain/repositories/inventory.repository'
+import type { Asset, InventoryCheck } from '@simanis/database'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { IAssetRepository } from '../../../domain/repositories/asset.repository'
 import type { IAuditRepository } from '../../../domain/repositories/audit.repository'
-import type { CreateInventoryInput } from '../../validators/inventory.validators'
-import type { Asset, InventoryCheck } from '@simanis/database'
+import type { IInventoryRepository } from '../../../domain/repositories/inventory.repository'
 import { NotFoundError } from '../../../shared/errors/not-found-error'
+import type { CreateInventoryInput } from '../../validators/inventory.validators'
+import { CreateInventoryUseCase } from './create-inventory.use-case'
 
 describe('CreateInventoryUseCase', () => {
   let createInventoryUseCase: CreateInventoryUseCase
@@ -230,13 +230,13 @@ describe('CreateInventoryUseCase', () => {
       vi.mocked(mockAssetRepository.findByQRCode).mockResolvedValue(null)
 
       // Act & Assert
-      await expect(
-        createInventoryUseCase.execute(input, 1)
-      ).rejects.toThrow(NotFoundError)
+      await expect(createInventoryUseCase.execute(input, 1)).rejects.toThrow(
+        NotFoundError
+      )
 
-      await expect(
-        createInventoryUseCase.execute(input, 1)
-      ).rejects.toThrow('Asset dengan QR Code invalid-qr tidak ditemukan')
+      await expect(createInventoryUseCase.execute(input, 1)).rejects.toThrow(
+        'Asset dengan QR Code invalid-qr tidak ditemukan'
+      )
 
       expect(mockInventoryRepository.create).not.toHaveBeenCalled()
       expect(mockAuditRepository.create).not.toHaveBeenCalled()
@@ -255,9 +255,9 @@ describe('CreateInventoryUseCase', () => {
       vi.mocked(mockAssetRepository.findByQRCode).mockResolvedValue(null)
 
       // Act & Assert
-      await expect(
-        createInventoryUseCase.execute(input, 1)
-      ).rejects.toThrow(`Asset dengan QR Code ${qrCode} tidak ditemukan`)
+      await expect(createInventoryUseCase.execute(input, 1)).rejects.toThrow(
+        `Asset dengan QR Code ${qrCode} tidak ditemukan`
+      )
     })
   })
 

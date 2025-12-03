@@ -1,14 +1,14 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import {
-  DeleteAssetUseCase,
-  type DeleteAssetInput,
-  type IAssetDocumentRepository,
-} from './delete-asset.use-case'
+import type { Asset } from '@simanis/database'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { IAssetRepository } from '../../../domain/repositories/asset.repository'
 import type { IAuditRepository } from '../../../domain/repositories/audit.repository'
-import type { Asset } from '@simanis/database'
 import { NotFoundError } from '../../../shared/errors/not-found-error'
 import { ValidationError } from '../../../shared/errors/validation-error'
+import {
+  type DeleteAssetInput,
+  DeleteAssetUseCase,
+  type IAssetDocumentRepository,
+} from './delete-asset.use-case'
 
 describe('DeleteAssetUseCase', () => {
   let deleteAssetUseCase: DeleteAssetUseCase
@@ -302,8 +302,7 @@ describe('DeleteAssetUseCase', () => {
     it('should handle berita acara URL with special characters', async () => {
       // Arrange
       const deleteInput: DeleteAssetInput = {
-        beritaAcaraUrl:
-          'https://example.com/berita acara 2024 (final).pdf?v=1',
+        beritaAcaraUrl: 'https://example.com/berita acara 2024 (final).pdf?v=1',
       }
 
       vi.mocked(mockAssetRepository.findById).mockResolvedValue(mockAsset)

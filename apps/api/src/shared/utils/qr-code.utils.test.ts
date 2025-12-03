@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import {
   generateAssetQRCode,
   generateAssetQRCodeBuffer,
-  validateAssetCode,
   parseAssetCode,
+  validateAssetCode,
 } from './qr-code.utils'
 
 describe('QR Code Utils', () => {
@@ -55,7 +55,6 @@ describe('QR Code Utils', () => {
       // Assert
       expect(result).toMatch(/^data:image\/png;base64,/)
     })
-
   })
 
   describe('generateAssetQRCodeBuffer', () => {
@@ -100,7 +99,6 @@ describe('QR Code Utils', () => {
       // Assert
       expect(buffer1.equals(buffer2)).toBe(true)
     })
-
   })
 
   describe('validateAssetCode', () => {

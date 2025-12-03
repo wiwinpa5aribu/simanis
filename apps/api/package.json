@@ -16,13 +16,7 @@
     "test:cov": "vitest --run --coverage",
     "test:ui": "vitest --ui"
   },
-  "keywords": [
-    "simanis",
-    "asset-management",
-    "school",
-    "fastify",
-    "prisma"
-  ],
+  "keywords": ["simanis", "asset-management", "school", "fastify", "prisma"],
   "author": "Wiwin Pasaribu <wiwinpa5aribu>",
   "license": "ISC",
   "repository": {

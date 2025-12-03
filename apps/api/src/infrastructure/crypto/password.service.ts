@@ -1,4 +1,4 @@
-import { hash, verify, Algorithm } from '@node-rs/argon2'
+import { Algorithm, hash, verify } from '@node-rs/argon2'
 
 /**
  * Password service menggunakan Argon2 untuk hashing

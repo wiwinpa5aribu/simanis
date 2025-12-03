@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { CreateCategoryUseCase } from './create-category.use-case'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { IAssetCategoryRepository } from '../../../domain/repositories/category.repository'
+import { ConflictError } from '../../../shared/errors/conflict-error'
 import type { CategoryDto } from '../../dto/category.dto'
 import type { CreateCategoryInput } from '../../validators/category.validators'
-import { ConflictError } from '../../../shared/errors/conflict-error'
+import { CreateCategoryUseCase } from './create-category.use-case'
 
 vi.mock('../../../shared/logger/winston.logger', () => ({
   logger: {

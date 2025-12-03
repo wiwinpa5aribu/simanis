@@ -1,7 +1,10 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { GetCurrentUserUseCase } from './get-current-user.use-case'
-import type { IUserRepository, UserWithRoles } from '../../../domain/repositories/user.repository'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import type {
+  IUserRepository,
+  UserWithRoles,
+} from '../../../domain/repositories/user.repository'
 import { NotFoundError } from '../../../shared/errors/not-found-error'
+import { GetCurrentUserUseCase } from './get-current-user.use-case'
 
 describe('GetCurrentUserUseCase', () => {
   let getCurrentUserUseCase: GetCurrentUserUseCase
