@@ -82,6 +82,7 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
 
 
 
+
   - [x] 5.1 Implementasi CalculateDepreciationUseCase
 
     - Kalkulasi penyusutan untuk semua aset aktif
@@ -95,8 +96,11 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
     - **Property 6: Fully Depreciated Badge**
     - **Validates: Requirements 2.4**
 
-- [ ] 6. Backend - Implementasi Settings dan Simulation
+- [-] 6. Backend - Implementasi Settings dan Simulation
+
+
   - [ ] 6.1 Implementasi UpdateCategoryUsefulLifeUseCase
+
     - Update default masa manfaat kategori
     - _Requirements: 4.1, 4.2_
   - [ ] 6.2 Implementasi SimulateDepreciationUseCase

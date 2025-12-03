@@ -8,6 +8,20 @@
         "sequentialthinking"
       ]
     },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "D:/simanis"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "read_file",
+        "write_file",
+        "list_directory"
+      ]
+    },
     "context7": {
       "command": "context7-mcp",
       "args": [],

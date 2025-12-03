@@ -9,3 +9,5 @@ export {
 } from './get-depreciation-list.use-case'
 export * from './get-depreciation-summary.use-case'
 export * from './get-depreciation-trend.use-case'
+export * from './simulate-depreciation.use-case'
+export * from './update-category-useful-life.use-case'
