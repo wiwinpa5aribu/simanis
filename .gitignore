@@ -89,3 +89,6 @@ prompt.md
 .trunk/out/
 .trunk/plugins/
 .trunk/tools/
+
+# ============= Turborepo Cache =============
+.turbo/
