@@ -24,11 +24,11 @@ export type DepreciationFilterValues = z.output<typeof depreciationFilterSchema>
 
 export const calculateDepreciationSchema = z.object({
   month: z
-    .number({ required_error: 'Bulan wajib diisi' })
+    .number()
     .min(1, 'Bulan harus antara 1-12')
     .max(12, 'Bulan harus antara 1-12'),
   year: z
-    .number({ required_error: 'Tahun wajib diisi' })
+    .number()
     .min(2000, 'Tahun minimal 2000')
     .max(2100, 'Tahun maksimal 2100'),
 })
@@ -47,7 +47,7 @@ export const simulateDepreciationSchema = z
     assetId: z.number().optional(),
     categoryId: z.number().optional(),
     periodMonths: z
-      .number({ required_error: 'Periode wajib diisi' })
+      .number()
       .min(1, 'Periode minimal 1 bulan')
       .max(60, 'Periode maksimal 60 bulan'),
   })
@@ -66,9 +66,9 @@ export type SimulateDepreciationValues = z.output<
 // ============ Update Useful Life Schema ============
 
 export const updateUsefulLifeSchema = z.object({
-  categoryId: z.number({ required_error: 'Kategori wajib dipilih' }),
+  categoryId: z.number(),
   defaultMasaManfaat: z
-    .number({ required_error: 'Masa manfaat wajib diisi' })
+    .number()
     .min(1, 'Masa manfaat minimal 1 tahun')
     .max(20, 'Masa manfaat maksimal 20 tahun'),
 })
@@ -80,11 +80,11 @@ export type UpdateUsefulLifeValues = z.output<typeof updateUsefulLifeSchema>
 
 export const depreciationReportSchema = z.object({
   year: z
-    .number({ required_error: 'Tahun wajib diisi' })
+    .number()
     .min(2000, 'Tahun minimal 2000')
     .max(2100, 'Tahun maksimal 2100'),
   month: z
-    .number({ required_error: 'Bulan wajib diisi' })
+    .number()
     .min(1, 'Bulan harus antara 1-12')
     .max(12, 'Bulan harus antara 1-12'),
   categoryId: z.number().optional(),
