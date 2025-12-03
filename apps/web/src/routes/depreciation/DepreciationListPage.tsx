@@ -1,167 +1,178 @@
-import { useQuery } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Loading } from '@/components/ui/loading'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { getDepreciationList } from '@/libs/api/depreciation'
-import { formatCurrency } from '@/libs/utils/format'
+/**
+ * DepreciationListPage - Halaman utama penyusutan dengan tab navigation
+ * Validates: All depreciation requirements
+ */
 
-interface DepreciationFilters {
-  year: string
-  category: string
-  month: string
-}
+import { useMutation } from '@tanstack/react-query'
+import { Download, BarChart3, List, Settings, Calculator } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  downloadDepreciationReport,
+  simulateDepreciation,
+  type DepreciationListItem,
+  type SimulateDepreciationResult,
+} from '@/libs/api/depreciation'
+import {
+  DepreciationChart,
+  DepreciationDetailModal,
+  DepreciationFilters,
+  DepreciationSummaryCards,
+  DepreciationTable,
+  SimulationForm,
+  SimulationResult,
+  UsefulLifeSettings,
+} from './components'
 
 export default function DepreciationListPage() {
-  const { register, watch, setValue } = useForm<DepreciationFilters>({
-    defaultValues: {
-      year: new Date().getFullYear().toString(),
-      category: '',
-      month: (new Date().getMonth() + 1).toString(),
+  const [categoryId, setCategoryId] = useState<number | undefined>()
+  const [year, setYear] = useState<number | undefined>()
+  const [selectedAssetId, setSelectedAssetId] = useState<number | null>(null)
+  const [detailModalOpen, setDetailModalOpen] = useState(false)
+  const [simulationResult, setSimulationResult] =
+    useState<SimulateDepreciationResult | null>(null)
+
+  // Simulation mutation
+  const simulateMutation = useMutation({
+    mutationFn: simulateDepreciation,
+    onSuccess: (data) => {
+      setSimulationResult(data)
+      toast.success('Simulasi berhasil dijalankan')
+    },
+    onError: () => {
+      toast.error('Gagal menjalankan simulasi')
     },
   })
 
-  const filters = watch()
-
-  // Fetch data penyusutan
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['depreciation', filters],
-    queryFn: () =>
-      getDepreciationList({
-        year: parseInt(filters.year),
-        month: parseInt(filters.month),
-        category_id: filters.category ? parseInt(filters.category) : undefined,
+  // Download report mutation
+  const downloadMutation = useMutation({
+    mutationFn: () =>
+      downloadDepreciationReport({
+        year: year ?? new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
+        categoryId,
       }),
+    onSuccess: (blob) => {
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `Laporan_Penyusutan_${year ?? new Date().getFullYear()}.xlsx`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+      toast.success('Laporan berhasil diunduh')
+    },
+    onError: () => {
+      toast.error('Gagal mengunduh laporan')
+    },
   })
 
+  const handleViewDetail = (item: DepreciationListItem) => {
+    setSelectedAssetId(item.id)
+    setDetailModalOpen(true)
+  }
+
   return (
-    <div className="container mx-auto max-w-6xl space-y-6 p-6">
-      <div className="flex items-center justify-between">
+    <div className="container mx-auto max-w-7xl space-y-6 p-6">
+      {/* Header */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Penyusutan Aset</h1>
           <p className="text-gray-500">
-            Laporan penyusutan nilai aset bulanan (View Only)
+            Kelola dan pantau penyusutan nilai aset sekolah
           </p>
         </div>
+        <Button
+          variant="outline"
+          onClick={() => downloadMutation.mutate()}
+          disabled={downloadMutation.isPending}
+        >
+          <Download className="mr-2 h-4 w-4" />
+          {downloadMutation.isPending ? 'Mengunduh...' : 'Unduh Laporan'}
+        </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Filter Data</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="year">Tahun</Label>
-              <Input
-                id="year"
-                type="number"
-                {...register('year')}
-                placeholder="2024"
+      {/* Tabs */}
+      <Tabs defaultValue="dashboard" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-none">
+          <TabsTrigger value="dashboard" className="gap-2">
+            <BarChart3 className="h-4 w-4" />
+            <span className="hidden sm:inline">Dashboard</span>
+          </TabsTrigger>
+          <TabsTrigger value="list" className="gap-2">
+            <List className="h-4 w-4" />
+            <span className="hidden sm:inline">Daftar</span>
+          </TabsTrigger>
+          <TabsTrigger value="simulation" className="gap-2">
+            <Calculator className="h-4 w-4" />
+            <span className="hidden sm:inline">Simulasi</span>
+          </TabsTrigger>
+          <TabsTrigger value="settings" className="gap-2">
+            <Settings className="h-4 w-4" />
+            <span className="hidden sm:inline">Pengaturan</span>
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Dashboard Tab */}
+        <TabsContent value="dashboard" className="space-y-6">
+          <DepreciationFilters
+            categoryId={categoryId}
+            year={year}
+            onCategoryChange={setCategoryId}
+            onYearChange={setYear}
+          />
+          <DepreciationSummaryCards categoryId={categoryId} year={year} />
+          <DepreciationChart categoryId={categoryId} />
+        </TabsContent>
+
+        {/* List Tab */}
+        <TabsContent value="list" className="space-y-6">
+          <DepreciationFilters
+            categoryId={categoryId}
+            year={year}
+            onCategoryChange={setCategoryId}
+            onYearChange={setYear}
+          />
+          <DepreciationTable
+            categoryId={categoryId}
+            year={year}
+            onViewDetail={handleViewDetail}
+          />
+        </TabsContent>
+
+        {/* Simulation Tab */}
+        <TabsContent value="simulation">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-1">
+              <SimulationForm
+                onSimulate={(params) => simulateMutation.mutate(params)}
+                isLoading={simulateMutation.isPending}
               />
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="month">Bulan</Label>
-              <Select
-                value={filters.month}
-                onValueChange={(val) => setValue('month', val)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih Bulan" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                    <SelectItem key={m} value={m.toString()}>
-                      {new Date(0, m - 1).toLocaleString('id-ID', {
-                        month: 'long',
-                      })}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="category">Kategori (ID)</Label>
-              <Input
-                id="category"
-                {...register('category')}
-                placeholder="ID Kategori (Opsional)"
-              />
+            <div className="lg:col-span-2">
+              <SimulationResult result={simulationResult} />
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </TabsContent>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Daftar Penyusutan</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="flex justify-center py-8">
-              <Loading />
-            </div>
-          ) : isError ? (
-            <Alert variant="destructive">
-              <AlertDescription>
-                Gagal memuat data penyusutan. Pastikan backend berjalan.
-              </AlertDescription>
-            </Alert>
-          ) : data?.data.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              Tidak ada data penyusutan untuk periode ini.
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Kode Aset</TableHead>
-                  <TableHead>Nama Aset</TableHead>
-                  <TableHead>Kategori</TableHead>
-                  <TableHead className="text-right">Nilai Buku</TableHead>
-                  <TableHead className="text-right">Penyusutan (Bln)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data?.data.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="font-medium">
-                      {item.asset_code}
-                    </TableCell>
-                    <TableCell>{item.asset_name}</TableCell>
-                    <TableCell>{item.category_name || '-'}</TableCell>
-                    <TableCell className="text-right">
-                      {formatCurrency(item.book_value)}
-                    </TableCell>
-                    <TableCell className="text-right font-medium text-red-600">
-                      {formatCurrency(item.depreciation_value)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+        {/* Settings Tab */}
+        <TabsContent value="settings">
+          <UsefulLifeSettings />
+        </TabsContent>
+      </Tabs>
+
+      {/* Detail Modal */}
+      <DepreciationDetailModal
+        assetId={selectedAssetId}
+        open={detailModalOpen}
+        onClose={() => {
+          setDetailModalOpen(false)
+          setSelectedAssetId(null)
+        }}
+      />
     </div>
   )
 }

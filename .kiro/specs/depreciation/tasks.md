@@ -151,11 +151,19 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
     - _Requirements: All_
 
 
-  - [ ] 10.2 Buat libs/validation/depreciationSchemas.ts
+  - [x] 10.2 Buat libs/validation/depreciationSchemas.ts
+
+
+
+
     - Zod schemas untuk form validation
     - _Requirements: All_
 
-- [ ] 11. Frontend - Implementasi Dashboard Components
+
+
+- [x] 11. Frontend - Implementasi Dashboard Components
+
+
   - [ ] 11.1 Buat DepreciationSummaryCards component
     - 3 cards: Nilai Perolehan, Akumulasi Penyusutan, Nilai Buku
     - Responsive layout
@@ -174,23 +182,37 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
     - **Property 3: Year Filter Correctness**
     - **Validates: Requirements 1.4**
 
-- [ ] 12. Frontend - Implementasi List Components
-  - [ ] 12.1 Buat DepreciationTable component
+- [x] 12. Frontend - Implementasi List Components
+
+
+
+  - [x] 12.1 Buat DepreciationTable component
+
     - Kolom sesuai requirements
     - Sortable headers
     - Badge "Habis Disusutkan"
     - _Requirements: 2.1, 2.3, 2.4_
-  - [ ] 12.2 Buat DepreciationDetailModal component
+
+  - [x] 12.2 Buat DepreciationDetailModal component
+
     - Info aset dan riwayat penyusutan
     - Timeline view
     - _Requirements: 2.2_
 
-- [ ] 13. Frontend - Implementasi Settings dan Simulation
-  - [ ] 13.1 Buat UsefulLifeSettings component
+- [x] 13. Frontend - Implementasi Settings dan Simulation
+
+
+
+  - [x] 13.1 Buat UsefulLifeSettings component
+
     - Daftar kategori dengan masa manfaat
     - Edit inline
     - _Requirements: 4.1, 4.2_
-  - [ ] 13.2 Buat SimulationForm component
+
+
+  - [x] 13.2 Buat SimulationForm component
+
+
     - Form pilih aset/kategori dan periode
     - _Requirements: 6.1_
   - [ ] 13.3 Buat SimulationResult component
@@ -199,10 +221,16 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
     - _Requirements: 6.2, 6.3_
 
 - [ ] 14. Frontend - Update DepreciationListPage
-  - [ ] 14.1 Refactor DepreciationListPage dengan tab navigation
+
+
+
+
+  - [x] 14.1 Refactor DepreciationListPage dengan tab navigation
+
     - Dashboard, List, Settings, Simulation tabs
     - Integrate semua components
     - _Requirements: All_
+
   - [ ] 14.2 Implementasi responsive layout
     - Mobile card view untuk table
     - Collapsible filters

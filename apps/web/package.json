@@ -17,6 +17,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@sentry/react": "^10.27.0",
+    "@simanis/shared": "workspace:*",
     "@tanstack/react-query": "^5.90.10",
     "axios": "^1.13.2",
     "clsx": "^2.1.1",
@@ -28,11 +29,11 @@
     "react-hook-form": "^7.66.1",
     "react-qr-code": "^2.0.18",
     "react-router-dom": "^7.9.6",
+    "recharts": "^3.5.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.1.12",
-    "zustand": "^5.0.8",
-    "@simanis/shared": "workspace:*"
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",
