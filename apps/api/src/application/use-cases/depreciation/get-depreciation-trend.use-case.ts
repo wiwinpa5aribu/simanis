@@ -18,7 +18,9 @@ export interface DepreciationTrendItemDto {
 export class GetDepreciationTrendUseCase {
   constructor(private depreciationRepository: IDepreciationRepository) {}
 
-  async execute(params: GetDepreciationTrendParams): Promise<DepreciationTrendItemDto[]> {
+  async execute(
+    params: GetDepreciationTrendParams
+  ): Promise<DepreciationTrendItemDto[]> {
     const { categoryId, months = 12 } = params
 
     // Get trend data from repository

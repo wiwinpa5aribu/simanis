@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
+import { describe, expect, it } from 'vitest'
 import { DepreciationCalculatorService } from './depreciation-calculator.service'
 
 describe('DepreciationCalculatorService', () => {
@@ -19,12 +19,18 @@ describe('DepreciationCalculatorService', () => {
     })
 
     it('should throw error for zero or negative useful life', () => {
-      expect(() => service.calculateMonthlyDepreciation(10_000_000, 0)).toThrow()
-      expect(() => service.calculateMonthlyDepreciation(10_000_000, -1)).toThrow()
+      expect(() =>
+        service.calculateMonthlyDepreciation(10_000_000, 0)
+      ).toThrow()
+      expect(() =>
+        service.calculateMonthlyDepreciation(10_000_000, -1)
+      ).toThrow()
     })
 
     it('should throw error for negative acquisition value', () => {
-      expect(() => service.calculateMonthlyDepreciation(-10_000_000, 5)).toThrow()
+      expect(() =>
+        service.calculateMonthlyDepreciation(-10_000_000, 5)
+      ).toThrow()
     })
   })
 
@@ -55,13 +61,21 @@ describe('DepreciationCalculatorService', () => {
     it('should calculate accumulated depreciation for multiple months', () => {
       // 10 million, 5 years, after 12 months
       // Monthly = 166,666.67, accumulated = 2,000,000
-      const accumulated = service.calculateAccumulatedDepreciation(10_000_000, 5, 12)
+      const accumulated = service.calculateAccumulatedDepreciation(
+        10_000_000,
+        5,
+        12
+      )
       expect(accumulated).toBeCloseTo(2_000_000, 2)
     })
 
     it('should not exceed acquisition value', () => {
       // Even if months exceed useful life
-      const accumulated = service.calculateAccumulatedDepreciation(10_000_000, 5, 100)
+      const accumulated = service.calculateAccumulatedDepreciation(
+        10_000_000,
+        5,
+        100
+      )
       expect(accumulated).toBe(10_000_000)
     })
   })
@@ -90,7 +104,11 @@ describe('DepreciationCalculatorService', () => {
     })
 
     it('should return 0 for fully depreciated asset', () => {
-      const remaining = service.calculateRemainingLife(10_000_000, 10_000_000, 5)
+      const remaining = service.calculateRemainingLife(
+        10_000_000,
+        10_000_000,
+        5
+      )
       expect(remaining).toBe(0)
     })
   })
@@ -114,7 +132,9 @@ describe('DepreciationCalculatorService', () => {
             const totalDepreciation = monthly * totalMonths
 
             // Should equal within floating point precision
-            expect(Math.abs(totalDepreciation - nilaiPerolehan)).toBeLessThan(0.01)
+            expect(Math.abs(totalDepreciation - nilaiPerolehan)).toBeLessThan(
+              0.01
+            )
           }
         ),
         { numRuns: 100 }
@@ -127,9 +147,12 @@ describe('DepreciationCalculatorService', () => {
           fc.integer({ min: 1000, max: 1_000_000_000 }), // nilaiPerolehan
           fc.integer({ min: 0, max: 1_000_000_000 }), // akumulasi (can be any value)
           (nilaiPerolehan, akumulasi) => {
-            const bookValue = service.calculateBookValue(nilaiPerolehan, akumulasi)
+            const bookValue = service.calculateBookValue(
+              nilaiPerolehan,
+              akumulasi
+            )
             const expected = Math.max(0, nilaiPerolehan - akumulasi)
-            
+
             expect(bookValue).toBe(expected)
           }
         ),
@@ -149,8 +172,11 @@ describe('DepreciationCalculatorService', () => {
           fc.integer({ min: 1000, max: 1_000_000_000 }), // nilaiPerolehan
           (nilaiPerolehan) => {
             // When accumulated equals or exceeds acquisition value
-            const bookValue = service.calculateBookValue(nilaiPerolehan, nilaiPerolehan)
-            
+            const bookValue = service.calculateBookValue(
+              nilaiPerolehan,
+              nilaiPerolehan
+            )
+
             expect(service.isFullyDepreciated(bookValue)).toBe(true)
             expect(bookValue).toBe(0)
           }
@@ -166,8 +192,11 @@ describe('DepreciationCalculatorService', () => {
           fc.integer({ min: 1, max: 1_000_000_000 }), // excess
           (nilaiPerolehan, excess) => {
             const akumulasi = nilaiPerolehan + excess
-            const bookValue = service.calculateBookValue(nilaiPerolehan, akumulasi)
-            
+            const bookValue = service.calculateBookValue(
+              nilaiPerolehan,
+              akumulasi
+            )
+
             // Book value should never be negative
             expect(bookValue).toBe(0)
             expect(service.isFullyDepreciated(bookValue)).toBe(true)
@@ -188,7 +217,7 @@ describe('DepreciationCalculatorService', () => {
               nilaiPerolehan, // fully depreciated
               masaManfaatTahun
             )
-            
+
             expect(remaining).toBe(0)
           }
         ),

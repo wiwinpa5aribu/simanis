@@ -1,6 +1,6 @@
+import { PrismaClient } from '@simanis/database'
 import { IDepreciationRepository } from '../../../domain/repositories/depreciation.repository'
 import { DepreciationCalculatorService } from '../../../infrastructure/services/depreciation-calculator.service'
-import { PrismaClient } from '@simanis/database'
 
 export interface GetDepreciationSummaryParams {
   categoryId?: number
@@ -23,13 +23,15 @@ export class GetDepreciationSummaryUseCase {
   private calculator: DepreciationCalculatorService
 
   constructor(
-    private depreciationRepository: IDepreciationRepository,
+    _depreciationRepository: IDepreciationRepository,
     private prisma: PrismaClient
   ) {
     this.calculator = new DepreciationCalculatorService()
   }
 
-  async execute(params: GetDepreciationSummaryParams): Promise<DepreciationSummaryDto> {
+  async execute(
+    params: GetDepreciationSummaryParams
+  ): Promise<DepreciationSummaryDto> {
     const { categoryId, year } = params
 
     // Build where clause for assets
@@ -76,13 +78,19 @@ export class GetDepreciationSummaryUseCase {
       totalAkumulasiPenyusutan += akumulasi
 
       // Check if fully depreciated
-      const nilaiBuku = this.calculator.calculateBookValue(nilaiPerolehan, akumulasi)
+      const nilaiBuku = this.calculator.calculateBookValue(
+        nilaiPerolehan,
+        akumulasi
+      )
       if (this.calculator.isFullyDepreciated(nilaiBuku)) {
         fullyDepreciatedCount++
       }
     }
 
-    const totalNilaiBuku = Math.max(0, totalNilaiPerolehan - totalAkumulasiPenyusutan)
+    const totalNilaiBuku = Math.max(
+      0,
+      totalNilaiPerolehan - totalAkumulasiPenyusutan
+    )
 
     return {
       totalNilaiPerolehan,

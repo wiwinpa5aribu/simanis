@@ -65,9 +65,7 @@ export class DepreciationRepositoryImpl implements IDepreciationRepository {
     })
   }
 
-  async getLatestByAssetId(
-    assetId: number
-  ): Promise<DepreciationEntry | null> {
+  async getLatestByAssetId(assetId: number): Promise<DepreciationEntry | null> {
     return this.prisma.depreciationEntry.findFirst({
       where: { assetId },
       orderBy: { tanggalHitung: 'desc' },
@@ -127,14 +125,11 @@ export class DepreciationRepositoryImpl implements IDepreciationRepository {
       })
     )
 
-    const totalAkumulasiPenyusutan = latestDepreciations.reduce(
-      (sum, item) => {
-        if (!item.entry) return sum
-        const akumulasi = Number(item.asset.harga) - Number(item.entry.nilaiBuku)
-        return sum + akumulasi
-      },
-      0
-    )
+    const totalAkumulasiPenyusutan = latestDepreciations.reduce((sum, item) => {
+      if (!item.entry) return sum
+      const akumulasi = Number(item.asset.harga) - Number(item.entry.nilaiBuku)
+      return sum + akumulasi
+    }, 0)
 
     const totalNilaiBuku = totalNilaiPerolehan - totalAkumulasiPenyusutan
 
@@ -145,9 +140,7 @@ export class DepreciationRepositoryImpl implements IDepreciationRepository {
     }
   }
 
-  async getMonthlyTrend(params: {
-    categoryId?: number
-  }): Promise<
+  async getMonthlyTrend(params: { categoryId?: number }): Promise<
     Array<{
       month: string
       totalPenyusutan: number
@@ -212,10 +205,7 @@ export class DepreciationRepositoryImpl implements IDepreciationRepository {
     }))
   }
 
-  async existsForAssetAndDate(
-    assetId: number,
-    date: Date
-  ): Promise<boolean> {
+  async existsForAssetAndDate(assetId: number, date: Date): Promise<boolean> {
     const count = await this.prisma.depreciationEntry.count({
       where: {
         assetId,

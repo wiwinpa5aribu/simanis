@@ -1,6 +1,6 @@
 /**
  * Depreciation Calculator Service
- * 
+ *
  * Implements straight-line depreciation method (Metode Garis Lurus)
  * according to BMN (Barang Milik Negara) standards
  */
@@ -8,7 +8,7 @@ export class DepreciationCalculatorService {
   /**
    * Calculate monthly depreciation amount
    * Formula: Penyusutan Bulanan = Nilai Perolehan / (Masa Manfaat × 12)
-   * 
+   *
    * @param nilaiPerolehan - Asset acquisition value (harga)
    * @param masaManfaatTahun - Useful life in years
    * @returns Monthly depreciation amount
@@ -32,7 +32,7 @@ export class DepreciationCalculatorService {
   /**
    * Calculate current book value
    * Formula: Nilai Buku = Nilai Perolehan - Akumulasi Penyusutan
-   * 
+   *
    * @param nilaiPerolehan - Asset acquisition value
    * @param akumulasiPenyusutan - Accumulated depreciation
    * @returns Current book value (minimum 0)
@@ -50,14 +50,14 @@ export class DepreciationCalculatorService {
     }
 
     const bookValue = nilaiPerolehan - akumulasiPenyusutan
-    
+
     // Book value should never be negative
     return Math.max(0, bookValue)
   }
 
   /**
    * Calculate accumulated depreciation up to a specific month
-   * 
+   *
    * @param nilaiPerolehan - Asset acquisition value
    * @param masaManfaatTahun - Useful life in years
    * @param bulanBerjalan - Number of months elapsed
@@ -74,14 +74,14 @@ export class DepreciationCalculatorService {
     )
 
     const accumulated = monthlyDepreciation * bulanBerjalan
-    
+
     // Accumulated depreciation should not exceed acquisition value
     return Math.min(accumulated, nilaiPerolehan)
   }
 
   /**
    * Check if asset is fully depreciated
-   * 
+   *
    * @param nilaiBuku - Current book value
    * @returns True if book value is 0
    */
@@ -91,7 +91,7 @@ export class DepreciationCalculatorService {
 
   /**
    * Calculate remaining useful life in months
-   * 
+   *
    * @param nilaiPerolehan - Asset acquisition value
    * @param akumulasiPenyusutan - Accumulated depreciation
    * @param masaManfaatTahun - Total useful life in years
@@ -102,8 +102,11 @@ export class DepreciationCalculatorService {
     akumulasiPenyusutan: number,
     masaManfaatTahun: number
   ): number {
-    const nilaiBuku = this.calculateBookValue(nilaiPerolehan, akumulasiPenyusutan)
-    
+    const nilaiBuku = this.calculateBookValue(
+      nilaiPerolehan,
+      akumulasiPenyusutan
+    )
+
     if (this.isFullyDepreciated(nilaiBuku)) {
       return 0
     }

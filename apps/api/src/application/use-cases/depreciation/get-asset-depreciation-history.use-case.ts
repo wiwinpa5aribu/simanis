@@ -1,5 +1,5 @@
-import { IDepreciationRepository } from '../../../domain/repositories/depreciation.repository'
 import { PrismaClient } from '@simanis/database'
+import { IDepreciationRepository } from '../../../domain/repositories/depreciation.repository'
 import { NotFoundError } from '../../../shared/errors/not-found-error'
 
 export interface GetAssetDepreciationHistoryParams {

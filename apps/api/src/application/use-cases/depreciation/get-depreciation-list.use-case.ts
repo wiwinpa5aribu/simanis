@@ -51,7 +51,9 @@ export class GetDepreciationListUseCase {
     this.calculator = new DepreciationCalculatorService()
   }
 
-  async execute(params: GetDepreciationListParams): Promise<DepreciationListDto> {
+  async execute(
+    params: GetDepreciationListParams
+  ): Promise<DepreciationListDto> {
     const {
       categoryId,
       year,
@@ -106,7 +108,10 @@ export class GetDepreciationListUseCase {
           select: { name: true },
         },
         depreciationEntries: {
-          where: Object.keys(depreciationWhere).length > 0 ? depreciationWhere : undefined,
+          where:
+            Object.keys(depreciationWhere).length > 0
+              ? depreciationWhere
+              : undefined,
           orderBy: { tanggalHitung: 'desc' },
         },
       },
@@ -118,9 +123,13 @@ export class GetDepreciationListUseCase {
       const masaManfaatTahun = asset.masaManfaatTahun || 4 // Default 4 years
 
       // Calculate monthly depreciation
-      const penyusutanPerBulan = masaManfaatTahun > 0
-        ? this.calculator.calculateMonthlyDepreciation(nilaiPerolehan, masaManfaatTahun)
-        : 0
+      const penyusutanPerBulan =
+        masaManfaatTahun > 0
+          ? this.calculator.calculateMonthlyDepreciation(
+              nilaiPerolehan,
+              masaManfaatTahun
+            )
+          : 0
 
       // Calculate accumulated depreciation from entries
       const akumulasiPenyusutan = asset.depreciationEntries.reduce(

@@ -45,9 +45,7 @@ export function DeleteAssetDialog({
   // Check if user has permission to delete
   // userRole is now the resolved role key from usePermission (e.g., 'wakasek', 'kepsek', 'admin')
   const canDelete =
-    userRole === 'wakasek' ||
-    userRole === 'kepsek' ||
-    userRole === 'admin'
+    userRole === 'wakasek' || userRole === 'kepsek' || userRole === 'admin'
 
   const handleFileUpload = (file: File) => {
     setBeritaAcaraFile(file)

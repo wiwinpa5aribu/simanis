@@ -59,9 +59,7 @@ export interface IDepreciationRepository {
   /**
    * Get monthly trend for last 12 months
    */
-  getMonthlyTrend(params: {
-    categoryId?: number
-  }): Promise<
+  getMonthlyTrend(params: { categoryId?: number }): Promise<
     Array<{
       month: string
       totalPenyusutan: number
