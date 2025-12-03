@@ -134,15 +134,23 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
     - PUT /categories/:id/useful-life
     - _Requirements: 4.2_
 
-- [ ] 9. Checkpoint - Pastikan semua backend tests passing
+- [x] 9. Checkpoint - Pastikan semua backend tests passing
+
+
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 10. Frontend - Update API Layer
-  - [ ] 10.1 Update libs/api/depreciation.ts
+
+
+- [x] 10. Frontend - Update API Layer
+
+  - [x] 10.1 Update libs/api/depreciation.ts
+
     - getDepreciationSummary, getDepreciationList, getDepreciationTrend
     - getAssetDepreciationHistory, calculateDepreciation
     - simulateDepreciation, getDepreciationReport
     - _Requirements: All_
+
+
   - [ ] 10.2 Buat libs/validation/depreciationSchemas.ts
     - Zod schemas untuk form validation
     - _Requirements: All_
