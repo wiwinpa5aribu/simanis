@@ -5,7 +5,6 @@
 
 import { z } from 'zod'
 import {
-  ASSET_CONDITIONS,
   assetConditionSchema,
   idSchema,
   loanStatusSchema,

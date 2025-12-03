@@ -104,7 +104,10 @@ class HttpLocationService implements ILocationService {
    */
   async createFloor(data: CreateFloorData): Promise<Floor> {
     try {
-      logger.info('LocationService', 'Creating floor', data)
+      logger.info('LocationService', 'Creating floor', {
+        buildingId: data.buildingId,
+        levelNumber: data.levelNumber,
+      })
       const response = await api.post<Floor>('/locations/floors', data)
       logger.success(
         'LocationService',

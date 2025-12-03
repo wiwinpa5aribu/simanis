@@ -1,4 +1,4 @@
-import * as argon2 from 'argon2'
+import { hash, verify, Algorithm } from '@node-rs/argon2'
 
 /**
  * Password service menggunakan Argon2 untuk hashing
@@ -9,13 +9,13 @@ export class PasswordService {
    */
   async hash(password: string): Promise<string> {
     try {
-      const hash = await argon2.hash(password, {
-        type: argon2.argon2id,
+      const hashedPassword = await hash(password, {
+        algorithm: Algorithm.Argon2id,
         memoryCost: 65536, // 64 MB
         timeCost: 3,
         parallelism: 4,
       })
-      return hash
+      return hashedPassword
     } catch (error) {
       throw new Error(`Failed to hash password: ${error}`)
     }
@@ -24,9 +24,9 @@ export class PasswordService {
   /**
    * Verify password against hash
    */
-  async verify(hash: string, password: string): Promise<boolean> {
+  async verify(hashedPassword: string, password: string): Promise<boolean> {
     try {
-      return await argon2.verify(hash, password)
+      return await verify(hashedPassword, password)
     } catch (error) {
       throw new Error(`Failed to verify password: ${error}`)
     }

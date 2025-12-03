@@ -1,4 +1,4 @@
-import { PrismaClient } from '@simanis/database'
+import { Asset, PrismaClient } from '@simanis/database'
 import {
   AssetFilters,
   AssetWithRelations,
@@ -70,13 +70,13 @@ export class AssetRepositoryImpl implements IAssetRepository {
     })
   }
 
-  async findByKodeAset(kodeAset: string) {
+  async findByKodeAset(kodeAset: string): Promise<Asset | null> {
     return this.prisma.asset.findUnique({
       where: { kodeAset },
     })
   }
 
-  async findByQRCode(qrCode: string) {
+  async findByQRCode(qrCode: string): Promise<Asset | null> {
     return this.prisma.asset.findUnique({
       where: { qrCode },
     })
@@ -97,7 +97,7 @@ export class AssetRepositoryImpl implements IAssetRepository {
     categoryId?: number
     masaManfaatTahun?: number
     currentRoomId?: number
-  }) {
+  }): Promise<Asset> {
     return this.prisma.asset.create({
       data,
     })
@@ -114,7 +114,7 @@ export class AssetRepositoryImpl implements IAssetRepository {
       categoryId?: number
       currentRoomId?: number
     }
-  ) {
+  ): Promise<Asset> {
     return this.prisma.asset.update({
       where: { id },
       data,
@@ -156,7 +156,7 @@ export class AssetRepositoryImpl implements IAssetRepository {
     return this.prisma.asset.count({ where })
   }
 
-  async findLastByKodePattern(pattern: string) {
+  async findLastByKodePattern(pattern: string): Promise<Asset | null> {
     // Convert SQL LIKE pattern to Prisma startsWith
     // Pattern: SCH/2025/ELK/% -> startsWith: SCH/2025/ELK/
     const prefix = pattern.replace(/%$/, '')

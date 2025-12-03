@@ -22,7 +22,9 @@
         "@playwright/mcp@latest"
       ],
       "disabled": false,
-      "autoApprove": []
+      "autoApprove": [
+        "browser_wait_for"
+      ]
     },
     "TestSprite": {
       "command": "npx",
@@ -65,7 +67,7 @@
         "@modelcontextprotocol/server-github"
       ],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "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"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
       },
       "disabled": false,
       "autoApprove": [

@@ -9,7 +9,7 @@ import { z } from 'zod'
 // Enum Values (sesuai Prisma Schema - Title Case)
 // ============================================
 
-export const ASSET_CONDITIONS = [
+const ASSET_CONDITIONS = [
   'Baik',
   'Rusak Ringan',
   'Rusak Berat',
@@ -77,6 +77,4 @@ export const optionalDateStringSchema = z.string().optional()
 // Types
 // ============================================
 
-export type AssetCondition = z.infer<typeof assetConditionSchema>
-export type SumberDana = z.infer<typeof sumberDanaSchema>
-export type LoanStatus = z.infer<typeof loanStatusSchema>
+// Types are exported from types/entities.ts to avoid duplication

@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import type { AssetCategory } from '@simanis/shared/types/entities'
+import { z } from 'zod'
 
 // Re-export type
 export type { AssetCategory as Category }

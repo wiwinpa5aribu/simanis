@@ -1,10 +1,10 @@
-import { z } from 'zod'
 import type {
   AssetCondition,
   Loan,
   LoanItem,
   LoanStatus,
 } from '@simanis/shared/types/entities'
+import { z } from 'zod'
 
 // Re-export types
 export type { Loan, LoanItem, LoanStatus }

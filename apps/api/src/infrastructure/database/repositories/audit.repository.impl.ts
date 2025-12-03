@@ -1,5 +1,8 @@
-import { PrismaClient } from '@simanis/database'
-import { IAuditRepository } from '../../../domain/repositories/audit.repository'
+import { AuditLog, PrismaClient } from '@simanis/database'
+import {
+  AuditLogWithUser,
+  IAuditRepository,
+} from '../../../domain/repositories/audit.repository'
 import { calculateSkip } from '../../../shared/utils/pagination.utils'
 
 export class AuditRepositoryImpl implements IAuditRepository {
@@ -11,7 +14,7 @@ export class AuditRepositoryImpl implements IAuditRepository {
     userId?: number
     action: string
     fieldChanged: Record<string, unknown>
-  }) {
+  }): Promise<AuditLog> {
     return this.prisma.auditLog.create({
       data: {
         entityType: data.entityType,
@@ -32,7 +35,7 @@ export class AuditRepositoryImpl implements IAuditRepository {
     action?: string
     startDate?: Date
     endDate?: Date
-  }) {
+  }): Promise<{ logs: AuditLogWithUser[]; total: number }> {
     const {
       page,
       pageSize,

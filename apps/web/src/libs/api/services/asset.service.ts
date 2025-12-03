@@ -113,7 +113,11 @@ class HttpAssetService implements IAssetService {
    */
   async update(id: number, data: UpdateAssetData): Promise<Asset> {
     try {
-      logger.info('AssetService', `Updating asset ID: ${id}`, data)
+      logger.info(
+        'AssetService',
+        `Updating asset ID: ${id}`,
+        data as Record<string, unknown>
+      )
       const response = await api.put<Asset>(`/assets/${id}`, data)
       logger.success(
         'AssetService',

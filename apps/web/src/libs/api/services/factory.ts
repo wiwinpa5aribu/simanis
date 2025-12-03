@@ -49,31 +49,26 @@ export interface Services {
  * // For Tauri (desktop) - future
  * const services = createServices({ type: 'tauri' })
  */
-export function createServices(adapter: ServiceAdapter): Services {
+export async function createServices(
+  adapter: ServiceAdapter
+): Promise<Services> {
   if (adapter.type === 'tauri') {
     // TODO: Implement Tauri adapter when needed
     throw new Error('Tauri adapter not implemented yet')
   }
 
   // Default: HTTP adapter
-  // Lazy import to avoid circular dependencies
+  // Import services directly (ES modules)
+  const { assetService } = await import('./asset.service')
+  const { loanService } = await import('./loan.service')
+  const { categoryService } = await import('./category.service')
+  const { locationService } = await import('./location.service')
+
   return {
-    get asset() {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      return require('./asset.service').assetService
-    },
-    get loan() {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      return require('./loan.service').loanService
-    },
-    get category() {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      return require('./category.service').categoryService
-    },
-    get location() {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      return require('./location.service').locationService
-    },
+    asset: assetService,
+    loan: loanService,
+    category: categoryService,
+    location: locationService,
   }
 }
 
