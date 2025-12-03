@@ -27,14 +27,23 @@ export function UsefulLifeSettings() {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editValue, setEditValue] = useState<number>(0)
 
-  const { data: categories, isLoading, isError } = useQuery({
+  const {
+    data: categories,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
   })
 
   const updateMutation = useMutation({
-    mutationFn: ({ categoryId, value }: { categoryId: number; value: number }) =>
-      updateCategoryUsefulLife(categoryId, value),
+    mutationFn: ({
+      categoryId,
+      value,
+    }: {
+      categoryId: number
+      value: number
+    }) => updateCategoryUsefulLife(categoryId, value),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       toast.success('Masa manfaat berhasil diperbarui')
@@ -124,7 +133,9 @@ export function UsefulLifeSettings() {
                       min={1}
                       max={20}
                       value={editValue}
-                      onChange={(e) => setEditValue(parseInt(e.target.value) || 0)}
+                      onChange={(e) =>
+                        setEditValue(parseInt(e.target.value) || 0)
+                      }
                       className="w-20"
                       autoFocus
                     />
@@ -159,7 +170,10 @@ export function UsefulLifeSettings() {
                       variant="ghost"
                       size="icon"
                       onClick={() =>
-                        handleEdit(category.id, category.defaultMasaManfaat ?? 5)
+                        handleEdit(
+                          category.id,
+                          category.defaultMasaManfaat ?? 5
+                        )
                       }
                     >
                       <Edit2 className="h-4 w-4" />

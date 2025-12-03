@@ -43,13 +43,13 @@ describe('SimulateDepreciationUseCase', () => {
     })
 
     it('should throw ValidationError if neither assetId nor categoryId provided', async () => {
-      await expect(
-        useCase.execute({ periodMonths: 12 })
-      ).rejects.toThrow(ValidationError)
+      await expect(useCase.execute({ periodMonths: 12 })).rejects.toThrow(
+        ValidationError
+      )
 
-      await expect(
-        useCase.execute({ periodMonths: 12 })
-      ).rejects.toThrow('Harus memilih aset atau kategori')
+      await expect(useCase.execute({ periodMonths: 12 })).rejects.toThrow(
+        'Harus memilih aset atau kategori'
+      )
     })
 
     describe('simulateForAsset', () => {
@@ -138,7 +138,10 @@ describe('SimulateDepreciationUseCase', () => {
 
           expect(projection.penyusutan).toBeCloseTo(monthlyDepreciation, 0)
           expectedBookValue -= monthlyDepreciation
-          expect(projection.nilaiBuku).toBeCloseTo(Math.max(0, expectedBookValue), 0)
+          expect(projection.nilaiBuku).toBeCloseTo(
+            Math.max(0, expectedBookValue),
+            0
+          )
         }
       })
 
@@ -236,10 +239,15 @@ describe('SimulateDepreciationUseCase', () => {
           },
         ]
 
-        vi.mocked(prisma.assetCategory.findUnique).mockResolvedValue(category as any)
+        vi.mocked(prisma.assetCategory.findUnique).mockResolvedValue(
+          category as any
+        )
         vi.mocked(prisma.asset.findMany).mockResolvedValue(assets as any)
 
-        const result = await useCase.execute({ categoryId: 1, periodMonths: 12 })
+        const result = await useCase.execute({
+          categoryId: 1,
+          periodMonths: 12,
+        })
 
         // Average nilai perolehan = 15,000,000
         // Monthly depreciation = 15,000,000 / 48 = 312,500

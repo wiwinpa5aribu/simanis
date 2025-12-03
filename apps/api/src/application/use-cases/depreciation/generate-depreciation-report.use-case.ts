@@ -139,7 +139,10 @@ export class GenerateDepreciationReportUseCase {
     worksheet.mergeCells('A1:I1')
     worksheet.getCell('A1').value = 'LAPORAN PENYUSUTAN ASET'
     worksheet.getCell('A1').font = { bold: true, size: 16 }
-    worksheet.getCell('A1').alignment = { horizontal: 'center', vertical: 'middle' }
+    worksheet.getCell('A1').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    }
 
     worksheet.mergeCells('A2:I2')
     const monthNames = [
@@ -232,8 +235,14 @@ export class GenerateDepreciationReportUseCase {
     })
 
     // Add summary row
-    const totalNilaiPerolehan = data.reduce((sum, item) => sum + item.nilaiPerolehan, 0)
-    const totalAkumulasi = data.reduce((sum, item) => sum + item.akumulasiPenyusutan, 0)
+    const totalNilaiPerolehan = data.reduce(
+      (sum, item) => sum + item.nilaiPerolehan,
+      0
+    )
+    const totalAkumulasi = data.reduce(
+      (sum, item) => sum + item.akumulasiPenyusutan,
+      0
+    )
     const totalNilaiBuku = data.reduce((sum, item) => sum + item.nilaiBuku, 0)
 
     worksheet.addRow([])

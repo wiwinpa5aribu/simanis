@@ -139,7 +139,9 @@ export class SimulateDepreciationUseCase {
     })
 
     if (!category) {
-      throw new NotFoundError(`Kategori dengan ID ${categoryId} tidak ditemukan`)
+      throw new NotFoundError(
+        `Kategori dengan ID ${categoryId} tidak ditemukan`
+      )
     }
 
     // Get average values from assets in this category
@@ -232,7 +234,11 @@ export class SimulateDepreciationUseCase {
       totalDepreciationInPeriod += penyusutan
 
       // Generate month label
-      const projectionDate = new Date(now.getFullYear(), now.getMonth() + month, 1)
+      const projectionDate = new Date(
+        now.getFullYear(),
+        now.getMonth() + month,
+        1
+      )
       const monthLabel = projectionDate.toISOString().substring(0, 7)
 
       projections.push({
@@ -254,7 +260,9 @@ export class SimulateDepreciationUseCase {
       const remainingMonths = this.calculator.calculateRemainingLife(
         currentBookValue + currentAkumulasi, // nilaiPerolehan
         currentAkumulasi + totalDepreciationInPeriod,
-        Math.ceil((currentBookValue + currentAkumulasi) / (monthlyDepreciation * 12))
+        Math.ceil(
+          (currentBookValue + currentAkumulasi) / (monthlyDepreciation * 12)
+        )
       )
 
       if (remainingMonths > 0) {

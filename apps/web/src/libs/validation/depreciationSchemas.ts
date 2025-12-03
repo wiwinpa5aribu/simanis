@@ -33,8 +33,12 @@ export const calculateDepreciationSchema = z.object({
     .max(2100, 'Tahun maksimal 2100'),
 })
 
-export type CalculateDepreciationInput = z.input<typeof calculateDepreciationSchema>
-export type CalculateDepreciationValues = z.output<typeof calculateDepreciationSchema>
+export type CalculateDepreciationInput = z.input<
+  typeof calculateDepreciationSchema
+>
+export type CalculateDepreciationValues = z.output<
+  typeof calculateDepreciationSchema
+>
 
 // ============ Simulation Schema ============
 
@@ -52,8 +56,12 @@ export const simulateDepreciationSchema = z
     path: ['assetId'],
   })
 
-export type SimulateDepreciationInput = z.input<typeof simulateDepreciationSchema>
-export type SimulateDepreciationValues = z.output<typeof simulateDepreciationSchema>
+export type SimulateDepreciationInput = z.input<
+  typeof simulateDepreciationSchema
+>
+export type SimulateDepreciationValues = z.output<
+  typeof simulateDepreciationSchema
+>
 
 // ============ Update Useful Life Schema ============
 

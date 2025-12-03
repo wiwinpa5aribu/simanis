@@ -35,8 +35,12 @@ describe('UpdateCategoryUsefulLifeUseCase', () => {
         defaultMasaManfaat: 5,
       }
 
-      vi.mocked(prisma.assetCategory.findUnique).mockResolvedValue(existingCategory as any)
-      vi.mocked(prisma.assetCategory.update).mockResolvedValue(updatedCategory as any)
+      vi.mocked(prisma.assetCategory.findUnique).mockResolvedValue(
+        existingCategory as any
+      )
+      vi.mocked(prisma.assetCategory.update).mockResolvedValue(
+        updatedCategory as any
+      )
 
       const result = await useCase.execute({ categoryId, defaultMasaManfaat })
 
@@ -89,7 +93,9 @@ describe('UpdateCategoryUsefulLifeUseCase', () => {
     it('should accept valid masa manfaat values (1-20)', async () => {
       const category = { id: 1, name: 'Test', defaultMasaManfaat: 4 }
 
-      vi.mocked(prisma.assetCategory.findUnique).mockResolvedValue(category as any)
+      vi.mocked(prisma.assetCategory.findUnique).mockResolvedValue(
+        category as any
+      )
       vi.mocked(prisma.assetCategory.update).mockResolvedValue({
         ...category,
         defaultMasaManfaat: 1,

@@ -66,7 +66,9 @@ export function DepreciationDetailModal({
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <p className="text-sm text-gray-500">Kode Aset</p>
-                  <p className="font-mono font-semibold">{data.asset.kodeAset}</p>
+                  <p className="font-mono font-semibold">
+                    {data.asset.kodeAset}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Nama Barang</p>
@@ -80,7 +82,9 @@ export function DepreciationDetailModal({
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Masa Manfaat</p>
-                  <p className="font-semibold">{data.asset.masaManfaatTahun} tahun</p>
+                  <p className="font-semibold">
+                    {data.asset.masaManfaatTahun} tahun
+                  </p>
                 </div>
               </div>
 
@@ -136,7 +140,9 @@ export function DepreciationDetailModal({
                             {formatMonth(entry.bulan, entry.tahun)}
                           </span>
                           <span className="text-sm text-gray-500">
-                            {new Date(entry.createdAt).toLocaleDateString('id-ID')}
+                            {new Date(entry.createdAt).toLocaleDateString(
+                              'id-ID'
+                            )}
                           </span>
                         </div>
                         <div className="mt-2 grid grid-cols-2 gap-2 text-sm">

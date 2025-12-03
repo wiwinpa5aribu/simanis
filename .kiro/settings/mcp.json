@@ -49,7 +49,10 @@
         "browser_navigate",
         "browser_press_key",
         "browser_evaluate",
-        "browser_close"
+        "browser_close",
+        "browser_run_code",
+        "browser_take_screenshot",
+        "browser_console_messages"
       ]
     },
     "TestSprite": {

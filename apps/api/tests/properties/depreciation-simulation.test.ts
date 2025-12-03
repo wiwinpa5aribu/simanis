@@ -32,7 +32,10 @@ describe('Depreciation Simulation - Property Tests', () => {
             bookValue = Math.max(0, bookValue - penyusutan)
 
             // Property 13: nilaiBuku = previous - penyusutan
-            const expectedBookValue = Math.max(0, previousBookValue - monthlyDepreciation)
+            const expectedBookValue = Math.max(
+              0,
+              previousBookValue - monthlyDepreciation
+            )
 
             // Allow small floating point errors (< 0.01)
             const diff = Math.abs(bookValue - expectedBookValue)
@@ -46,7 +49,10 @@ describe('Depreciation Simulation - Property Tests', () => {
             if (bookValue === 0) {
               // All subsequent months should also be 0
               for (let m = month + 1; m <= periodMonths; m++) {
-                const futureBookValue = Math.max(0, bookValue - monthlyDepreciation)
+                const futureBookValue = Math.max(
+                  0,
+                  bookValue - monthlyDepreciation
+                )
                 if (futureBookValue !== 0) {
                   return false
                 }
@@ -91,7 +97,9 @@ describe('Depreciation Simulation - Property Tests', () => {
           )
 
           // Calculate expected end month
-          const expectedEndMonth = Math.ceil(currentBookValue / monthlyDepreciation)
+          const expectedEndMonth = Math.ceil(
+            currentBookValue / monthlyDepreciation
+          )
 
           // Simulate to find actual end month
           let bookValue = currentBookValue
@@ -133,7 +141,10 @@ describe('Depreciation Simulation - Property Tests', () => {
         fc.double({ min: 0, max: 0.9, noNaN: true }), // akumulasiRatio
         (nilaiPerolehan, masaManfaatTahun, periodMonths, akumulasiRatio) => {
           const initialAkumulasi = nilaiPerolehan * akumulasiRatio
-          let bookValue = calculator.calculateBookValue(nilaiPerolehan, initialAkumulasi)
+          let bookValue = calculator.calculateBookValue(
+            nilaiPerolehan,
+            initialAkumulasi
+          )
           const monthlyDepreciation = calculator.calculateMonthlyDepreciation(
             nilaiPerolehan,
             masaManfaatTahun
@@ -231,7 +242,9 @@ describe('Depreciation Simulation - Property Tests', () => {
             nilaiPerolehan,
             masaManfaatTahun
           )
-          const expectedRemainingLife = Math.ceil(bookValue / monthlyDepreciation)
+          const expectedRemainingLife = Math.ceil(
+            bookValue / monthlyDepreciation
+          )
 
           return remainingLife === expectedRemainingLife
         }

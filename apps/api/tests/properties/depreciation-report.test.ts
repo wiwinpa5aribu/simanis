@@ -45,7 +45,10 @@ describe('Depreciation Report - Property Tests', () => {
               harga: 1_000_000,
               masaManfaatTahun: 4,
               categoryId: selectedCategoryId,
-              category: { id: selectedCategoryId, name: `Category ${selectedCategoryId}` },
+              category: {
+                id: selectedCategoryId,
+                name: `Category ${selectedCategoryId}`,
+              },
               depreciationEntries: [],
               isDeleted: false,
             },
@@ -219,20 +222,28 @@ describe('Depreciation Report - Property Tests', () => {
           const summaryRowNum = 6 + assets.length + 1
           const summaryRow = worksheet.getRow(summaryRowNum)
 
-          const actualTotalNilaiPerolehan = Number(summaryRow.getCell(5).value) || 0
+          const actualTotalNilaiPerolehan =
+            Number(summaryRow.getCell(5).value) || 0
           const actualTotalAkumulasi = Number(summaryRow.getCell(8).value) || 0
           const actualTotalNilaiBuku = Number(summaryRow.getCell(9).value) || 0
 
           // Allow small floating point errors
           const tolerance = 1
 
-          if (Math.abs(actualTotalNilaiPerolehan - expectedTotalNilaiPerolehan) > tolerance) {
+          if (
+            Math.abs(actualTotalNilaiPerolehan - expectedTotalNilaiPerolehan) >
+            tolerance
+          ) {
             return false
           }
-          if (Math.abs(actualTotalAkumulasi - expectedTotalAkumulasi) > tolerance) {
+          if (
+            Math.abs(actualTotalAkumulasi - expectedTotalAkumulasi) > tolerance
+          ) {
             return false
           }
-          if (Math.abs(actualTotalNilaiBuku - expectedTotalNilaiBuku) > tolerance) {
+          if (
+            Math.abs(actualTotalNilaiBuku - expectedTotalNilaiBuku) > tolerance
+          ) {
             return false
           }
 

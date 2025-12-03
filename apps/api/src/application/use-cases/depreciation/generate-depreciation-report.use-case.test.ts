@@ -294,7 +294,7 @@ describe('GenerateDepreciationReportUseCase', () => {
 
       // Verify asset is fully depreciated (nilai buku close to 0)
       expect(dataRow?.getCell(9).value).toBeCloseTo(0, 0)
-      
+
       // Note: Fill styling is applied but ExcelJS may not preserve it when reading back
       // The important thing is the data is correct (within rounding tolerance)
     })
@@ -333,7 +333,7 @@ describe('GenerateDepreciationReportUseCase', () => {
       await workbook.xlsx.load(buffer)
 
       const worksheet = workbook.getWorksheet('Laporan Penyusutan')
-      
+
       // Summary row should be at row 9 (after 2 data rows + empty row)
       const summaryRow = worksheet?.getRow(9)
 

@@ -66,7 +66,9 @@ export class DepreciationController {
     )
 
     const result = await useCase.execute({
-      categoryId: query.categoryId ? Number.parseInt(query.categoryId) : undefined,
+      categoryId: query.categoryId
+        ? Number.parseInt(query.categoryId)
+        : undefined,
       year: query.year ? Number.parseInt(query.year) : undefined,
     })
 
@@ -95,16 +97,24 @@ export class DepreciationController {
     const useCase = new GetDepreciationListUseCase(prisma)
 
     const result = await useCase.execute({
-      categoryId: query.categoryId ? Number.parseInt(query.categoryId) : undefined,
+      categoryId: query.categoryId
+        ? Number.parseInt(query.categoryId)
+        : undefined,
       year: query.year ? Number.parseInt(query.year) : undefined,
       month: query.month ? Number.parseInt(query.month) : undefined,
-      sortBy: query.sortBy as 'kodeAset' | 'namaBarang' | 'nilaiBuku' | 'akumulasiPenyusutan',
+      sortBy: query.sortBy as
+        | 'kodeAset'
+        | 'namaBarang'
+        | 'nilaiBuku'
+        | 'akumulasiPenyusutan',
       sortOrder: query.sortOrder as 'asc' | 'desc',
       page,
       pageSize,
     })
 
-    return reply.status(200).send(createSuccessResponse(result.items, result.meta))
+    return reply
+      .status(200)
+      .send(createSuccessResponse(result.items, result.meta))
   }
 
   /**
@@ -119,7 +129,9 @@ export class DepreciationController {
     const useCase = new GetDepreciationTrendUseCase(depreciationRepository)
 
     const result = await useCase.execute({
-      categoryId: query.categoryId ? Number.parseInt(query.categoryId) : undefined,
+      categoryId: query.categoryId
+        ? Number.parseInt(query.categoryId)
+        : undefined,
       months: query.months ? Number.parseInt(query.months) : 12,
     })
 
@@ -203,15 +215,20 @@ export class DepreciationController {
     const buffer = await useCase.execute({
       year: Number.parseInt(query.year),
       month: Number.parseInt(query.month),
-      categoryId: query.categoryId ? Number.parseInt(query.categoryId) : undefined,
+      categoryId: query.categoryId
+        ? Number.parseInt(query.categoryId)
+        : undefined,
       format: (query.format as 'excel' | 'pdf') || 'excel',
     })
 
     // Set appropriate headers for file download
     const filename = `Laporan_Penyusutan_${query.year}_${query.month}.xlsx`
-    
+
     return reply
-      .header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+      .header(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      )
       .header('Content-Disposition', `attachment; filename="${filename}"`)
       .send(buffer)
   }

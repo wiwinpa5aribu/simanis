@@ -164,15 +164,18 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
 - [x] 11. Frontend - Implementasi Dashboard Components
 
 
-  - [ ] 11.1 Buat DepreciationSummaryCards component
+  - [x] 11.1 Buat DepreciationSummaryCards component
+
+
     - 3 cards: Nilai Perolehan, Akumulasi Penyusutan, Nilai Buku
     - Responsive layout
     - _Requirements: 1.1_
-  - [ ] 11.2 Buat DepreciationChart component
+
+  - [x] 11.2 Buat DepreciationChart component
     - Line chart dengan Recharts
     - Tren 12 bulan terakhir
     - _Requirements: 1.2_
-  - [ ] 11.3 Buat DepreciationFilters component
+  - [x] 11.3 Buat DepreciationFilters component
     - Filter kategori dan tahun
     - _Requirements: 1.3, 1.4_
   - [ ]* 11.4 Write property test untuk category filter
@@ -213,14 +216,16 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
   - [x] 13.2 Buat SimulationForm component
 
 
+
     - Form pilih aset/kategori dan periode
     - _Requirements: 6.1_
-  - [ ] 13.3 Buat SimulationResult component
+  - [x] 13.3 Buat SimulationResult component
     - Tabel dan grafik proyeksi
     - Estimasi tanggal habis
     - _Requirements: 6.2, 6.3_
 
-- [ ] 14. Frontend - Update DepreciationListPage
+- [x] 14. Frontend - Update DepreciationListPage
+
 
 
 
@@ -228,21 +233,27 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
   - [x] 14.1 Refactor DepreciationListPage dengan tab navigation
 
     - Dashboard, List, Settings, Simulation tabs
+
     - Integrate semua components
     - _Requirements: All_
 
-  - [ ] 14.2 Implementasi responsive layout
+  - [x] 14.2 Implementasi responsive layout
+
     - Mobile card view untuk table
     - Collapsible filters
     - _Requirements: All_
 
-- [ ] 15. Checkpoint - Pastikan semua tests passing
+
+
+- [x] 15. Checkpoint - Pastikan semua tests passing
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 16. Backend - Implementasi Scheduled Job (Optional)
   - [ ]* 16.1 Buat MonthlyDepreciationJob dengan BullMQ
     - Schedule untuk tanggal 1 setiap bulan
     - Auto-calculate depreciation
+
+
     - _Requirements: 3.1, 3.5_
 
 - [ ] 17. Final Checkpoint - Pastikan semua tests passing

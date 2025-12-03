@@ -70,7 +70,6 @@ export interface AssetDepreciationHistory {
   }[]
 }
 
-
 export interface SimulationProjection {
   month: number
   monthLabel: string
@@ -120,10 +119,10 @@ export const getDepreciationSummary = async (params?: {
   categoryId?: number
   year?: number
 }): Promise<DepreciationSummary> => {
-  const response = await api.get<{ data: DepreciationSummary }>('/depreciation/summary', {
+  const response = await api.get<DepreciationSummary>('/depreciation/summary', {
     params,
   })
-  return response.data.data
+  return response.data
 }
 
 /**
@@ -139,11 +138,17 @@ export const getDepreciationList = async (params?: {
   page?: number
   pageSize?: number
 }): Promise<{ items: DepreciationListItem[]; meta: PaginationMeta }> => {
-  const response = await api.get<{ data: DepreciationListItem[]; meta: PaginationMeta }>(
-    '/depreciation/list',
-    { params }
-  )
-  return { items: response.data.data, meta: response.data.meta }
+  const response = await api.get<DepreciationListItem[]>('/depreciation/list', {
+    params,
+  })
+  // Meta is attached by interceptor
+  const meta = (response as { meta?: PaginationMeta }).meta ?? {
+    page: 1,
+    pageSize: 10,
+    total: 0,
+    totalPages: 0,
+  }
+  return { items: response.data, meta }
 }
 
 /**
@@ -154,12 +159,14 @@ export const getDepreciationTrend = async (params?: {
   categoryId?: number
   months?: number
 }): Promise<DepreciationTrendItem[]> => {
-  const response = await api.get<{ data: DepreciationTrendItem[] }>('/depreciation/trend', {
-    params,
-  })
-  return response.data.data
+  const response = await api.get<DepreciationTrendItem[]>(
+    '/depreciation/trend',
+    {
+      params,
+    }
+  )
+  return response.data
 }
-
 
 /**
  * GET /api/depreciation/asset/:id/history
@@ -168,10 +175,10 @@ export const getDepreciationTrend = async (params?: {
 export const getAssetDepreciationHistory = async (
   assetId: number
 ): Promise<AssetDepreciationHistory> => {
-  const response = await api.get<{ data: AssetDepreciationHistory }>(
+  const response = await api.get<AssetDepreciationHistory>(
     `/depreciation/asset/${assetId}/history`
   )
-  return response.data.data
+  return response.data
 }
 
 /**
@@ -182,11 +189,11 @@ export const calculateDepreciation = async (params: {
   month: number
   year: number
 }): Promise<CalculateDepreciationResult> => {
-  const response = await api.post<{ data: CalculateDepreciationResult }>(
+  const response = await api.post<CalculateDepreciationResult>(
     '/depreciation/calculate',
     params
   )
-  return response.data.data
+  return response.data
 }
 
 /**
@@ -198,11 +205,11 @@ export const simulateDepreciation = async (params: {
   categoryId?: number
   periodMonths: number
 }): Promise<SimulateDepreciationResult> => {
-  const response = await api.post<{ data: SimulateDepreciationResult }>(
+  const response = await api.post<SimulateDepreciationResult>(
     '/depreciation/simulate',
     params
   )
-  return response.data.data
+  return response.data
 }
 
 /**
@@ -230,7 +237,9 @@ export const updateCategoryUsefulLife = async (
   defaultMasaManfaat: number
 ): Promise<{ id: number; name: string; defaultMasaManfaat: number }> => {
   const response = await api.put<{
-    data: { id: number; name: string; defaultMasaManfaat: number }
+    id: number
+    name: string
+    defaultMasaManfaat: number
   }>(`/categories/${categoryId}/useful-life`, { defaultMasaManfaat })
-  return response.data.data
+  return response.data
 }

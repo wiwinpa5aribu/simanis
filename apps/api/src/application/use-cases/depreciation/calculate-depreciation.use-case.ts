@@ -73,10 +73,11 @@ export class CalculateDepreciationUseCase {
 
     for (const asset of assets) {
       // Check if already calculated for this date
-      const alreadyExists = await this.depreciationRepository.existsForAssetAndDate(
-        asset.id,
-        tanggalHitung
-      )
+      const alreadyExists =
+        await this.depreciationRepository.existsForAssetAndDate(
+          asset.id,
+          tanggalHitung
+        )
 
       if (alreadyExists) {
         skippedCount++

@@ -92,7 +92,9 @@ export function SimulationResult({ result }: SimulationResultProps) {
             </div>
             <div className="rounded-lg border p-4">
               <p className="text-sm text-gray-500">Jumlah Bulan</p>
-              <p className="text-xl font-bold">{result.projections.length} bulan</p>
+              <p className="text-xl font-bold">
+                {result.projections.length} bulan
+              </p>
             </div>
             <div className="rounded-lg border p-4">
               <div className="flex items-center gap-2">
@@ -101,7 +103,9 @@ export function SimulationResult({ result }: SimulationResultProps) {
               </div>
               <p className="text-xl font-bold">
                 {result.estimatedEndDate ? (
-                  <Badge variant="secondary">{formatDate(result.estimatedEndDate)}</Badge>
+                  <Badge variant="secondary">
+                    {formatDate(result.estimatedEndDate)}
+                  </Badge>
                 ) : (
                   <span className="text-gray-400">Belum habis</span>
                 )}
@@ -119,7 +123,10 @@ export function SimulationResult({ result }: SimulationResultProps) {
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={result.projections}>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                className="stroke-gray-200"
+              />
               <XAxis
                 dataKey="monthLabel"
                 tick={{ fontSize: 10 }}

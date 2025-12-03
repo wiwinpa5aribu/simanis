@@ -36,7 +36,9 @@ export class UpdateCategoryUsefulLifeUseCase {
     })
 
     if (!category) {
-      throw new NotFoundError(`Kategori dengan ID ${categoryId} tidak ditemukan`)
+      throw new NotFoundError(
+        `Kategori dengan ID ${categoryId} tidak ditemukan`
+      )
     }
 
     // Update category

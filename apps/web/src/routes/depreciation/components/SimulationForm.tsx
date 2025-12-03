@@ -58,7 +58,11 @@ export function SimulationForm({ onSimulate, isLoading }: SimulationFormProps) {
     },
   })
 
-  const simulationType = watch('assetId') ? 'asset' : watch('categoryId') ? 'category' : ''
+  const simulationType = watch('assetId')
+    ? 'asset'
+    : watch('categoryId')
+      ? 'category'
+      : ''
 
   const onSubmit = (data: SimulateDepreciationInput) => {
     onSimulate({
@@ -89,16 +93,15 @@ export function SimulationForm({ onSimulate, isLoading }: SimulationFormProps) {
           {/* Simulation Type */}
           <div className="space-y-2">
             <Label>Tipe Simulasi</Label>
-            <Select
-              value={simulationType}
-              onValueChange={handleTypeChange}
-            >
+            <Select value={simulationType} onValueChange={handleTypeChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Pilih tipe simulasi" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="asset">Per Aset</SelectItem>
-                <SelectItem value="category">Per Kategori (Hipotesis)</SelectItem>
+                <SelectItem value="category">
+                  Per Kategori (Hipotesis)
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -161,7 +164,9 @@ export function SimulationForm({ onSimulate, isLoading }: SimulationFormProps) {
               {...register('periodMonths', { valueAsNumber: true })}
             />
             {errors.periodMonths && (
-              <p className="text-sm text-red-500">{errors.periodMonths.message}</p>
+              <p className="text-sm text-red-500">
+                {errors.periodMonths.message}
+              </p>
             )}
             <p className="text-xs text-gray-500">Maksimal 60 bulan (5 tahun)</p>
           </div>
