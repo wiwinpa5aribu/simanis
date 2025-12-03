@@ -2,11 +2,13 @@ import { PrismaClient } from '@simanis/database'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import {
   CalculateDepreciationUseCase,
+  GenerateDepreciationReportUseCase,
   GetAssetDepreciationHistoryUseCase,
   GetDepreciationListUseCase,
   GetDepreciationSummaryUseCase,
   GetDepreciationTrendUseCase,
   GetDepreciationUseCase,
+  SimulateDepreciationUseCase,
 } from '../../application/use-cases/depreciation'
 import { DepreciationRepositoryImpl } from '../../infrastructure/database/repositories/depreciation.repository.impl'
 import { sanitizePaginationParams } from '../../shared/utils/pagination.utils'
@@ -162,5 +164,55 @@ export class DepreciationController {
     })
 
     return reply.status(200).send(createSuccessResponse(result))
+  }
+
+  /**
+   * POST /api/depreciation/simulate
+   */
+  static async simulate(request: FastifyRequest, reply: FastifyReply) {
+    const body = request.body as {
+      assetId?: number
+      categoryId?: number
+      periodMonths: number
+    }
+
+    const useCase = new SimulateDepreciationUseCase(prisma)
+
+    const result = await useCase.execute({
+      assetId: body.assetId,
+      categoryId: body.categoryId,
+      periodMonths: body.periodMonths,
+    })
+
+    return reply.status(200).send(createSuccessResponse(result))
+  }
+
+  /**
+   * GET /api/depreciation/report
+   */
+  static async generateReport(request: FastifyRequest, reply: FastifyReply) {
+    const query = request.query as {
+      year: string
+      month: string
+      categoryId?: string
+      format?: string
+    }
+
+    const useCase = new GenerateDepreciationReportUseCase(prisma)
+
+    const buffer = await useCase.execute({
+      year: Number.parseInt(query.year),
+      month: Number.parseInt(query.month),
+      categoryId: query.categoryId ? Number.parseInt(query.categoryId) : undefined,
+      format: (query.format as 'excel' | 'pdf') || 'excel',
+    })
+
+    // Set appropriate headers for file download
+    const filename = `Laporan_Penyusutan_${query.year}_${query.month}.xlsx`
+    
+    return reply
+      .header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+      .header('Content-Disposition', `attachment; filename="${filename}"`)
+      .send(buffer)
   }
 }

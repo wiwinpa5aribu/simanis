@@ -19,7 +19,10 @@
       "autoApprove": [
         "read_file",
         "write_file",
-        "list_directory"
+        "list_directory",
+        "read_text_file",
+        "read_text_file",
+        "read_text_file"
       ]
     },
     "context7": {

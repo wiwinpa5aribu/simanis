@@ -23,4 +23,10 @@ export async function depreciationRoutes(fastify: FastifyInstance) {
 
   // POST /api/depreciation/calculate - Calculate depreciation for a period
   fastify.post('/calculate', DepreciationController.calculate)
+
+  // POST /api/depreciation/simulate - Simulate depreciation
+  fastify.post('/simulate', DepreciationController.simulate)
+
+  // GET /api/depreciation/report - Generate depreciation report
+  fastify.get('/report', DepreciationController.generateReport)
 }

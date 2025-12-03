@@ -96,35 +96,32 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
     - **Property 6: Fully Depreciated Badge**
     - **Validates: Requirements 2.4**
 
-- [-] 6. Backend - Implementasi Settings dan Simulation
-
-
-  - [ ] 6.1 Implementasi UpdateCategoryUsefulLifeUseCase
-
+- [x] 6. Backend - Implementasi Settings dan Simulation
+  - [x] 6.1 Implementasi UpdateCategoryUsefulLifeUseCase
     - Update default masa manfaat kategori
     - _Requirements: 4.1, 4.2_
-  - [ ] 6.2 Implementasi SimulateDepreciationUseCase
+  - [x] 6.2 Implementasi SimulateDepreciationUseCase
     - Proyeksi nilai buku per bulan
     - Estimasi tanggal habis disusutkan
     - _Requirements: 6.1, 6.2, 6.3_
-  - [ ]* 6.3 Write property test untuk simulation projection
+  - [x]* 6.3 Write property test untuk simulation projection
     - **Property 13: Simulation Projection Correctness**
     - **Validates: Requirements 6.2**
-  - [ ]* 6.4 Write property test untuk end date estimation
+  - [x]* 6.4 Write property test untuk end date estimation
     - **Property 14: Simulation End Date Estimation**
     - **Validates: Requirements 6.3**
 
-- [ ] 7. Backend - Implementasi Report Generation
-  - [ ] 7.1 Implementasi GenerateDepreciationReportUseCase
+- [x] 7. Backend - Implementasi Report Generation
+  - [x] 7.1 Implementasi GenerateDepreciationReportUseCase
     - Generate Excel report dengan ExcelJS
     - Filter by period, category
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
-  - [ ]* 7.2 Write property test untuk report category filter
+  - [x]* 7.2 Write property test untuk report category filter
     - **Property 12: Report Category Filter**
     - **Validates: Requirements 5.4**
 
-- [ ] 8. Backend - Implementasi API Routes
-  - [ ] 8.1 Buat depreciation.routes.ts
+- [x] 8. Backend - Implementasi API Routes
+  - [x] 8.1 Buat depreciation.routes.ts
     - GET /depreciation/summary
     - GET /depreciation/list
     - GET /depreciation/trend
@@ -133,7 +130,7 @@ Implementasi fitur penyusutan aset sesuai dengan requirements dan design documen
     - POST /depreciation/simulate
     - GET /depreciation/report
     - _Requirements: All_
-  - [ ] 8.2 Update categories.routes.ts
+  - [x] 8.2 Update categories.routes.ts
     - PUT /categories/:id/useful-life
     - _Requirements: 4.2_
 

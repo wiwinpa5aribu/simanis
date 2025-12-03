@@ -8,4 +8,7 @@ export async function categoryRoutes(fastify: FastifyInstance) {
 
   fastify.get('/', CategoryController.getAll)
   fastify.post('/', CategoryController.create)
+  
+  // PUT /api/categories/:id/useful-life - Update default useful life for category
+  fastify.put('/:id/useful-life', CategoryController.updateUsefulLife)
 }
