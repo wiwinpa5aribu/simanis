@@ -20,7 +20,6 @@ import {
 } from '../../libs/api/assets'
 import { useMediaQuery } from '../../libs/hooks/useMediaQuery'
 import { usePermission } from '../../libs/hooks/usePermission'
-import { useAuthStore } from '../../libs/store/authStore'
 import { useFavoriteStore } from '../../libs/store/favoriteStore'
 import { showErrorToast, showSuccessToast } from '../../libs/ui/toast'
 import {
@@ -33,14 +32,11 @@ import {
 export function AssetDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { can } = usePermission()
+  const { can, role } = usePermission()
   const queryClient = useQueryClient()
 
   // Delete dialog state
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-
-  // Get user role for delete permission
-  const user = useAuthStore((state) => state.user)
 
   // Responsive breakpoint - true if mobile (< 1024px / lg breakpoint)
   const isMobile = useMediaQuery('(max-width: 1023px)')
@@ -371,7 +367,7 @@ export function AssetDetailPage() {
         onConfirm={handleDeleteConfirm}
         assetName={asset.namaBarang}
         assetCode={asset.kodeAset}
-        userRole={user?.role}
+        userRole={role}
       />
     </div>
   )

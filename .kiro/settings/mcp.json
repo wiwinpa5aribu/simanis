@@ -4,7 +4,9 @@
       "command": "mcp-server-sequential-thinking",
       "args": [],
       "disabled": false,
-      "autoApprove": []
+      "autoApprove": [
+        "sequentialthinking"
+      ]
     },
     "context7": {
       "command": "context7-mcp",
@@ -23,7 +25,14 @@
       ],
       "disabled": false,
       "autoApprove": [
-        "browser_wait_for"
+        "browser_wait_for",
+        "browser_click",
+        "browser_resize",
+        "browser_snapshot",
+        "browser_navigate",
+        "browser_press_key",
+        "browser_evaluate",
+        "browser_close"
       ]
     },
     "TestSprite": {

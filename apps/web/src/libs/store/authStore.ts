@@ -6,7 +6,8 @@ export interface User {
   id: string
   username: string
   name: string
-  role: string
+  role?: string
+  roles?: string[] // Role labels from backend JWT
 }
 
 // Tipe data untuk state autentikasi

@@ -57,9 +57,10 @@ model UserRole {
 // ============= ASSET MANAGEMENT =============
 
 model AssetCategory {
-    id          Int     @id @default(autoincrement())
-    name        String  @unique @db.VarChar(64)
-    description String? @db.Text
+    id                  Int     @id @default(autoincrement())
+    name                String  @unique @db.VarChar(64)
+    description         String? @db.Text
+    defaultMasaManfaat  Int     @default(5) @map("default_masa_manfaat")
 
     assets Asset[]
 
