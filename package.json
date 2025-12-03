@@ -1,36 +1,38 @@
 {
-  "name": "simanis-frontend",
+  "name": "simanis",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Frontend untuk SIMANIS - Sistem Manajemen Aset Sekolah",
+  "description": "SIMANIS - Sistem Manajemen Aset Sekolah (Monorepo)",
   "author": "Wiwin Pasaribu <wiwinpa5aribu>",
   "repository": {
     "type": "git",
     "url": "https://github.com/wiwinpa5aribu/simanis.git"
   },
+  "packageManager": "pnpm@10.24.0",
   "scripts": {
     "prepare": "husky",
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "dev": "turbo run dev",
+    "dev:web": "pnpm --filter @simanis/web dev",
+    "dev:api": "pnpm --filter @simanis/api dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "test": "turbo run test:run",
+    "test:ui": "pnpm --filter @simanis/web test:ui",
+    "test:coverage": "turbo run test:coverage",
+    "db:generate": "pnpm --filter @simanis/database db:generate",
+    "db:migrate": "pnpm --filter @simanis/database db:migrate",
+    "db:push": "pnpm --filter @simanis/database db:push",
+    "db:studio": "pnpm --filter @simanis/database db:studio",
     "knip": "knip",
     "knip:fix": "knip --fix"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "src/**/*.{json,css,md}": [
-      "prettier --write"
+    "src/**/*.{ts,tsx,json,css,md}": [
+      "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
     ]
   },
   "dependencies": {
@@ -54,7 +56,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
+    "@biomejs/biome": "^2.3.8",
     "@tailwindcss/postcss": "^4.1.17",
     "@tanstack/react-query-devtools": "^5.91.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -68,23 +70,17 @@
     "@vitest/ui": "^4.0.10",
     "autoprefixer": "^10.4.22",
     "depcheck": "^1.4.7",
-    "eslint": "^9.39.1",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.24",
     "fast-check": "^4.3.0",
-    "globals": "^16.5.0",
     "husky": "^9.1.7",
     "jsdom": "^27.2.0",
     "knip": "^5.70.2",
     "lint-staged": "^16.2.7",
     "madge": "^8.0.0",
     "postcss": "^8.5.6",
-    "prettier": "^3.6.2",
     "tailwindcss": "^4.1.17",
     "ts-prune": "^0.10.3",
+    "turbo": "^2.6.1",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.46.3",
     "vite": "npm:rolldown-vite@7.2.2",
     "vite-plugin-pwa": "^1.1.0",
     "vitest": "^4.0.10"

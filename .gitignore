@@ -60,6 +60,28 @@ Desktop.ini
 .cache/
 .temp/
 
+# ============= AI Progress Docs (Local Only) =============
+# These files are for AI context continuity, not for version control
+docs/progress/
+docs/CURSOR_FIRST_PROMPT.md
+session sebelumnya.md
+
+# ============= MCP Memory Storage =============
+.kiro/memory/*.jsonl
+.kiro/memory/
+
+# ============= AI/Cursor Specific =============
+.cursor/
+.cursorignore
+.aider*
+.continue/
+
+# ============= Session/Context Files =============
+*session*.md
+*context*.md
+*prompt*.md
+prompt.md
+
 # ============= Trunk (keep config, ignore runtime) =============
 .trunk/actions/
 .trunk/logs/
@@ -67,3 +89,6 @@ Desktop.ini
 .trunk/out/
 .trunk/plugins/
 .trunk/tools/
+
+# ============= Turborepo Cache =============
+.turbo/

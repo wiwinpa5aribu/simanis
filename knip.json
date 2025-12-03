@@ -2,15 +2,7 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": ["src/main.tsx"],
   "project": ["src/**/*.{ts,tsx}"],
-  "ignore": [
-    "src/test/**",
-    "**/*.d.ts"
-  ],
-  "ignoreDependencies": [
-    "@types/*",
-    "autoprefixer",
-    "postcss",
-    "tailwindcss"
-  ],
+  "ignore": ["src/test/**", "**/*.d.ts"],
+  "ignoreDependencies": ["@types/*", "autoprefixer", "postcss", "tailwindcss"],
   "ignoreExportsUsedInFile": true
 }
