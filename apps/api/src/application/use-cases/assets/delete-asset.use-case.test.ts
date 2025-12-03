@@ -22,8 +22,9 @@ describe('DeleteAssetUseCase', () => {
     namaBarang: 'Laptop Dell',
     merk: 'Dell',
     spesifikasi: 'Core i5, 8GB RAM',
-    tahunPembelian: 2024,
-    hargaBeli: 10000000,
+    tahunPerolehan: new Date('2024-01-01'),
+    harga: 10000000,
+    sumberDana: 'APBN',
     kondisi: 'Baik',
     fotoUrl: null,
     qrCode: 'qr-code-1',
@@ -31,9 +32,9 @@ describe('DeleteAssetUseCase', () => {
     currentRoomId: 1,
     isDeleted: false,
     deletedAt: null,
-    deletedBy: null,
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01'),
+    tanggalPencatatan: new Date('2024-01-01'),
+    createdBy: 1,
+    masaManfaatTahun: 5,
   }
 
   beforeEach(() => {
@@ -46,7 +47,6 @@ describe('DeleteAssetUseCase', () => {
       create: vi.fn(),
       update: vi.fn(),
       softDelete: vi.fn(),
-      restore: vi.fn(),
       getTotalValue: vi.fn(),
       getCountByCategory: vi.fn(),
       getCountByStatus: vi.fn(),
@@ -55,7 +55,6 @@ describe('DeleteAssetUseCase', () => {
     mockAuditRepository = {
       create: vi.fn(),
       findAll: vi.fn(),
-      findByEntity: vi.fn(),
     }
 
     mockDocumentRepository = {
