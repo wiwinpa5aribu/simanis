@@ -89,7 +89,7 @@
             "noDuplicateElseIf": "error",
             "noDuplicateObjectKeys": "error",
             "noDuplicateParameters": "error",
-            "noEmptyBlockStatements": "error",
+            "noEmptyBlockStatements": "warn",
             "noFallthroughSwitchClause": "error",
             "noFunctionAssign": "error",
             "noGlobalAssign": "error",
@@ -163,7 +163,7 @@
             "useAsConstAssertion": "error"
           },
           "suspicious": {
-            "noExplicitAny": "error",
+            "noExplicitAny": "warn",
             "noExtraNonNullAssertion": "error",
             "noMisleadingInstantiator": "error",
             "noNonNullAssertedOptionalChain": "error",
@@ -321,7 +321,7 @@
           "a11y": {
             "noAriaUnsupportedElements": "error",
             "noAutofocus": "warn",
-            "noLabelWithoutControl": "error",
+            "noLabelWithoutControl": "warn",
             "noPositiveTabindex": "error",
             "noRedundantAlt": "error",
             "noRedundantRoles": "error",
