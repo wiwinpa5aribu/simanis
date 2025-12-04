@@ -67,7 +67,7 @@ export function AssetCreatePage() {
     handleSubmit,
     formState: { errors },
   } = useForm<CreateAssetFormInput>({
-    // biome-ignore lint/suspicious/noExplicitAny: zodResolver type mismatch with react-hook-form
+    // biome-ignore lint/suspicious/noExplicitAny: zodResolver type compatibility with react-hook-form
     resolver: zodResolver(createAssetFormSchema) as any,
     defaultValues: {
       kondisi: 'Baik',
