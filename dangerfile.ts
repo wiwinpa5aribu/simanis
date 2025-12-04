@@ -80,8 +80,14 @@ if (filesChanged > PR_FILES_LIMIT) {
 // Code Quality Checks
 // =============================================================================
 
+// Files to exclude from code quality checks (to avoid self-detection)
+const excludedFiles = ['dangerfile.ts']
+
 // Check for console.log in TypeScript/JavaScript files
-const tsFiles = getAllChangedFiles(/\.(ts|tsx|js|jsx)$/)
+const tsFiles = getAllChangedFiles(/\.(ts|tsx|js|jsx)$/).filter(
+  (file) => !excludedFiles.includes(file)
+)
+
 tsFiles.forEach(async (file) => {
   const content = await danger.git.diffForFile(file)
   if (content && content.added.includes('console.log')) {
@@ -111,7 +117,8 @@ tsFiles.forEach(async (file) => {
 // Check for debugger statements
 tsFiles.forEach(async (file) => {
   const content = await danger.git.diffForFile(file)
-  if (content && content.added.includes('debugger')) {
+  // Use regex to match actual debugger statement, not string literals
+  if (content && /^\+.*\bdebugger\b/m.test(content.diff)) {
     fail(
       `❌ \`debugger\` statement ditemukan di \`${file}\`. Tolong hapus sebelum merge.`
     )
