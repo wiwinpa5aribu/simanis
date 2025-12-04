@@ -44,9 +44,15 @@ class MockIntersectionObserver implements IntersectionObserver {
     // Parameters required by IntersectionObserver interface but not used in mock
   }
 
-  disconnect(): void {}
-  observe(): void {}
-  unobserve(): void {}
+  disconnect(): void {
+    // Mock implementation - no-op
+  }
+  observe(): void {
+    // Mock implementation - no-op
+  }
+  unobserve(): void {
+    // Mock implementation - no-op
+  }
   takeRecords(): IntersectionObserverEntry[] {
     return []
   }

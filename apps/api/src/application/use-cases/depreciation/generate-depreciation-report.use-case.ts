@@ -1,8 +1,8 @@
 import { PrismaClient } from '@simanis/database'
 import ExcelJS from 'exceljs'
+import { DepreciationCalculatorService } from '../../../infrastructure/services/depreciation-calculator.service'
 import { NotFoundError } from '../../../shared/errors/not-found-error'
 import { ValidationError } from '../../../shared/errors/validation-error'
-import { DepreciationCalculatorService } from '../../../infrastructure/services/depreciation-calculator.service'
 
 export interface GenerateDepreciationReportParams {
   year: number

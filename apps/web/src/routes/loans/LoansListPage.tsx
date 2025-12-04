@@ -31,12 +31,12 @@ export function LoansListPage() {
   )
 
   // Lifecycle logging
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally run only on mount/unmount
   useEffect(() => {
     logger.lifecycle('LoansListPage', 'mount', { savedFilters })
     return () => {
       logger.lifecycle('LoansListPage', 'unmount')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Update store saat filter berubah

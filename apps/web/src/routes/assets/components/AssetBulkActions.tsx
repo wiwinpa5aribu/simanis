@@ -80,7 +80,7 @@ export function AssetBulkActions({
     for (let i = 0; i < selectedIds.length; i++) {
       const id = selectedIds[i]
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: Partial update type mismatch
         await updateAsset(id, updates as any)
         successCount++
       } catch (error) {

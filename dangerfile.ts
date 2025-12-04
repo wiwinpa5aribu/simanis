@@ -5,7 +5,7 @@
  * Docs: https://danger.systems/js/
  */
 
-import { danger, warn, fail, message, markdown } from "danger"
+import { danger, fail, markdown, message, warn } from 'danger'
 
 // =============================================================================
 // Configuration
@@ -35,18 +35,22 @@ const getAllChangedFiles = (pattern: RegExp) => [
 // =============================================================================
 
 // Check PR description
-if (!danger.github.pr.body || danger.github.pr.body.length < DESCRIPTION_MIN_LENGTH) {
-  fail("❌ Tolong tambahkan deskripsi PR yang jelas (minimal 20 karakter)")
+if (
+  !danger.github.pr.body ||
+  danger.github.pr.body.length < DESCRIPTION_MIN_LENGTH
+) {
+  fail('❌ Tolong tambahkan deskripsi PR yang jelas (minimal 20 karakter)')
 }
 
 // Check PR title format (conventional commits)
 const prTitle = danger.github.pr.title
-const conventionalCommitRegex = /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .+/
+const conventionalCommitRegex =
+  /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .+/
 if (!conventionalCommitRegex.test(prTitle)) {
   warn(
-    "⚠️ Judul PR sebaiknya mengikuti format Conventional Commits:\n" +
-    "`feat|fix|docs|style|refactor|perf|test|build|ci|chore(scope): description`\n" +
-    "Contoh: `feat(auth): add login functionality`"
+    '⚠️ Judul PR sebaiknya mengikuti format Conventional Commits:\n' +
+      '`feat|fix|docs|style|refactor|perf|test|build|ci|chore(scope): description`\n' +
+      'Contoh: `feat(auth): add login functionality`'
   )
 }
 
@@ -55,19 +59,20 @@ if (!conventionalCommitRegex.test(prTitle)) {
 // =============================================================================
 
 const linesChanged = danger.github.pr.additions + danger.github.pr.deletions
-const filesChanged = danger.git.modified_files.length + danger.git.created_files.length
+const filesChanged =
+  danger.git.modified_files.length + danger.git.created_files.length
 
 if (linesChanged > PR_SIZE_LIMIT) {
   warn(
     `⚠️ PR ini cukup besar (${linesChanged} baris diubah). ` +
-    `Pertimbangkan untuk memecah menjadi PR yang lebih kecil untuk review yang lebih mudah.`
+      `Pertimbangkan untuk memecah menjadi PR yang lebih kecil untuk review yang lebih mudah.`
   )
 }
 
 if (filesChanged > PR_FILES_LIMIT) {
   warn(
     `⚠️ PR ini mengubah ${filesChanged} file. ` +
-    `Pertimbangkan untuk memecah menjadi PR yang lebih kecil.`
+      `Pertimbangkan untuk memecah menjadi PR yang lebih kecil.`
   )
 }
 
@@ -79,8 +84,10 @@ if (filesChanged > PR_FILES_LIMIT) {
 const tsFiles = getAllChangedFiles(/\.(ts|tsx|js|jsx)$/)
 tsFiles.forEach(async (file) => {
   const content = await danger.git.diffForFile(file)
-  if (content && content.added.includes("console.log")) {
-    warn(`⚠️ \`console.log\` ditemukan di \`${file}\`. Pastikan ini intentional atau gunakan logger.`)
+  if (content && content.added.includes('console.log')) {
+    warn(
+      `⚠️ \`console.log\` ditemukan di \`${file}\`. Pastikan ini intentional atau gunakan logger.`
+    )
   }
 })
 
@@ -88,11 +95,15 @@ tsFiles.forEach(async (file) => {
 tsFiles.forEach(async (file) => {
   const content = await danger.git.diffForFile(file)
   if (content) {
-    if (content.added.includes("TODO")) {
-      message(`📝 TODO baru ditemukan di \`${file}\`. Pertimbangkan untuk membuat issue.`)
+    if (content.added.includes('TODO')) {
+      message(
+        `📝 TODO baru ditemukan di \`${file}\`. Pertimbangkan untuk membuat issue.`
+      )
     }
-    if (content.added.includes("FIXME")) {
-      warn(`⚠️ FIXME ditemukan di \`${file}\`. Ini sebaiknya diperbaiki sebelum merge.`)
+    if (content.added.includes('FIXME')) {
+      warn(
+        `⚠️ FIXME ditemukan di \`${file}\`. Ini sebaiknya diperbaiki sebelum merge.`
+      )
     }
   }
 })
@@ -100,8 +111,10 @@ tsFiles.forEach(async (file) => {
 // Check for debugger statements
 tsFiles.forEach(async (file) => {
   const content = await danger.git.diffForFile(file)
-  if (content && content.added.includes("debugger")) {
-    fail(`❌ \`debugger\` statement ditemukan di \`${file}\`. Tolong hapus sebelum merge.`)
+  if (content && content.added.includes('debugger')) {
+    fail(
+      `❌ \`debugger\` statement ditemukan di \`${file}\`. Tolong hapus sebelum merge.`
+    )
   }
 })
 
@@ -110,41 +123,46 @@ tsFiles.forEach(async (file) => {
 // =============================================================================
 
 // Check if package.json changed but pnpm-lock.yaml didn't
-const packageJsonChanged = danger.git.modified_files.includes("package.json")
-const lockfileChanged = danger.git.modified_files.includes("pnpm-lock.yaml")
+const packageJsonChanged = danger.git.modified_files.includes('package.json')
+const lockfileChanged = danger.git.modified_files.includes('pnpm-lock.yaml')
 
 if (packageJsonChanged && !lockfileChanged) {
   warn(
-    "⚠️ `package.json` diubah tapi `pnpm-lock.yaml` tidak. " +
-    "Pastikan untuk menjalankan `pnpm install` dan commit lockfile."
+    '⚠️ `package.json` diubah tapi `pnpm-lock.yaml` tidak. ' +
+      'Pastikan untuk menjalankan `pnpm install` dan commit lockfile.'
   )
 }
 
 // Check for changes in sensitive files
 const sensitiveFiles = [
-  ".env",
-  ".env.local",
-  ".env.production",
-  "apps/api/.env",
+  '.env',
+  '.env.local',
+  '.env.production',
+  'apps/api/.env',
 ]
 
 sensitiveFiles.forEach((file) => {
-  if (danger.git.modified_files.includes(file) || danger.git.created_files.includes(file)) {
-    fail(`❌ File sensitif \`${file}\` tidak boleh di-commit. Gunakan \`.env.example\` sebagai template.`)
+  if (
+    danger.git.modified_files.includes(file) ||
+    danger.git.created_files.includes(file)
+  ) {
+    fail(
+      `❌ File sensitif \`${file}\` tidak boleh di-commit. Gunakan \`.env.example\` sebagai template.`
+    )
   }
 })
 
 // Check for Prisma schema changes
 const prismaSchemaChanged = danger.git.modified_files.some((file) =>
-  file.includes("schema.prisma")
+  file.includes('schema.prisma')
 )
 
 if (prismaSchemaChanged) {
   message(
-    "📊 Prisma schema diubah. Pastikan untuk:\n" +
-    "1. Menjalankan `pnpm db:generate`\n" +
-    "2. Membuat migration jika diperlukan (`pnpm db:migrate`)\n" +
-    "3. Update seed data jika diperlukan"
+    '📊 Prisma schema diubah. Pastikan untuk:\n' +
+      '1. Menjalankan `pnpm db:generate`\n' +
+      '2. Membuat migration jika diperlukan (`pnpm db:migrate`)\n' +
+      '3. Update seed data jika diperlukan'
   )
 }
 
@@ -153,13 +171,15 @@ if (prismaSchemaChanged) {
 // =============================================================================
 
 // Check if source files changed but no test files
-const sourceFilesChanged = getAllChangedFiles(/apps\/(web|api)\/src\/.*\.(ts|tsx)$/)
+const sourceFilesChanged = getAllChangedFiles(
+  /apps\/(web|api)\/src\/.*\.(ts|tsx)$/
+)
 const testFilesChanged = getAllChangedFiles(/\.(test|spec)\.(ts|tsx)$/)
 
 if (sourceFilesChanged.length > 0 && testFilesChanged.length === 0) {
   warn(
-    "⚠️ File source diubah tapi tidak ada file test yang diubah. " +
-    "Pertimbangkan untuk menambahkan atau update test."
+    '⚠️ File source diubah tapi tidak ada file test yang diubah. ' +
+      'Pertimbangkan untuk menambahkan atau update test.'
   )
 }
 
@@ -173,7 +193,7 @@ const docsChanged = getAllChangedFiles(/docs\/.*\.(md)$/)
 
 if (apiRoutesChanged.length > 0 && docsChanged.length === 0) {
   message(
-    "📚 API routes diubah. Pertimbangkan untuk update dokumentasi API jika ada perubahan endpoint."
+    '📚 API routes diubah. Pertimbangkan untuk update dokumentasi API jika ada perubahan endpoint.'
   )
 }
 
@@ -195,5 +215,7 @@ markdown(`
 
 // Congratulate on small PRs
 if (linesChanged < 100 && filesChanged < 5) {
-  message("🎉 PR yang bagus dan fokus! Terima kasih sudah menjaga PR tetap kecil.")
+  message(
+    '🎉 PR yang bagus dan fokus! Terima kasih sudah menjaga PR tetap kecil.'
+  )
 }
