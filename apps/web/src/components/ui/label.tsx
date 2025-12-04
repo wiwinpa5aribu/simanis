@@ -6,6 +6,7 @@ type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>
 const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
   ({ className, children, ...props }, ref) => {
     return (
+      // biome-ignore lint/a11y/noLabelWithoutControl: This is a reusable component that receives htmlFor from parent
       <label
         ref={ref}
         className={clsx(

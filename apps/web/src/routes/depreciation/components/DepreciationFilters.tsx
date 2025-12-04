@@ -5,7 +5,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query'
-import { Filter, ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Filter } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'

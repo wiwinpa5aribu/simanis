@@ -5,7 +5,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query'
-import { ArrowUpDown, Eye, CheckCircle } from 'lucide-react'
+import { ArrowUpDown, CheckCircle, Eye } from 'lucide-react'
 import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -20,8 +20,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import {
-  getDepreciationList,
   type DepreciationListItem,
+  getDepreciationList,
 } from '@/libs/api/depreciation'
 import { useMediaQuery } from '@/libs/hooks/useMediaQuery'
 import { formatCurrency } from '@/libs/utils/format'

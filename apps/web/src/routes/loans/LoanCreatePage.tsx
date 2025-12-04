@@ -34,7 +34,7 @@ export function LoanCreatePage() {
     watch,
     setValue,
   } = useForm<CreateLoanFormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: zodResolver type compatibility with react-hook-form
     resolver: zodResolver(createLoanSchema) as any,
     defaultValues: {
       tanggalPinjam: new Date().toISOString().split('T')[0],

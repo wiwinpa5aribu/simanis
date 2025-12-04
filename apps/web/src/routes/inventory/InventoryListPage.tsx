@@ -27,6 +27,7 @@ export default function InventoryListPage() {
   const savedFilters = getFilter(routeKey) || {}
 
   // Lifecycle logging
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Only run on mount/unmount
   useEffect(() => {
     logger.lifecycle('InventoryListPage', 'mount', {
       savedFilters,
@@ -35,7 +36,6 @@ export default function InventoryListPage() {
     return () => {
       logger.lifecycle('InventoryListPage', 'unmount')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [filters, setFilters] = useState<InventoryListParams>({

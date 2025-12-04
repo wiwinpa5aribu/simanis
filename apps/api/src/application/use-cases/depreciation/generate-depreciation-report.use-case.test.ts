@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { PrismaClient } from '@simanis/database'
-import { GenerateDepreciationReportUseCase } from './generate-depreciation-report.use-case'
+import ExcelJS from 'exceljs'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { NotFoundError } from '../../../shared/errors/not-found-error'
 import { ValidationError } from '../../../shared/errors/validation-error'
-import ExcelJS from 'exceljs'
+import { GenerateDepreciationReportUseCase } from './generate-depreciation-report.use-case'
 
 describe('GenerateDepreciationReportUseCase', () => {
   let prisma: PrismaClient

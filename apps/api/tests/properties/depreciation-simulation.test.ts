@@ -1,5 +1,5 @@
-import { describe, it } from 'vitest'
 import fc from 'fast-check'
+import { describe, it } from 'vitest'
 import { DepreciationCalculatorService } from '../../src/infrastructure/services/depreciation-calculator.service'
 
 describe('Depreciation Simulation - Property Tests', () => {

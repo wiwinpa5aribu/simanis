@@ -21,8 +21,8 @@ import {
 import { getAssets } from '@/libs/api/assets'
 import { getCategories } from '@/libs/api/categories'
 import {
-  simulateDepreciationSchema,
   type SimulateDepreciationInput,
+  simulateDepreciationSchema,
 } from '@/libs/validation/depreciationSchemas'
 
 interface SimulationFormProps {
