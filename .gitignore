@@ -64,8 +64,10 @@ Desktop.ini
 .cache/
 .temp/
 
-# ============= AI Progress Docs (Local Only) =============
-docs/progress/
+# ============= Internal Documentation (AI/Local Only) =============
+docs/
+.cursorrules
+CLAUDE.md
 
 # ============= Session/Context Files =============
 *session*.md
