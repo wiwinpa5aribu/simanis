@@ -24,6 +24,7 @@ lint_errors.log
 .env.local
 .env.*.local
 backend/.env
+apps/api/.env
 
 # ============= Editor & IDE =============
 .vscode/
@@ -41,8 +42,13 @@ backend/.env
 coverage/
 .nyc_output/
 
-# ============= Kiro/MCP Settings (contains credentials) =============
+# ============= Local Tool Configs (contains credentials/local settings) =============
 .kiro/
+.cursor/
+.cursorignore
+.aider*
+.continue/
+.qodo/
 
 # ============= Old/Deprecated Tools =============
 .kilocode/
@@ -59,13 +65,7 @@ Desktop.ini
 .temp/
 
 # ============= AI Progress Docs (Local Only) =============
-docs/
-
-# ============= AI/Cursor Specific =============
-.cursor/
-.cursorignore
-.aider*
-.continue/
+docs/progress/
 
 # ============= Session/Context Files =============
 *session*.md
@@ -73,14 +73,16 @@ docs/
 *prompt*.md
 prompt.md
 
-# ============= Trunk =============
-.trunk/
+# ============= Trunk (keep config, ignore runtime) =============
+.trunk/actions/
+.trunk/logs/
+.trunk/notifications/
+.trunk/out/
+.trunk/plugins/
+.trunk/tools/
 
 # ============= Turborepo Cache =============
 .turbo/
 
-# ============= Husky =============
+# ============= Git Hooks (local setup) =============
 .husky/
-
-# ============= Qodo =============
-.qodo/
