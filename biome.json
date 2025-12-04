@@ -41,6 +41,27 @@
   },
   "overrides": [
     {
+      "includes": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/tests/**/*.ts",
+        "**/test/**/*.ts",
+        "**/test/**/*.tsx",
+        "**/*.d.ts"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off",
+            "noEmptyBlockStatements": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "warn"
+          }
+        }
+      }
+    },
+    {
       "includes": ["**/*.{ts,tsx}"],
       "linter": {
         "rules": {
