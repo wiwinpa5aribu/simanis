@@ -44,7 +44,7 @@ coverage/
 .nyc_output/
 
 # ============= Kiro/MCP Settings (contains credentials) =============
-.kiro/settings/mcp.json
+.kiro/
 
 # ============= Old/Deprecated Tools =============
 .kilocode/
@@ -65,10 +65,6 @@ Desktop.ini
 docs/progress/
 docs/CURSOR_FIRST_PROMPT.md
 session sebelumnya.md
-
-# ============= MCP Memory Storage =============
-.kiro/memory/*.jsonl
-.kiro/memory/
 
 # ============= AI/Cursor Specific =============
 .cursor/
