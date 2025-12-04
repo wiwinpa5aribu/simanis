@@ -26,9 +26,7 @@ lint_errors.log
 backend/.env
 
 # ============= Editor & IDE =============
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
+.vscode/
 .idea/
 .DS_Store
 *.suo
@@ -61,10 +59,7 @@ Desktop.ini
 .temp/
 
 # ============= AI Progress Docs (Local Only) =============
-# These files are for AI context continuity, not for version control
-docs/progress/
-docs/CURSOR_FIRST_PROMPT.md
-session sebelumnya.md
+docs/
 
 # ============= AI/Cursor Specific =============
 .cursor/
@@ -78,13 +73,14 @@ session sebelumnya.md
 *prompt*.md
 prompt.md
 
-# ============= Trunk (keep config, ignore runtime) =============
-.trunk/actions/
-.trunk/logs/
-.trunk/notifications/
-.trunk/out/
-.trunk/plugins/
-.trunk/tools/
+# ============= Trunk =============
+.trunk/
 
 # ============= Turborepo Cache =============
 .turbo/
+
+# ============= Husky =============
+.husky/
+
+# ============= Qodo =============
+.qodo/
