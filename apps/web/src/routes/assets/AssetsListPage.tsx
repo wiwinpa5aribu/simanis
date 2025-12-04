@@ -61,6 +61,7 @@ export function AssetsListPage() {
   const { isFavorite, toggleFavorite } = useFavoriteStore()
 
   // Lifecycle logging
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Only run on mount/unmount
   useEffect(() => {
     logger.lifecycle('AssetsListPage', 'mount', {
       savedFilters,
@@ -70,7 +71,6 @@ export function AssetsListPage() {
     return () => {
       logger.lifecycle('AssetsListPage', 'unmount')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Update store saat filter berubah
@@ -131,6 +131,7 @@ export function AssetsListPage() {
   const totalPages = Math.ceil(filteredAssets.length / pageSize)
 
   // Reset to page 1 when filters change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Intentionally trigger on filter changes
   useEffect(() => {
     setCurrentPage(1)
   }, [searchTerm, categoryFilter, conditionFilter, pageSize])

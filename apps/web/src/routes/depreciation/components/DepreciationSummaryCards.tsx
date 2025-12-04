@@ -5,7 +5,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query'
-import { TrendingDown, Wallet, Calculator } from 'lucide-react'
+import { Calculator, TrendingDown, Wallet } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getDepreciationSummary } from '@/libs/api/depreciation'

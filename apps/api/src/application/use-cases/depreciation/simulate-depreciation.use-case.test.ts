@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { PrismaClient } from '@simanis/database'
-import { SimulateDepreciationUseCase } from './simulate-depreciation.use-case'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { NotFoundError } from '../../../shared/errors/not-found-error'
 import { ValidationError } from '../../../shared/errors/validation-error'
+import { SimulateDepreciationUseCase } from './simulate-depreciation.use-case'
 
 describe('SimulateDepreciationUseCase', () => {
   let prisma: PrismaClient
