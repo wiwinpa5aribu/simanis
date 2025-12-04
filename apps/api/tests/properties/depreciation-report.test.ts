@@ -1,8 +1,8 @@
-import { describe, it, beforeEach, vi } from 'vitest'
-import fc from 'fast-check'
 import { PrismaClient } from '@simanis/database'
-import { GenerateDepreciationReportUseCase } from '../../src/application/use-cases/depreciation/generate-depreciation-report.use-case'
 import ExcelJS from 'exceljs'
+import fc from 'fast-check'
+import { beforeEach, describe, it, vi } from 'vitest'
+import { GenerateDepreciationReportUseCase } from '../../src/application/use-cases/depreciation/generate-depreciation-report.use-case'
 
 describe('Depreciation Report - Property Tests', () => {
   let prisma: PrismaClient
@@ -61,7 +61,7 @@ describe('Depreciation Report - Property Tests', () => {
             name: `Category ${selectedCategoryId}`,
           } as any)
 
-          const buffer = await useCase.execute({
+          const _buffer = await useCase.execute({
             year,
             month,
             categoryId: selectedCategoryId,
