@@ -1,0 +1,107 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "group:monorepos",
+    "group:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":automergeMinor",
+    ":automergePatch"
+  ],
+  "description": "Renovate configuration for SIMANIS monorepo",
+  "labels": ["dependencies", "renovate"],
+  "timezone": "Asia/Jakarta",
+  "schedule": ["before 9am on monday"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "minimumReleaseAge": "3 days",
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"]
+  },
+  "packageRules": [
+    {
+      "description": "Auto-merge patch updates",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
+    },
+    {
+      "description": "Auto-merge minor updates for dev dependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Group React ecosystem",
+      "groupName": "React",
+      "matchPackagePatterns": ["^react", "^@types/react"]
+    },
+    {
+      "description": "Group Testing libraries",
+      "groupName": "Testing",
+      "matchPackagePatterns": [
+        "vitest",
+        "@vitest/*",
+        "@testing-library/*",
+        "fast-check"
+      ]
+    },
+    {
+      "description": "Group Biome",
+      "groupName": "Biome",
+      "matchPackagePatterns": ["@biomejs/*"]
+    },
+    {
+      "description": "Group TanStack",
+      "groupName": "TanStack",
+      "matchPackagePatterns": ["@tanstack/*"]
+    },
+    {
+      "description": "Group TypeScript",
+      "groupName": "TypeScript",
+      "matchPackagePatterns": ["typescript", "@types/*"]
+    },
+    {
+      "description": "Group Prisma (apps/api)",
+      "groupName": "Prisma",
+      "matchPackagePatterns": ["prisma", "@prisma/*"]
+    },
+    {
+      "description": "Group Fastify (apps/api)",
+      "groupName": "Fastify",
+      "matchPackagePatterns": ["fastify", "@fastify/*"]
+    },
+    {
+      "description": "Group Build tools",
+      "groupName": "Build Tools",
+      "matchPackagePatterns": [
+        "vite",
+        "rolldown-vite",
+        "@vitejs/*",
+        "turbo",
+        "postcss",
+        "autoprefixer",
+        "tailwindcss",
+        "@tailwindcss/*"
+      ]
+    },
+    {
+      "description": "Disable major updates for critical packages (manual review)",
+      "matchPackagePatterns": ["react", "typescript", "prisma"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["dependencies", "major", "needs-review"]
+    },
+    {
+      "description": "Pin GitHub Actions",
+      "matchManagers": ["github-actions"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ],
+  "ignoreDeps": [],
+  "postUpdateOptions": ["pnpmDedupe"]
+}

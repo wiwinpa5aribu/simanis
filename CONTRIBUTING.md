@@ -1,258 +1,208 @@
-# Panduan Kontribusi SIMANIS
+# Contributing to SIMANIS
 
-Terima kasih telah berkontribusi pada SIMANIS! 🎉
+## 🔒 Branch Protection Rules
 
-## 🚀 Quick Start
+> **PENTING**: Jangan pernah commit langsung ke `main` atau `develop`!
+
+### Protected Branches
+
+| Branch | Purpose | Direct Push |
+|--------|---------|-------------|
+| `main` | Production code | ❌ DILARANG |
+| `develop` | Staging/integration | ❌ DILARANG |
+| `feature/*` | Development work | ✅ Allowed |
+| `fix/*` | Bug fixes | ✅ Allowed |
+| `chore/*` | Maintenance | ✅ Allowed |
+
+---
+
+## 📋 Git Workflow
+
+### 1. Mulai Fitur Baru
 
 ```bash
-# Clone repository
-git clone https://github.com/wiwinpa5aribu/simanis.git
-cd simanis
+# Pastikan develop up-to-date
+git checkout develop
+git pull origin develop
 
-# Install dependencies
-npm install
-cd backend && npm install && cd ..
+# Buat feature branch
+git checkout -b feature/nama-fitur
 
-# Setup database
-cd backend
-cp .env.example .env
-npm run prisma:migrate
-npm run prisma:seed
-cd ..
-
-# Run development
-npm run dev          # Frontend (port 5000)
-cd backend && npm run dev  # Backend (port 3000)
+# Contoh nama branch yang baik:
+# feature/login-page
+# feature/asset-crud
+# fix/auth-token-expired
+# chore/update-dependencies
 ```
 
-## 🌿 Git Flow Branching Strategy
+### 2. Selama Development
 
-```
-main (protected)
-  │
-  ├── develop (integration branch)
-  │     │
-  │     ├── feature/add-qr-scanner
-  │     ├── feature/bulk-import
-  │     └── feature/kib-report
-  │
-  ├── release/v1.1.0
-  │
-  ├── hotfix/critical-auth-fix
-  │
-  └── bugfix/loan-calculation
+```bash
+# Commit dengan conventional commits
+git add .
+git commit -m "feat(auth): add login functionality"
+
+# Push ke remote
+git push -u origin feature/nama-fitur
 ```
 
-### Branch Types
+### 3. Selesai Development → PR ke Develop
 
-| Branch | Base | Merge To | Naming | Purpose |
-|--------|------|----------|--------|---------|
-| `main` | - | - | `main` | Production-ready code (protected) |
-| `develop` | main | main | `develop` | Integration branch |
-| `feature/*` | develop | develop | `feature/nama-fitur` | New features |
-| `bugfix/*` | develop | develop | `bugfix/nama-bug` | Bug fixes |
-| `release/*` | develop | main + develop | `release/v1.x.x` | Release preparation |
-| `hotfix/*` | main | main + develop | `hotfix/nama-fix` | Emergency production fixes |
+```bash
+# Push final changes
+git push origin feature/nama-fitur
 
-### Workflow
+# Buat PR di GitHub:
+# feature/nama-fitur → develop
+```
 
-1. **New Feature**
-   ```bash
-   git checkout develop
-   git pull origin develop
-   git checkout -b feature/nama-fitur
-   # ... work on feature ...
-   git push origin feature/nama-fitur
-   # Create PR to develop
-   ```
+**PR Checklist:**
+- [ ] CI checks pass (lint, test, build)
+- [ ] Code review approved
+- [ ] No merge conflicts
 
-2. **Bug Fix**
-   ```bash
-   git checkout develop
-   git checkout -b bugfix/nama-bug
-   # ... fix bug ...
-   git push origin bugfix/nama-bug
-   # Create PR to develop
-   ```
+### 4. Release ke Production
 
-3. **Release**
-   ```bash
-   git checkout develop
-   git checkout -b release/v1.1.0
-   # ... final testing, version bump ...
-   # Create PR to main AND develop
-   ```
+```bash
+# Buat PR di GitHub:
+# develop → main
+```
 
-4. **Hotfix (Emergency)**
-   ```bash
-   git checkout main
-   git checkout -b hotfix/critical-fix
-   # ... fix critical bug ...
-   # Create PR to main AND develop
-   ```
+**Release Checklist:**
+- [ ] All tests pass
+- [ ] QA approved
+- [ ] No breaking changes (atau sudah documented)
+
+---
 
 ## 📝 Conventional Commits
 
-Semua commit harus mengikuti format:
+Format: `type(scope): description`
 
-```
-<type>(<scope>): <subject>
-```
+### Types
 
-**Types:**
-- `feat`: Fitur baru
-- `fix`: Bug fix
-- `docs`: Dokumentasi
-- `style`: Formatting, semicolons, dll
-- `refactor`: Refactoring code
-- `perf`: Performance improvement
-- `test`: Menambah/memperbaiki test
-- `chore`: Maintenance tasks
-- `ci`: CI/CD changes
+| Type | Kapan Digunakan |
+|------|-----------------|
+| `feat` | Fitur baru |
+| `fix` | Bug fix |
+| `docs` | Dokumentasi |
+| `style` | Formatting (tidak ubah logic) |
+| `refactor` | Refactoring code |
+| `perf` | Performance improvement |
+| `test` | Menambah/update tests |
+| `build` | Build system changes |
+| `ci` | CI/CD changes |
+| `chore` | Maintenance tasks |
 
-**Contoh:**
-```
-feat(assets): add QR code bulk print
-fix(auth): resolve token refresh issue
-docs: update API documentation
-refactor(api): extract dashboard types to separate file
-```
-
-## 🧪 Testing
+### Contoh
 
 ```bash
-# Frontend tests
-npm run test:run
-npm run test:coverage
-
-# Backend tests
-cd backend && npm test
-
-# Analysis tools
-npm run knip              # Unused code detection
-npx madge --circular src/ # Circular dependency check
-npx depcheck              # Unused dependencies
+feat(auth): add JWT refresh token
+fix(assets): resolve pagination bug
+docs(readme): update installation guide
+chore(deps): update dependencies
+test(loans): add unit tests for return flow
 ```
 
-## 🔍 Code Quality Checklist
+---
 
-Sebelum commit, pastikan:
+## 🛡️ Branch Protection (GitHub Settings)
 
-- [ ] `npm run lint` - No errors
-- [ ] `npm run format:check` - Formatting OK
-- [ ] `npm run test:run` - Tests pass
-- [ ] `npx tsc --noEmit` - No TypeScript errors
-- [ ] `npx madge --circular src/` - No circular dependencies
+### Untuk `main` branch:
 
-Pre-commit hooks akan otomatis menjalankan lint dan format.
+1. Require pull request before merging
+2. Require approvals: 1
+3. Require status checks to pass:
+   - `lint`
+   - `test-api`
+   - `test-web`
+   - `build`
+4. Require branches to be up to date
+5. Do not allow bypassing the above settings
 
-## 📐 Coding Standards
+### Untuk `develop` branch:
 
-### Naming Convention: camelCase
+1. Require pull request before merging
+2. Require status checks to pass:
+   - `lint`
+   - `test-api`
+   - `test-web`
+   - `build`
 
-Semua property menggunakan **camelCase** sesuai Prisma schema:
+---
 
-```typescript
-// ✅ Benar
-asset.kodeAset
-asset.namaBarang
-asset.categoryId
+## 🚫 Yang TIDAK Boleh Dilakukan
 
-// ❌ Salah
-asset.kode_aset
-asset.nama_barang
+```bash
+# ❌ JANGAN LAKUKAN INI:
+git checkout main
+git commit -m "quick fix"
+git push origin main
+
+# ❌ JANGAN LAKUKAN INI:
+git checkout develop
+git commit -m "add feature"
+git push origin develop
+
+# ❌ JANGAN LAKUKAN INI:
+git push --force origin main
+git push --force origin develop
 ```
 
-### Zod v4 Enum Validation
+---
 
-Gunakan `message` bukan `errorMap`:
+## ✅ Yang HARUS Dilakukan
 
-```typescript
-// ✅ Benar
-z.enum(['Baik', 'Rusak Ringan'], { message: 'Pilih kondisi valid' })
+```bash
+# ✅ SELALU mulai dari develop
+git checkout develop && git pull
 
-// ❌ Salah
-z.enum(['Baik', 'Rusak Ringan'], { errorMap: () => ({ message: '...' }) })
+# ✅ SELALU buat branch baru
+git checkout -b feature/nama-fitur
+
+# ✅ SELALU buat PR untuk merge
+# feature/* → develop (via PR)
+# develop → main (via PR)
+
+# ✅ SELALU tunggu CI pass sebelum merge
 ```
 
-### Vite Environment Variables
+---
 
-```typescript
-// ✅ Benar (frontend)
-import.meta.env.DEV
-import.meta.env.VITE_API_URL
+## 🔧 Setup Local Git Hooks
 
-// ❌ Salah (tidak tersedia di browser)
-process.env.NODE_ENV
+Untuk mencegah push langsung ke protected branches, jalankan:
+
+```bash
+# Sudah otomatis via Husky
+pnpm install
 ```
 
-### Unused Parameters
+Hook akan mencegah:
+- Push langsung ke `main`
+- Push langsung ke `develop`
+- Commit tanpa conventional commit format
 
-Gunakan underscore prefix untuk parameter yang intentionally unused:
+---
 
-```typescript
-// ✅ Benar
-constructor(_callback: CallbackType, _options?: OptionsType) {}
-
-// ❌ Salah - akan error ESLint
-constructor(callback: CallbackType, options?: OptionsType) {}
-```
-
-Dokumentasi lengkap: `.kiro/steering/coding-standards.md`
-
-## 📦 Pull Request Process
-
-1. Buat branch dari `develop` (atau `main` untuk hotfix)
-2. Commit dengan conventional commit format
-3. Push dan buat PR
-4. Isi PR template dengan lengkap
-5. Tunggu CI pass dan review approval
-6. Squash merge ke target branch
-
-### PR Title Format
-```
-feat(scope): description
-fix(scope): description
-docs: description
-```
-
-## 🏗️ Project Structure
+## 📊 Workflow Diagram
 
 ```
-simanis/
-├── src/                 # Frontend React
-│   ├── components/      # Reusable components
-│   ├── routes/          # Page components
-│   ├── libs/            # Utilities, hooks, stores
-│   └── test/            # Test setup
-├── backend/             # Backend Fastify
-│   ├── src/
-│   │   ├── application/ # Use cases, DTOs
-│   │   ├── domain/      # Entities, repositories
-│   │   ├── infrastructure/ # Database, external services
-│   │   └── presentation/   # Controllers, routes
-│   └── prisma/          # Database schema
-├── shared/              # Shared types & constants
-├── docs/                # Documentation
-└── .github/             # CI/CD, templates
+┌─────────────────────────────────────────────────────────────┐
+│                        WORKFLOW                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  feature/xxx ──PR──► develop ──PR──► main                   │
+│       │                  │              │                    │
+│       │                  │              └── Production       │
+│       │                  └── Staging/Testing                 │
+│       └── Development                                        │
+│                                                              │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐              │
+│  │ feature/ │───►│ develop  │───►│   main   │              │
+│  │   fix/   │ PR │          │ PR │          │              │
+│  │  chore/  │    │  (CI ✓)  │    │  (CI ✓)  │              │
+│  └──────────┘    └──────────┘    └──────────┘              │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
 ```
-
-## 🏷️ Issue Labels
-
-| Label | Description |
-|-------|-------------|
-| `bug` | Something isn't working |
-| `enhancement` | New feature request |
-| `documentation` | Documentation improvements |
-| `good first issue` | Good for newcomers |
-| `help wanted` | Extra attention needed |
-| `priority: high` | High priority |
-| `priority: medium` | Medium priority |
-| `priority: low` | Low priority |
-| `platform: frontend` | Frontend related |
-| `platform: backend` | Backend related |
-| `platform: database` | Database related |
-
-## ❓ Questions?
-
-Buat issue dengan label `question` atau gunakan GitHub Discussions.
