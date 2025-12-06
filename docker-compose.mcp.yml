@@ -1,0 +1,45 @@
+# Docker Compose untuk MCP Power Stack - SIMANIS
+# Jalankan: docker-compose -f docker-compose.mcp.yml up -d
+
+services:
+  # ============================================
+  # CHROMA - Vector Database untuk Semantic Search
+  # Memungkinkan Kiro "mengingat" pattern kode SIMANIS
+  # ============================================
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: simanis-chroma
+    ports:
+      - "8100:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma/chroma
+      - ANONYMIZED_TELEMETRY=FALSE
+      - ALLOW_RESET=TRUE
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================
+  # REDIS - Untuk BullMQ Queue (sudah dibutuhkan SIMANIS API)
+  # Jika belum ada, uncomment service ini
+  # ============================================
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: simanis-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   restart: unless-stopped
+
+volumes:
+  chroma_data:
+    driver: local
+  # redis_data:
+  #   driver: local

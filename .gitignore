@@ -68,6 +68,7 @@ Desktop.ini
 docs/
 .cursorrules
 CLAUDE.md
+scripts/
 
 # ============= Session/Context Files =============
 *session*.md
@@ -75,8 +76,8 @@ CLAUDE.md
 *prompt*.md
 prompt.md
 
-# ============= Trunk (keep config, ignore runtime) =============
-.trunk/actions/
+# ============= Trunk (keep config, ignore runtime) =/actions/
+.trunk============
 .trunk/logs/
 .trunk/notifications/
 .trunk/out/
