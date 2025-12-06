@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@sentry/react": "^10.27.0",
+    "@sentry/react": "^10.29.0",
     "@simanis/shared": "workspace:*",
     "@tanstack/react-query": "^5.90.10",
     "axios": "^1.13.2",
