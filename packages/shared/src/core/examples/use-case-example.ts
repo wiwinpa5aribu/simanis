@@ -134,17 +134,16 @@ async function exampleUsage() {
   // 8. Handle result dengan match pattern
   result.match({
     ok: (output) => {
-      console.log('Asset created:', output.data.id)
-      console.log('Duration:', output.duration, 'ms')
+      logger.info('Asset created', { assetId: output.data.id, duration: output.duration })
     },
     err: (error) => {
-      console.error('Error:', error.code, error.message)
+      logger.error('Error creating asset', { code: error.code, message: error.message })
     },
   })
 
   // 9. Check system health
   const health = ModuleRegistry.getSystemHealth()
-  console.log('System health:', health.status)
+  logger.info('System health check', { status: health.status })
 }
 
 // Export for documentation

@@ -15,14 +15,12 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 // Mock untuk test environment (replace dengan Playwright imports untuk real E2E)
 const mockPage = {
-  goto: async (url: string) => console.log(`Navigate to: ${url}`),
-  fill: async (selector: string, value: string) =>
-    console.log(`Fill ${selector}: ${value}`),
-  click: async (selector: string) => console.log(`Click: ${selector}`),
-  waitForSelector: async (selector: string) =>
-    console.log(`Wait for: ${selector}`),
-  textContent: async (selector: string) => 'mock content',
-  isVisible: async (selector: string) => true,
+  goto: async (_url: string) => { /* mock navigation */ },
+  fill: async (_selector: string, _value: string) => { /* mock fill */ },
+  click: async (_selector: string) => { /* mock click */ },
+  waitForSelector: async (_selector: string) => { /* mock wait */ },
+  textContent: async (_selector: string) => 'mock content',
+  isVisible: async (_selector: string) => true,
   url: () => 'http://localhost:5000/dashboard',
 }
 
