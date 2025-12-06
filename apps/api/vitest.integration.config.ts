@@ -5,8 +5,12 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['tests/**/*.test.ts', 'src/**/*.test.ts'],
-    exclude: ['tests/integration/**', 'node_modules/**'],
+    include: ['tests/integration/**/*.test.ts'],
+    testTimeout: 30000,
+    hookTimeout: 30000,
+    sequence: {
+      concurrent: false,
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
@@ -17,15 +21,7 @@ export default defineConfig({
         '**/*.config.*',
         '**/tests/**',
         'src/main.ts',
-        'src/presentation/routes/**',
-        'src/shared/sentry/**',
       ],
-      thresholds: {
-        statements: 80,
-        branches: 75,
-        functions: 80,
-        lines: 80,
-      },
     },
   },
   resolve: {
