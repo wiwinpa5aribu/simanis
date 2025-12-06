@@ -34,11 +34,14 @@ const DEPRECIATION_ROUTES = {
   main: '/depreciation',
 } as const
 
-const _DepreciationRoutes = {
+const DepreciationRoutes = {
   main: () => DEPRECIATION_ROUTES.main,
   withTab: (tab: 'dashboard' | 'list' | 'simulation' | 'settings') =>
     `${DEPRECIATION_ROUTES.main}?tab=${tab}`,
 }
+
+// Export for potential use in other tests
+export { DepreciationRoutes }
 
 const AssetDepreciationIntegration = {
   assetToDepreciation: () => DEPRECIATION_ROUTES.main,
