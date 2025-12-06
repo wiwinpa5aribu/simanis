@@ -50,6 +50,8 @@ jobs:
 
       - name: Validate Prisma Schema
         run: pnpm --filter @simanis/database exec prisma validate
+        env:
+          DATABASE_URL: mysql://dummy:dummy@localhost:3306/dummy
 
       - name: Run Biome lint
         run: pnpm run lint
@@ -97,6 +99,8 @@ jobs:
 
       - name: Validate Prisma Schema
         run: pnpm --filter @simanis/database exec prisma validate
+        env:
+          DATABASE_URL: mysql://dummy:dummy@localhost:3306/dummy
 
       - name: Run API tests with coverage
         run: pnpm --filter @simanis/api test:cov
@@ -353,6 +357,8 @@ jobs:
 
       - name: Validate Prisma Schema
         run: pnpm --filter @simanis/database exec prisma validate
+        env:
+          DATABASE_URL: mysql://dummy:dummy@localhost:3306/dummy
 
       - name: Build all apps
         run: pnpm run build
