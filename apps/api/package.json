@@ -14,7 +14,8 @@
     "test": "vitest --run",
     "test:watch": "vitest",
     "test:cov": "vitest --run --coverage",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "test:integration": "vitest --run --config vitest.integration.config.ts"
   },
   "keywords": ["simanis", "asset-management", "school", "fastify", "prisma"],
   "author": "Wiwin Pasaribu <wiwinpa5aribu>",
