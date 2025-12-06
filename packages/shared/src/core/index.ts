@@ -5,6 +5,7 @@
  * - Defensive programming patterns
  * - Module registry untuk tracking
  * - Explicit contracts untuk type safety
+ * - Self-debugging entity types
  *
  * @example
  * import { Result, Guard, createLogger, ModuleRegistry } from '@simanis/shared/core';
@@ -19,6 +20,9 @@
  * // Use defensive patterns
  * const result = Guard.againstEmpty(name, 'name');
  * if (result.isErr()) return result;
+ *
+ * // Create self-debugging entity
+ * const asset = createSelfDebuggingEntity(assetData, userId);
  */
 
 // Contracts
@@ -79,3 +83,48 @@ export {
   type SystemHealth,
   withModuleTracking,
 } from './registry'
+// Entity (Self-Debugging Data Design)
+export {
+  // Types
+  type AuditAction,
+  type AuditChange,
+  type AuditEntry,
+  type EntityRelationships,
+  type ObservabilityData,
+  type PerformanceFlags,
+  type SyncState,
+  type SyncStatus,
+  type ValidationStatus,
+  // Factory functions
+  createEntityLineage,
+  createEntityMetadata,
+  createInitialAuditEntry,
+  createObservabilityData,
+  createSelfDebuggingEntity,
+  createSyncState,
+  createUpdateAuditEntry,
+  createValidationStatus,
+  // Operations
+  addHasMany,
+  calculateHash,
+  getAuditEntriesByUser,
+  getAuditEntriesInRange,
+  getDebuggingSummary,
+  getEntityAge,
+  getLastAuditEntry,
+  isModifiedSince,
+  markInvalid,
+  markSynced,
+  markSyncError,
+  markValid,
+  recordAccess,
+  recordError,
+  removeHasMany,
+  setBelongsTo,
+  updateEntity,
+  updateSyncStatus,
+  updateValidation,
+  verifyIntegrity,
+} from './entity'
+// Hash utilities
+export { createChecksum, createHash, hashObject, verifyHash } from './defensive'

@@ -5,9 +5,11 @@
  * - Result<T, E> pattern
  * - Guard classes
  * - Structured Logger
+ * - Hash utilities
  */
 
 export { Guard, type GuardResult, SIMANISGuard } from './guard'
+export { createChecksum, createHash, hashObject, verifyHash } from './hash'
 export {
   createLogger,
   generateCorrelationId,
