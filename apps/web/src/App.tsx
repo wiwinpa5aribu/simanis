@@ -22,8 +22,10 @@ import { LoginPage } from './routes/auth/LoginPage'
 import { CategoriesPage } from './routes/categories/CategoriesPage'
 import DashboardPage from './routes/dashboard/DashboardPage'
 import DepreciationListPage from './routes/depreciation/DepreciationListPage'
+import InventoryCreatePage from './routes/inventory/InventoryCreatePage'
 import InventoryListPage from './routes/inventory/InventoryListPage'
 import InventoryScanPage from './routes/inventory/InventoryScanPage'
+import InventorySessionPage from './routes/inventory/InventorySessionPage'
 import { LoanCreatePage } from './routes/loans/LoanCreatePage'
 import { LoanDetailPage } from './routes/loans/LoanDetailPage'
 import { LoansListPage } from './routes/loans/LoansListPage'
@@ -72,10 +74,26 @@ function App() {
                 }
               />
               <Route
+                path="inventory/new"
+                element={
+                  <ErrorBoundary>
+                    <InventoryCreatePage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route
                 path="inventory/scan"
                 element={
                   <ErrorBoundary>
                     <InventoryScanPage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route
+                path="inventory/session/:id"
+                element={
+                  <ErrorBoundary>
+                    <InventorySessionPage />
                   </ErrorBoundary>
                 }
               />

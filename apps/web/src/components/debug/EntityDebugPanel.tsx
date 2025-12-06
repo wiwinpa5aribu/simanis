@@ -11,7 +11,6 @@ import type {
   SyncState,
   ValidationStatus,
 } from '@simanis/shared'
-import { getDebuggingSummary } from '@simanis/shared'
 
 // Entity type with debugging metadata
 interface DebugEntity {
@@ -20,7 +19,28 @@ interface DebugEntity {
   _auditTrail: AuditEntry[]
   _validation: ValidationStatus
   _sync: SyncState
-  _observability: { errorCount: number; accessCount: number }
+  _observability: { errorCount: number; accessCount: number; lastAccessed?: string }
+}
+
+// Local summary function to avoid type issues with getDebuggingSummary
+function createSummary(entity: DebugEntity) {
+  const created = new Date(entity._lineage.createdAt)
+  const now = new Date()
+  const ageInDays = Math.floor((now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24))
+  
+  return {
+    version: entity._metadata.version,
+    createdBy: entity._lineage.createdBy,
+    createdAt: entity._lineage.createdAt,
+    lastModifiedBy: entity._lineage.lastModifiedBy,
+    lastModifiedAt: entity._lineage.lastModifiedAt,
+    modificationCount: entity._lineage.modificationCount,
+    isValid: entity._validation.isValid,
+    syncStatus: entity._sync.syncStatus,
+    errorCount: entity._observability.errorCount,
+    accessCount: entity._observability.accessCount,
+    ageInDays,
+  }
 }
 
 interface EntityDebugPanelProps {
@@ -37,7 +57,7 @@ export function EntityDebugPanel({
   const [expanded, setExpanded] = useState(defaultExpanded)
   const [activeTab, setActiveTab] = useState<'summary' | 'audit' | 'validation' | 'sync'>('summary')
 
-  const summary = getDebuggingSummary(entity)
+  const summary = createSummary(entity)
 
   if (!expanded) {
     return (
@@ -104,7 +124,7 @@ export function EntityDebugPanel({
 // TAB COMPONENTS
 // ============================================
 
-function SummaryTab({ summary }: { summary: ReturnType<typeof getDebuggingSummary> }) {
+function SummaryTab({ summary }: { summary: ReturnType<typeof createSummary> }) {
   return (
     <div className="grid grid-cols-2 gap-4 text-sm">
       <InfoRow label="Version" value={summary.version} />
@@ -186,7 +206,7 @@ function ValidationTab({
         <div>
           <div className="font-medium text-green-700 mb-1">Passed Rules:</div>
           <div className="flex flex-wrap gap-1">
-            {validation.passedRules.map((rule) => (
+            {validation.passedRules.map((rule: string) => (
               <span key={rule} className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-800">
                 {rule}
               </span>
@@ -199,7 +219,7 @@ function ValidationTab({
         <div>
           <div className="font-medium text-red-700 mb-1">Failed Rules:</div>
           <div className="flex flex-wrap gap-1">
-            {validation.failedRules.map((rule) => (
+            {validation.failedRules.map((rule: string) => (
               <span key={rule} className="rounded bg-red-100 px-2 py-0.5 text-xs text-red-800">
                 {rule}
               </span>
@@ -212,7 +232,7 @@ function ValidationTab({
         <div>
           <div className="font-medium text-yellow-700 mb-1">Warnings:</div>
           <div className="flex flex-wrap gap-1">
-            {validation.warnings.map((warning) => (
+            {validation.warnings.map((warning: string) => (
               <span
                 key={warning}
                 className="rounded bg-yellow-100 px-2 py-0.5 text-xs text-yellow-800"
@@ -231,8 +251,8 @@ function ValidationTab({
   )
 }
 
-function SyncTab({ sync }: { sync: SelfDebuggingEntity<unknown>['_sync'] }) {
-  const statusColors = {
+function SyncTab({ sync }: { sync: SyncState }) {
+  const statusColors: Record<string, string> = {
     synced: 'bg-green-100 text-green-800',
     pending: 'bg-yellow-100 text-yellow-800',
     conflict: 'bg-orange-100 text-orange-800',
@@ -242,7 +262,7 @@ function SyncTab({ sync }: { sync: SelfDebuggingEntity<unknown>['_sync'] }) {
   return (
     <div className="space-y-3 text-sm">
       <div className="flex items-center gap-2">
-        <span className={`rounded px-2 py-1 text-xs font-medium ${statusColors[sync.syncStatus]}`}>
+        <span className={`rounded px-2 py-1 text-xs font-medium ${statusColors[sync.syncStatus] ?? 'bg-gray-100'}`}>
           {sync.syncStatus.toUpperCase()}
         </span>
       </div>
