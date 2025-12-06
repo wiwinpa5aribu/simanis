@@ -84,8 +84,9 @@ if (filesChanged > PR_FILES_LIMIT) {
 const excludedFiles = ['dangerfile.ts']
 
 // Check for console.log in TypeScript/JavaScript files
+// Exclude dangerfile.ts to avoid self-detection
 const tsFiles = getAllChangedFiles(/\.(ts|tsx|js|jsx)$/).filter(
-  (file) => !excludedFiles.includes(file)
+  (file) => !excludedFiles.includes(file) && !file.includes('dangerfile')
 )
 
 tsFiles.forEach(async (file) => {
@@ -97,7 +98,7 @@ tsFiles.forEach(async (file) => {
   }
 })
 
-// Check for TODO/FIXME comments
+// Check for TODO/FIXME comments (skip dangerfile.ts)
 tsFiles.forEach(async (file) => {
   const content = await danger.git.diffForFile(file)
   if (content) {
@@ -114,16 +115,22 @@ tsFiles.forEach(async (file) => {
   }
 })
 
-// Check for debugger statements
-tsFiles.forEach(async (file) => {
-  const content = await danger.git.diffForFile(file)
-  // Use regex to match actual debugger statement, not string literals
-  if (content && /^\+.*\bdebugger\b/m.test(content.diff)) {
-    fail(
-      `❌ \`debugger\` statement ditemukan di \`${file}\`. Tolong hapus sebelum merge.`
-    )
-  }
-})
+// Check for debugger statements (skip dangerfile.ts to avoid self-detection)
+tsFiles
+  .filter((file) => !file.includes('dangerfile'))
+  .forEach(async (file) => {
+    const content = await danger.git.diffForFile(file)
+    // Match lines that start with + and contain standalone debugger keyword
+    // Excludes string literals like 'debugger' or "debugger"
+    if (
+      content &&
+      /^\+(?!.*['"`].*debugger.*['"`]).*\bdebugger\s*;?\s*$/m.test(content.diff)
+    ) {
+      fail(
+        `❌ debugger statement ditemukan di \`${file}\`. Tolong hapus sebelum merge.`
+      )
+    }
+  })
 
 // =============================================================================
 // File-specific Checks
