@@ -28,16 +28,16 @@ updates:
           - "@eslint/*"
           - "typescript-eslint"
 
-  # Backend dependencies
+  # Database package dependencies (Prisma)
   - package-ecosystem: "npm"
-    directory: "/backend"
+    directory: "/packages/database"
     schedule:
       interval: "weekly"
       day: "monday"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3
     labels:
       - "dependencies"
-      - "backend"
+      - "database"
     commit-message:
       prefix: "chore(deps)"
     groups:
@@ -45,10 +45,46 @@ updates:
         patterns:
           - "prisma"
           - "@prisma/*"
+
+  # API app dependencies
+  - package-ecosystem: "npm"
+    directory: "/apps/api"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "backend"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
       fastify:
         patterns:
           - "fastify"
           - "@fastify/*"
+
+  # Web app dependencies
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "frontend"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      vite:
+        patterns:
+          - "vite*"
+          - "@vitejs/*"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
