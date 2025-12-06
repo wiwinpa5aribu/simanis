@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client'
 import * as argon2 from 'argon2'
+import { PrismaClient } from '../node_modules/.prisma/client'
 
 const prisma = new PrismaClient()
 
