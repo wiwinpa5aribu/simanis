@@ -1,4 +1,4 @@
-name: SIMANIS CI
+name: SIMANIS CI # Cleaned and synced version
 
 on:
   push:
