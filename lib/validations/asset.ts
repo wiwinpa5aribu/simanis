@@ -10,8 +10,7 @@ export const assetSchema = z.object({
     purchasePrice: z.number(),
     condition: z.enum(["baik", "cukup", "kurang", "rusak"]),
     description: z.string(),
-    specification: z.string().optional(),
-    imageUrl: z.string().optional(),
 })
+
 
 export type TAsset = z.infer<typeof assetSchema>
