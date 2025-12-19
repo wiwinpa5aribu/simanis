@@ -15,7 +15,6 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
-import { Plus } from "lucide-react"
 
 interface LocationFormProps {
     locations: any[]
