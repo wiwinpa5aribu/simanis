@@ -34,9 +34,10 @@ next-env.d.ts
 
 # documentation
 !README.md
-docs/
-DOMAIN_GLOSSARY.md
-walkthrough.md
+!docs/
+!DOMAIN_GLOSSARY.md
+!walkthrough.md
+!CONTRIBUTING.md
 
 # File temporer atau yang benar-benar tidak relevan
 .kiro/
