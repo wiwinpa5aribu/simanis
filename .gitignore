@@ -34,11 +34,10 @@ yarn-error.log*
 next-env.d.ts
 
 # documentation
+*.md
 !README.md
 !CONTRIBUTING.md
-docs/
-DOMAIN_GLOSSARY.md
-walkthrough.md
+.github/PULL_REQUEST_TEMPLATE.md
 
 # File temporer atau yang benar-benar tidak relevan
 .cursorrules
