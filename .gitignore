@@ -48,5 +48,5 @@ walkthrough.md
 .antigravity/
 /lib/generated/prisma
 
-# Prisma generated client
-/prisma/generated/
+
+
