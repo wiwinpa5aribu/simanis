@@ -1,4 +1,4 @@
-import { stockOpnames } from "@/lib/data"
+import { prisma } from "@/lib/db"
 import { stockOpnameSchema, type TStockOpname } from "@/lib/validations/stock-opname"
 
 /**
@@ -6,12 +6,17 @@ import { stockOpnameSchema, type TStockOpname } from "@/lib/validations/stock-op
  */
 export const stockOpnameService = {
     /**
-     * Retrieves all stock opname sessions and validates them against the schema.
-     * @returns {TStockOpname[]} An array of validated session objects.
+     * Retrieves all stock opname sessions and validates them.
      */
-    getAll: (): TStockOpname[] => {
-        return stockOpnames.map((session) => {
-            const result = stockOpnameSchema.safeParse(session)
+    getAll: async (): Promise<TStockOpname[]> => {
+        const stockOpnames = await prisma.stockOpnameSession.findMany()
+        return stockOpnames.map((session: any) => {
+            // Convert enum value with hyphen to match schema if necessary
+            const formattedSession = {
+                ...session,
+                status: session.status === "sedang_berlangsung" ? "sedang-berlangsung" : session.status
+            }
+            const result = stockOpnameSchema.safeParse(formattedSession)
             if (!result.success) {
                 console.error("Validation error for stock opname session:", session.id, result.error.format())
                 throw new Error(`Data stock opname tidak valid: ${session.id}`)
@@ -20,5 +25,6 @@ export const stockOpnameService = {
         })
     },
 }
+
 
 

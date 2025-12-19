@@ -16,9 +16,13 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
-import { locations } from "@/lib/data"
 
-export function StockOpnameForm() {
+interface StockOpnameFormProps {
+    locations: any[]
+}
+
+export function StockOpnameForm({ locations }: StockOpnameFormProps) {
+
     const [open, setOpen] = useState(false)
 
     return (

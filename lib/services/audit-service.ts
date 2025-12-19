@@ -1,4 +1,4 @@
-import { auditLogs } from "@/lib/data"
+import { prisma } from "@/lib/db"
 import { auditLogSchema, type TAuditLog } from "@/lib/validations/audit"
 
 /**
@@ -6,11 +6,11 @@ import { auditLogSchema, type TAuditLog } from "@/lib/validations/audit"
  */
 export const auditService = {
     /**
-     * Retrieves all audit logs and validates them against the schema.
-     * @returns {TAuditLog[]} An array of validated audit log objects.
+     * Retrieves all audit logs from database and validates them.
      */
-    getAll: (): TAuditLog[] => {
-        return auditLogs.map((log) => {
+    getAll: async (): Promise<TAuditLog[]> => {
+        const auditLogs = await prisma.auditLog.findMany()
+        return auditLogs.map((log: any) => {
             const result = auditLogSchema.safeParse(log)
             if (!result.success) {
                 console.error("Validation error for audit log:", log.id, result.error.format())
@@ -20,4 +20,6 @@ export const auditService = {
         })
     },
 }
+
+
 

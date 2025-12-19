@@ -8,9 +8,10 @@ import { AssetForm } from "./asset-form"
 interface AssetFiltersProps {
     searchTerm: string
     setSearchTerm: (term: string) => void
+    locations?: any[]
 }
 
-export function AssetFilters({ searchTerm, setSearchTerm }: AssetFiltersProps) {
+export function AssetFilters({ searchTerm, setSearchTerm, locations }: AssetFiltersProps) {
     return (
         <div className="flex items-center justify-between">
             <div>
@@ -22,11 +23,12 @@ export function AssetFilters({ searchTerm, setSearchTerm }: AssetFiltersProps) {
                     <Upload className="mr-2 h-4 w-4" />
                     Import CSV
                 </Button>
-                <AssetForm />
+                <AssetForm locations={locations || []} />
             </div>
         </div>
     )
 }
+
 
 export function AssetSearch({ searchTerm, setSearchTerm }: AssetFiltersProps) {
     return (

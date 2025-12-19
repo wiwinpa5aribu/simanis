@@ -16,9 +16,14 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
-import { assets, locations } from "@/lib/data"
 
-export function MutationForm() {
+interface MutationFormProps {
+    assets: any[]
+    locations: any[]
+}
+
+export function MutationForm({ assets, locations }: MutationFormProps) {
+
     const [open, setOpen] = useState(false)
 
     return (

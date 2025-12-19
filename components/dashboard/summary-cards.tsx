@@ -1,42 +1,50 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Package, MapPin, ArrowLeftRight, ClipboardCheck, TrendingUp, TrendingDown } from "lucide-react"
+import { prisma } from "@/lib/db"
 
-const summaryData = [
-  {
-    title: "Total Aset",
-    value: "1,248",
-    change: "+12%",
-    trend: "up",
-    icon: Package,
-    description: "dari bulan lalu",
-  },
-  {
-    title: "Lokasi Aktif",
-    value: "45",
-    change: "+3",
-    trend: "up",
-    icon: MapPin,
-    description: "lokasi baru",
-  },
-  {
-    title: "Mutasi Bulan Ini",
-    value: "28",
-    change: "-5%",
-    trend: "down",
-    icon: ArrowLeftRight,
-    description: "dari bulan lalu",
-  },
-  {
-    title: "Stock Opname Pending",
-    value: "3",
-    change: "2",
-    trend: "neutral",
-    icon: ClipboardCheck,
-    description: "menunggu verifikasi",
-  },
-]
+export async function SummaryCards() {
+  const assetCount = await prisma.asset.count()
+  const locationCount = await prisma.location.count()
+  const mutationCount = await prisma.mutation.count()
+  const stockOpnameCount = await prisma.stockOpnameSession.count({
+    where: { status: "sedang_berlangsung" }
+  })
 
-export function SummaryCards() {
+  const summaryData = [
+    {
+      title: "Total Aset",
+      value: assetCount.toLocaleString(),
+      change: "+0%",
+      trend: "neutral",
+      icon: Package,
+      description: "total terdaftar",
+    },
+    {
+      title: "Lokasi Aktif",
+      value: locationCount.toLocaleString(),
+      change: "+0",
+      trend: "neutral",
+      icon: MapPin,
+      description: "titik lokasi",
+    },
+    {
+      title: "Mutasi Bulan Ini",
+      value: mutationCount.toLocaleString(),
+      change: "+0%",
+      trend: "neutral",
+      icon: ArrowLeftRight,
+      description: "total mutasi",
+    },
+    {
+      title: "Stock Opname Aktif",
+      value: stockOpnameCount.toLocaleString(),
+      change: "0",
+      trend: "neutral",
+      icon: ClipboardCheck,
+      description: "sesi berjalan",
+    },
+  ]
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {summaryData.map((item) => (
@@ -65,3 +73,4 @@ export function SummaryCards() {
     </div>
   )
 }
+

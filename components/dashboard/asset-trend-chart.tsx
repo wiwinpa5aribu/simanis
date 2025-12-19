@@ -3,22 +3,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
-const data = [
-  { month: "Jan", total: 1050, baru: 45 },
-  { month: "Feb", total: 1080, baru: 38 },
-  { month: "Mar", total: 1120, baru: 52 },
-  { month: "Apr", total: 1145, baru: 31 },
-  { month: "Mei", total: 1180, baru: 42 },
-  { month: "Jun", total: 1195, baru: 28 },
-  { month: "Jul", total: 1210, baru: 35 },
-  { month: "Agu", total: 1225, baru: 22 },
-  { month: "Sep", total: 1235, baru: 18 },
-  { month: "Okt", total: 1240, baru: 12 },
-  { month: "Nov", total: 1245, baru: 15 },
-  { month: "Des", total: 1248, baru: 8 },
-]
+interface TrendData {
+  month: string
+  total: number
+  baru: number
+}
 
-export function AssetTrendChart() {
+interface AssetTrendChartProps {
+  data: TrendData[]
+}
+
+export function AssetTrendChart({ data }: AssetTrendChartProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader>
@@ -60,3 +55,4 @@ export function AssetTrendChart() {
     </Card>
   )
 }
+

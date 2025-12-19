@@ -7,12 +7,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { FileDown } from "lucide-react"
-import { mutationService } from "@/lib/services/mutation-service"
+import type { TMutation } from "@/lib/validations/mutation"
 
-export function MutationReport() {
+interface MutationReportProps {
+    mutations: TMutation[]
+}
+
+export function MutationReport({ mutations }: MutationReportProps) {
     const [dateFrom, setDateFrom] = useState("")
     const [dateTo, setDateTo] = useState("")
-    const mutations = mutationService.getAll()
+
 
 
     return (
@@ -54,23 +58,26 @@ export function MutationReport() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow>
-                            <TableCell>2024-12-15</TableCell>
-                            <TableCell className="font-mono text-sm">AST-001</TableCell>
-                            <TableCell>Komputer Desktop HP</TableCell>
-                            <TableCell>Ruang TU</TableCell>
-                            <TableCell>Lab Komputer 1</TableCell>
-                            <TableCell>Penambahan fasilitas lab</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>2024-12-14</TableCell>
-                            <TableCell className="font-mono text-sm">AST-003</TableCell>
-                            <TableCell>Meja Siswa Standar</TableCell>
-                            <TableCell>Gudang</TableCell>
-                            <TableCell>Ruang Kelas 2B</TableCell>
-                            <TableCell>Kebutuhan kelas baru</TableCell>
-                        </TableRow>
+                        {mutations.length > 0 ? (
+                            mutations.map((mut) => (
+                                <TableRow key={mut.id}>
+                                    <TableCell>{mut.date}</TableCell>
+                                    <TableCell className="font-mono text-sm">{mut.assetId}</TableCell>
+                                    <TableCell>{mut.assetName}</TableCell>
+                                    <TableCell>{mut.fromLocation}</TableCell>
+                                    <TableCell>{mut.toLocation}</TableCell>
+                                    <TableCell>{mut.reason}</TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                                    Tidak ada data mutasi
+                                </TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
+
                 </Table>
             </CardContent>
         </>

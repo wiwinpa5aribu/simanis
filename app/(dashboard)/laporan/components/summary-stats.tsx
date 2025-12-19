@@ -1,11 +1,12 @@
-"use client"
-
 import { Card, CardContent } from "@/components/ui/card"
 import { BarChart3, PieChart, TrendingDown } from "lucide-react"
-import { assetService } from "@/lib/services/asset-service"
+import type { TAsset } from "@/lib/validations/asset"
 
-export function SummaryStats() {
-    const assets = assetService.getAll()
+interface SummaryStatsProps {
+    assets: TAsset[]
+}
+
+export function SummaryStats({ assets }: SummaryStatsProps) {
     const depreciationData = assets.map((asset) => {
         const purchaseYear = new Date(asset.purchaseDate).getFullYear()
         const currentYear = new Date().getFullYear()
@@ -18,6 +19,7 @@ export function SummaryStats() {
     const totalAssetValue = assets.reduce((sum, a) => sum + a.purchasePrice, 0)
     const totalCurrentValue = depreciationData.reduce((sum, d) => sum + d.currentValue, 0)
     const totalDepreciation = totalAssetValue - totalCurrentValue
+
 
     return (
         <div className="grid gap-4 md:grid-cols-3">

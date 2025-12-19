@@ -4,10 +4,14 @@ import { CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { FileDown, Eye } from "lucide-react"
-import { assetService } from "@/lib/services/asset-service"
+import type { TAsset } from "@/lib/validations/asset"
 
-export function DepreciationReport() {
-    const assets = assetService.getAll()
+interface DepreciationReportProps {
+    assets: TAsset[]
+}
+
+export function DepreciationReport({ assets }: DepreciationReportProps) {
+
     const depreciationData = assets.map((asset) => {
         const purchaseYear = new Date(asset.purchaseDate).getFullYear()
         const currentYear = new Date().getFullYear()

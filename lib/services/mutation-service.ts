@@ -1,4 +1,4 @@
-import { mutations } from "@/lib/data"
+import { prisma } from "@/lib/db"
 import { mutationSchema, type TMutation } from "@/lib/validations/mutation"
 
 /**
@@ -6,11 +6,11 @@ import { mutationSchema, type TMutation } from "@/lib/validations/mutation"
  */
 export const mutationService = {
     /**
-     * Retrieves all mutations and validates them against the schema.
-     * @returns {TMutation[]} An array of validated mutation objects.
+     * Retrieves all mutations from database and validates them.
      */
-    getAll: (): TMutation[] => {
-        return mutations.map((mut) => {
+    getAll: async (): Promise<TMutation[]> => {
+        const mutations = await prisma.mutation.findMany()
+        return mutations.map((mut: any) => {
             const result = mutationSchema.safeParse(mut)
             if (!result.success) {
                 console.error("Validation error for mutation:", mut.id, result.error.format())
@@ -20,4 +20,5 @@ export const mutationService = {
         })
     },
 }
+
 

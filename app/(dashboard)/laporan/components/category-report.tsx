@@ -5,18 +5,23 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { FileDown, Printer } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
-import { assets } from "@/lib/data"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
 import { categories } from "@/lib/constants"
-
-const categoryData = categories.map((cat) => ({
-    name: cat,
-    total: assets.filter((a) => a.category === cat).length,
-    value: assets.filter((a) => a.category === cat).reduce((sum, a) => sum + a.purchasePrice, 0),
-}))
+import type { TAsset } from "@/lib/validations/asset"
 
 const COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"]
 
-export function CategoryReport() {
+interface CategoryReportProps {
+    assets: TAsset[]
+}
+
+export function CategoryReport({ assets }: CategoryReportProps) {
+    const categoryData = categories.map((cat) => ({
+        name: cat,
+        total: assets.filter((a) => a.category === cat).length,
+        value: assets.filter((a) => a.category === cat).reduce((sum, a) => sum + a.purchasePrice, 0),
+    }))
+
     return (
         <>
             <CardHeader>

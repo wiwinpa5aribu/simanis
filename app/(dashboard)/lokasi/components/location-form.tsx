@@ -15,9 +15,14 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
-import { locations } from "@/lib/data"
+import { Plus } from "lucide-react"
 
-export function LocationForm() {
+interface LocationFormProps {
+    locations: any[]
+}
+
+export function LocationForm({ locations }: LocationFormProps) {
+
     const [open, setOpen] = useState(false)
 
     return (

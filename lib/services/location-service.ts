@@ -1,4 +1,4 @@
-import { locations } from "@/lib/data"
+import { prisma } from "@/lib/db"
 import { locationSchema, type TLocation } from "@/lib/validations/location"
 
 /**
@@ -7,9 +7,10 @@ import { locationSchema, type TLocation } from "@/lib/validations/location"
 export const locationService = {
     /**
      * Retrieves all locations and validates them against the schema.
-     * @returns {TLocation[]} An array of validated location objects.
+     * @returns {Promise<TLocation[]>} An array of validated location objects.
      */
-    getAll: (): TLocation[] => {
+    getAll: async (): Promise<TLocation[]> => {
+        const locations = await prisma.location.findMany()
         return locations.map((loc) => {
 
 
@@ -22,4 +23,5 @@ export const locationService = {
         })
     },
 }
+
 

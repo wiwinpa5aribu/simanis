@@ -1,17 +1,17 @@
-import { assets } from "@/lib/data"
+import { prisma } from "@/lib/db"
 import { assetSchema, type TAsset } from "@/lib/validations/asset"
 
 /**
  * Service for managing Asset data.
- * Handles fetching, filtering, and Zod validation for Asset entities.
+ * Handles fetching from database and Zod validation.
  */
 export const assetService = {
     /**
-     * Retrieves all assets from the data source and validates them.
-     * @returns {TAsset[]} An array of validated asset objects.
-     * @throws {Error} If data validation fails for any asset.
+     * Retrieves all assets from the database and validates them.
+     * @returns {Promise<TAsset[]>} An array of validated asset objects.
      */
-    getAll: (): TAsset[] => {
+    getAll: async (): Promise<TAsset[]> => {
+        const assets = await prisma.asset.findMany()
         return assets.map((asset) => {
             const result = assetSchema.safeParse(asset)
             if (!result.success) {
@@ -24,13 +24,14 @@ export const assetService = {
 
     /**
      * Finds a specific asset by its unique identifier.
-     * @param {string} id - The unique ID of the asset (e.g., 'AST-001').
-     * @returns {TAsset | undefined} The validated asset object, or undefined if not found.
-     * @throws {Error} If the found asset fails validation.
+     * @param {string} id - The unique ID of the asset.
+     * @returns {Promise<TAsset | null>} The validated asset object, or null if not found.
      */
-    getById: (id: string): TAsset | undefined => {
-        const asset = assets.find((a) => a.id === id)
-        if (!asset) return undefined
+    getById: async (id: string): Promise<TAsset | null> => {
+        const asset = await prisma.asset.findUnique({
+            where: { id },
+        })
+        if (!asset) return null
 
         const result = assetSchema.safeParse(asset)
         if (!result.success) {
@@ -39,4 +40,5 @@ export const assetService = {
         return result.data
     },
 }
+
 

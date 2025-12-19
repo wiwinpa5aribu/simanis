@@ -1,13 +1,11 @@
-"use client"
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { locationService } from "@/lib/services/location-service"
 import { LocationForm } from "./components/location-form"
 import { LocationTree } from "./components/location-tree"
 import { LocationSummary } from "./components/location-summary"
 
-export default function LocationPage() {
-  const locations = locationService.getAll()
+export default async function LocationPage() {
+  const locations = await locationService.getAll()
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -15,7 +13,8 @@ export default function LocationPage() {
           <h1 className="text-2xl font-bold text-foreground">Master Lokasi</h1>
           <p className="text-muted-foreground">Kelola hierarki lokasi aset</p>
         </div>
-        <LocationForm />
+        <LocationForm locations={locations} />
+
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -40,3 +39,4 @@ export default function LocationPage() {
     </div>
   )
 }
+

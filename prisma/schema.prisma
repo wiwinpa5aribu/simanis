@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      UserRole @default(viewer)
+  status    Status   @default(aktif)
+  avatar    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  admin
+  manager
+  staff
+  viewer
+}
+
+enum Status {
+  aktif
+  tidak_aktif
+}
+
+model Location {
+  id          String     @id @default(cuid())
+  name        String
+  type        LocType
+  parentId    String?
+  parent      Location?  @relation("LocationToLocation", fields: [parentId], references: [id])
+  children    Location[] @relation("LocationToLocation")
+  assetCount  Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("locations")
+}
+
+enum LocType {
+  gedung
+  lantai
+  ruangan
+}
+
+model Asset {
+  id            String      @id @default(cuid())
+  name          String
+  category      String
+  status        AssetStatus @default(aktif)
+  location      String
+  purchaseDate  String
+  purchasePrice Float
+  condition     Condition   @default(baik)
+  description   String      @db.Text
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@map("assets")
+}
+
+enum AssetStatus {
+  aktif
+  tidak_aktif
+  maintenance
+  dihapuskan
+}
+
+enum Condition {
+  baik
+  cukup
+  kurang
+  rusak
+}
+
+model Mutation {
+  id           String         @id @default(cuid())
+  assetId      String
+  assetName    String
+  fromLocation String
+  toLocation   String
+  date         String
+  status       MutationStatus @default(selesai)
+  requester    String
+  notes        String         @db.Text
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@map("mutations")
+}
+
+enum MutationStatus {
+  diproses
+  selesai
+  dibatalkan
+}
+
+model StockOpnameSession {
+  id            String            @id @default(cuid())
+  date          String
+  location      String
+  status        StockOpnameStatus @default(sedang_berlangsung)
+  foundCount    Int               @default(0)
+  notFoundCount Int               @default(0)
+  totalAssets   Int               @default(0)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@map("stock_opname_sessions")
+}
+
+enum StockOpnameStatus {
+  sedang_berlangsung @map("sedang-berlangsung")
+  selesai
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  timestamp String
+  user      String
+  action    String
+  module    String
+  details   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("audit_logs")
+}
+
+

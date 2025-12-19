@@ -5,12 +5,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { users } from "@/lib/data"
-
 const moduleOptions = ["Aset", "Lokasi", "Mutasi", "Status", "Stock Opname", "Laporan", "User"]
 
 interface AuditFiltersProps {
+    users: any[]
     searchTerm: string
+
     setSearchTerm: (v: string) => void
     userFilter: string
     setUserFilter: (v: string) => void
@@ -26,6 +26,7 @@ interface AuditFiltersProps {
 }
 
 export function AuditFilters({
+    users,
     searchTerm,
     setSearchTerm,
     userFilter,
@@ -40,6 +41,7 @@ export function AuditFilters({
     setDateTo,
     onReset,
 }: AuditFiltersProps) {
+
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
             <div className="space-y-2">
@@ -62,11 +64,12 @@ export function AuditFilters({
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">Semua User</SelectItem>
-                        {users.map((user) => (
+                        {users.map((user: any) => (
                             <SelectItem key={user.id} value={user.name}>
                                 {user.name}
                             </SelectItem>
                         ))}
+
                     </SelectContent>
                 </Select>
             </div>

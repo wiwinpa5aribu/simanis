@@ -3,14 +3,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
 
-const data = [
-  { name: "Aktif", value: 985, color: "var(--chart-1)" },
-  { name: "Maintenance", value: 156, color: "var(--chart-3)" },
-  { name: "Tidak Aktif", value: 82, color: "var(--chart-2)" },
-  { name: "Dihapuskan", value: 25, color: "var(--chart-4)" },
-]
+interface StatusData {
+  name: string
+  value: number
+  color: string
+}
 
-export function AssetByStatusChart() {
+interface AssetByStatusChartProps {
+  data: StatusData[]
+}
+
+export function AssetByStatusChart({ data }: AssetByStatusChartProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader>
@@ -45,3 +48,4 @@ export function AssetByStatusChart() {
     </Card>
   )
 }
+

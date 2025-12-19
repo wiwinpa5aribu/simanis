@@ -5,16 +5,19 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { FileDown, Printer } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import { locationService } from "@/lib/services/location-service"
 
-export function LocationReport() {
-    const locations = locationService.getAll()
+interface LocationReportProps {
+    locations: any[]
+}
+
+export function LocationReport({ locations }: LocationReportProps) {
     const locationData = locations
         .filter((l) => l.type === "ruangan")
         .map((loc) => ({
             name: loc.name,
             total: loc.assetCount,
         }))
+
 
     return (
         <>

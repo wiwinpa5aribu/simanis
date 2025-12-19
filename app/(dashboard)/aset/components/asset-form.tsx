@@ -17,9 +17,13 @@ import {
 } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
 import { categories } from "@/lib/constants"
-import { locations as locationData } from "@/lib/data"
 
-export function AssetForm() {
+interface AssetFormProps {
+    locations: any[]
+}
+
+export function AssetForm({ locations }: AssetFormProps) {
+
     const [open, setOpen] = useState(false)
 
     // In a real app, this would be a server action or API call
@@ -80,8 +84,9 @@ export function AssetForm() {
                                 <SelectValue placeholder="Pilih lokasi" />
                             </SelectTrigger>
                             <SelectContent>
-                                {locationData
+                                {locations
                                     .filter((l) => l.type === "ruangan")
+
                                     .map((loc) => (
                                         <SelectItem key={loc.id} value={loc.id}>
                                             {loc.name}
