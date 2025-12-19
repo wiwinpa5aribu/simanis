@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "postinstall": "prisma generate",
+    "postinstall": "pnpm exec prisma generate",
     "start": "next start"
   },
   "dependencies": {
@@ -80,6 +80,7 @@
     "tsx": "^4.21.0",
     "tw-animate-css": "1.3.3",
     "typescript": "^5",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "prisma": "^6.19.1"
   }
 }
