@@ -1,4 +1,4 @@
-# SIMANIS - Sistem Manajemen Aset Sekolah
+# SIMANIS - Sistem Manajemen Aset Sekolah 
 
 SIMANIS sistem manajemen aset sekolah
 
