@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "mysql://root@localhost:3306/simanis"
 
     steps:
       - uses: actions/checkout@v4
@@ -41,5 +43,3 @@ jobs:
 
       - name: Build
         run: pnpm run build
-        env:
-          DATABASE_URL: "mysql://root@localhost:3306/simanis"
