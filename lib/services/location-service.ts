@@ -10,7 +10,9 @@ export const locationService = {
      * @returns {TLocation[]} An array of validated location objects.
      */
     getAll: (): TLocation[] => {
+        console.log("SIMANIS_DEBUG: Executing locationService.getAll with updated nullable schema")
         return locations.map((loc) => {
+
             const result = locationSchema.safeParse(loc)
             if (!result.success) {
                 console.error("Validation error for location:", loc.id, result.error.format())
