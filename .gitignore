@@ -47,3 +47,6 @@ walkthrough.md
 .gemini/
 .antigravity/
 /lib/generated/prisma
+
+# Prisma generated client
+/prisma/generated/
