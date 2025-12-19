@@ -1,0 +1,377 @@
+// Data dummy untuk sistem manajemen aset sekolah
+
+export interface Asset {
+  id: string
+  name: string
+  category: string
+  location: string
+  status: "aktif" | "tidak-aktif" | "maintenance" | "dihapuskan"
+  condition: "baik" | "cukup" | "kurang" | "rusak"
+  purchaseDate: string
+  purchasePrice: number
+  description: string
+}
+
+export interface Location {
+  id: string
+  name: string
+  type: "gedung" | "lantai" | "ruangan"
+  parentId: string | null
+  assetCount: number
+}
+
+export interface Mutation {
+  id: string
+  assetId: string
+  assetName: string
+  fromLocation: string
+  toLocation: string
+  date: string
+  reason: string
+  status: "pending" | "approved" | "rejected"
+  createdBy: string
+}
+
+export interface StockOpname {
+  id: string
+  date: string
+  location: string
+  status: "sedang-berlangsung" | "selesai"
+  foundCount: number
+  notFoundCount: number
+  totalAssets: number
+}
+
+export interface User {
+  id: string
+  name: string
+  email: string
+  role: "admin" | "manager" | "staff" | "viewer"
+  status: "aktif" | "tidak-aktif"
+  avatar: string
+}
+
+export interface AuditLog {
+  id: string
+  timestamp: string
+  user: string
+  action: string
+  module: string
+  details: string
+}
+
+export interface Activity {
+  id: string
+  type: "registrasi" | "mutasi" | "status" | "opname"
+  title: string
+  description: string
+  timestamp: string
+  user: string
+}
+
+// Data dummy
+export const assets: Asset[] = [
+  {
+    id: "AST-001",
+    name: "Komputer Desktop HP ProDesk",
+    category: "Elektronik",
+    location: "Lab Komputer 1",
+    status: "aktif",
+    condition: "baik",
+    purchaseDate: "2024-01-15",
+    purchasePrice: 12500000,
+    description: "Komputer untuk praktikum siswa",
+  },
+  {
+    id: "AST-002",
+    name: "Proyektor Epson EB-X51",
+    category: "Elektronik",
+    location: "Ruang Kelas 3A",
+    status: "aktif",
+    condition: "baik",
+    purchaseDate: "2024-02-20",
+    purchasePrice: 8500000,
+    description: "Proyektor untuk presentasi",
+  },
+  {
+    id: "AST-003",
+    name: "Meja Siswa Standar",
+    category: "Furnitur",
+    location: "Ruang Kelas 2B",
+    status: "aktif",
+    condition: "cukup",
+    purchaseDate: "2023-06-10",
+    purchasePrice: 450000,
+    description: "Meja belajar siswa",
+  },
+  {
+    id: "AST-004",
+    name: "AC Daikin 2 PK",
+    category: "Elektronik",
+    location: "Ruang Guru",
+    status: "maintenance",
+    condition: "kurang",
+    purchaseDate: "2022-08-05",
+    purchasePrice: 15000000,
+    description: "Pendingin ruangan",
+  },
+  {
+    id: "AST-005",
+    name: "Printer Canon PIXMA G3020",
+    category: "Elektronik",
+    location: "Ruang TU",
+    status: "aktif",
+    condition: "baik",
+    purchaseDate: "2024-03-12",
+    purchasePrice: 3200000,
+    description: "Printer multifungsi",
+  },
+  {
+    id: "AST-006",
+    name: "Lemari Arsip Besi",
+    category: "Furnitur",
+    location: "Ruang Kepala Sekolah",
+    status: "aktif",
+    condition: "baik",
+    purchaseDate: "2023-01-20",
+    purchasePrice: 2800000,
+    description: "Lemari penyimpanan dokumen",
+  },
+  {
+    id: "AST-007",
+    name: "Whiteboard Magnetic 120x240",
+    category: "Perlengkapan",
+    location: "Ruang Kelas 1A",
+    status: "aktif",
+    condition: "cukup",
+    purchaseDate: "2023-07-15",
+    purchasePrice: 850000,
+    description: "Papan tulis magnetic",
+  },
+  {
+    id: "AST-008",
+    name: "Laptop Lenovo ThinkPad",
+    category: "Elektronik",
+    location: "Ruang Guru",
+    status: "tidak-aktif",
+    condition: "rusak",
+    purchaseDate: "2021-04-22",
+    purchasePrice: 14000000,
+    description: "Laptop untuk administrasi",
+  },
+]
+
+export const locations: Location[] = [
+  { id: "LOC-001", name: "Gedung A", type: "gedung", parentId: null, assetCount: 45 },
+  { id: "LOC-002", name: "Gedung B", type: "gedung", parentId: null, assetCount: 32 },
+  { id: "LOC-003", name: "Lantai 1", type: "lantai", parentId: "LOC-001", assetCount: 20 },
+  { id: "LOC-004", name: "Lantai 2", type: "lantai", parentId: "LOC-001", assetCount: 25 },
+  { id: "LOC-005", name: "Lab Komputer 1", type: "ruangan", parentId: "LOC-003", assetCount: 35 },
+  { id: "LOC-006", name: "Ruang Kelas 1A", type: "ruangan", parentId: "LOC-003", assetCount: 12 },
+  { id: "LOC-007", name: "Ruang Kelas 2A", type: "ruangan", parentId: "LOC-004", assetCount: 12 },
+  { id: "LOC-008", name: "Ruang Guru", type: "ruangan", parentId: "LOC-003", assetCount: 18 },
+]
+
+export const mutations: Mutation[] = [
+  {
+    id: "MUT-001",
+    assetId: "AST-001",
+    assetName: "Komputer Desktop HP ProDesk",
+    fromLocation: "Ruang TU",
+    toLocation: "Lab Komputer 1",
+    date: "2024-12-15",
+    reason: "Penambahan fasilitas lab",
+    status: "approved",
+    createdBy: "Ahmad Subari",
+  },
+  {
+    id: "MUT-002",
+    assetId: "AST-003",
+    assetName: "Meja Siswa Standar",
+    fromLocation: "Gudang",
+    toLocation: "Ruang Kelas 2B",
+    date: "2024-12-14",
+    reason: "Kebutuhan kelas baru",
+    status: "approved",
+    createdBy: "Siti Nurhaliza",
+  },
+  {
+    id: "MUT-003",
+    assetId: "AST-004",
+    assetName: "AC Daikin 2 PK",
+    fromLocation: "Ruang Guru",
+    toLocation: "Workshop Perbaikan",
+    date: "2024-12-18",
+    reason: "Perbaikan rutin",
+    status: "pending",
+    createdBy: "Budi Santoso",
+  },
+]
+
+export const stockOpnames: StockOpname[] = [
+  {
+    id: "SO-001",
+    date: "2024-12-01",
+    location: "Gedung A",
+    status: "selesai",
+    foundCount: 43,
+    notFoundCount: 2,
+    totalAssets: 45,
+  },
+  {
+    id: "SO-002",
+    date: "2024-12-10",
+    location: "Lab Komputer 1",
+    status: "selesai",
+    foundCount: 35,
+    notFoundCount: 0,
+    totalAssets: 35,
+  },
+  {
+    id: "SO-003",
+    date: "2024-12-18",
+    location: "Gedung B",
+    status: "sedang-berlangsung",
+    foundCount: 28,
+    notFoundCount: 1,
+    totalAssets: 32,
+  },
+]
+
+export const users: User[] = [
+  {
+    id: "USR-001",
+    name: "Ahmad Subari",
+    email: "ahmad@sekolah.id",
+    role: "admin",
+    status: "aktif",
+    avatar: "/male-avatar-professional.jpg",
+  },
+  {
+    id: "USR-002",
+    name: "Siti Nurhaliza",
+    email: "siti@sekolah.id",
+    role: "manager",
+    status: "aktif",
+    avatar: "/female-avatar-professional.jpg",
+  },
+  {
+    id: "USR-003",
+    name: "Budi Santoso",
+    email: "budi@sekolah.id",
+    role: "staff",
+    status: "aktif",
+    avatar: "/male-avatar-casual.jpg",
+  },
+  {
+    id: "USR-004",
+    name: "Dewi Kartika",
+    email: "dewi@sekolah.id",
+    role: "viewer",
+    status: "tidak-aktif",
+    avatar: "/female-avatar-casual.jpg",
+  },
+]
+
+export const auditLogs: AuditLog[] = [
+  {
+    id: "LOG-001",
+    timestamp: "2024-12-19 09:30:45",
+    user: "Ahmad Subari",
+    action: "CREATE",
+    module: "Aset",
+    details: "Menambahkan aset baru: Komputer Desktop HP ProDesk",
+  },
+  {
+    id: "LOG-002",
+    timestamp: "2024-12-19 10:15:22",
+    user: "Siti Nurhaliza",
+    action: "UPDATE",
+    module: "Mutasi",
+    details: "Menyetujui mutasi MUT-001",
+  },
+  {
+    id: "LOG-003",
+    timestamp: "2024-12-19 11:45:33",
+    user: "Budi Santoso",
+    action: "CREATE",
+    module: "Stock Opname",
+    details: "Membuat sesi stock opname SO-003",
+  },
+  {
+    id: "LOG-004",
+    timestamp: "2024-12-18 14:20:11",
+    user: "Ahmad Subari",
+    action: "DELETE",
+    module: "Lokasi",
+    details: "Menghapus lokasi: Ruang Arsip Lama",
+  },
+  {
+    id: "LOG-005",
+    timestamp: "2024-12-18 16:00:00",
+    user: "Dewi Kartika",
+    action: "READ",
+    module: "Laporan",
+    details: "Mengunduh laporan aset bulanan",
+  },
+]
+
+export const recentActivities: Activity[] = [
+  {
+    id: "ACT-001",
+    type: "registrasi",
+    title: "Aset Baru Ditambahkan",
+    description: "Komputer Desktop HP ProDesk berhasil didaftarkan",
+    timestamp: "2 jam yang lalu",
+    user: "Ahmad Subari",
+  },
+  {
+    id: "ACT-002",
+    type: "mutasi",
+    title: "Mutasi Disetujui",
+    description: "Pemindahan Meja Siswa ke Ruang Kelas 2B",
+    timestamp: "4 jam yang lalu",
+    user: "Siti Nurhaliza",
+  },
+  {
+    id: "ACT-003",
+    type: "status",
+    title: "Status Aset Diperbarui",
+    description: "AC Daikin 2 PK dalam status maintenance",
+    timestamp: "6 jam yang lalu",
+    user: "Budi Santoso",
+  },
+  {
+    id: "ACT-004",
+    type: "opname",
+    title: "Stock Opname Dimulai",
+    description: "Sesi stock opname Gedung B sedang berlangsung",
+    timestamp: "1 hari yang lalu",
+    user: "Ahmad Subari",
+  },
+]
+
+export const categories = [
+  "Elektronik",
+  "Furnitur",
+  "Perlengkapan",
+  "Kendaraan",
+  "Bangunan",
+  "Alat Laboratorium",
+  "Alat Olahraga",
+  "Lainnya",
+]
+
+export const statusOptions = [
+  { value: "aktif", label: "Aktif", color: "bg-success" },
+  { value: "tidak-aktif", label: "Tidak Aktif", color: "bg-muted-foreground" },
+  { value: "maintenance", label: "Maintenance", color: "bg-warning" },
+  { value: "dihapuskan", label: "Dihapuskan", color: "bg-destructive" },
+]
+
+export const conditionOptions = [
+  { value: "baik", label: "Baik", color: "bg-success" },
+  { value: "cukup", label: "Cukup", color: "bg-info" },
+  { value: "kurang", label: "Kurang", color: "bg-warning" },
+  { value: "rusak", label: "Rusak", color: "bg-destructive" },
+]
