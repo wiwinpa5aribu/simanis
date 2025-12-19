@@ -5,7 +5,7 @@ export interface Mutation {
     fromLocation: string
     toLocation: string
     date: string
-    reason: string
-    status: "pending" | "approved" | "rejected"
-    createdBy: string
+    notes: string
+    status: "diproses" | "selesai" | "dibatalkan"
+    requester: string
 }

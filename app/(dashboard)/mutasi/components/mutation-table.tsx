@@ -6,9 +6,9 @@ import { CheckCircle, XCircle, Clock } from "lucide-react"
 import type { Mutation } from "@/types"
 
 const statusConfig = {
-    pending: { label: "Menunggu", icon: Clock, variant: "secondary" as const },
-    approved: { label: "Disetujui", icon: CheckCircle, variant: "default" as const },
-    rejected: { label: "Ditolak", icon: XCircle, variant: "destructive" as const },
+    diproses: { label: "Diproses", icon: Clock, variant: "secondary" as const },
+    selesai: { label: "Selesai", icon: CheckCircle, variant: "default" as const },
+    dibatalkan: { label: "Dibatalkan", icon: XCircle, variant: "destructive" as const },
 }
 
 interface MutationTableProps {
@@ -47,7 +47,7 @@ export function MutationTable({ mutations }: MutationTableProps) {
                                     {status.label}
                                 </Badge>
                             </TableCell>
-                            <TableCell>{mutation.createdBy}</TableCell>
+                            <TableCell>{mutation.requester}</TableCell>
                         </TableRow>
                     )
                 })}

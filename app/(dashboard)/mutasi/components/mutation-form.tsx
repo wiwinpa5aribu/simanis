@@ -96,8 +96,8 @@ export function MutationForm({ assets, locations }: MutationFormProps) {
                         <Input id="mutDate" type="date" />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="reason">Alasan Mutasi</Label>
-                        <Textarea id="reason" placeholder="Masukkan alasan pemindahan aset" />
+                        <Label htmlFor="notes">Alasan Mutasi</Label>
+                        <Textarea id="notes" placeholder="Masukkan alasan pemindahan aset" />
                     </div>
                 </div>
                 <DialogFooter>

@@ -9,9 +9,9 @@ interface MutationStatsProps {
 }
 
 export function MutationStats({ mutations }: MutationStatsProps) {
-    const pendingCount = mutations.filter((m) => m.status === "pending").length
-    const approvedCount = mutations.filter((m) => m.status === "approved").length
-    const rejectedCount = mutations.filter((m) => m.status === "rejected").length
+    const pendingCount = mutations.filter((m) => m.status === "diproses").length
+    const approvedCount = mutations.filter((m) => m.status === "selesai").length
+    const rejectedCount = mutations.filter((m) => m.status === "dibatalkan").length
 
     return (
         <div className="grid gap-4 md:grid-cols-3">
