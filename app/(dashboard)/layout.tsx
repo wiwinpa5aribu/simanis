@@ -2,6 +2,7 @@ import type React from "react"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { DashboardHeader } from "@/components/dashboard-header"
+export const dynamic = "force-dynamic"
 
 export default function DashboardLayout({
   children,
