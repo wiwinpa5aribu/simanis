@@ -19,8 +19,9 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RefreshCw, History, CheckCircle, AlertTriangle, XCircle, Wrench } from "lucide-react"
-import { assets, statusOptions, conditionOptions } from "@/lib/data"
-import type { Asset } from "@/lib/data"
+import { assets } from "@/lib/data"
+import { statusOptions, conditionOptions } from "@/lib/constants"
+import type { Asset } from "@/types"
 
 const statusIcons = {
   aktif: CheckCircle,

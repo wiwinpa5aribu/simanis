@@ -9,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Search, FileDown, Filter, X } from "lucide-react"
-import { assets, categories, statusOptions, conditionOptions, locations } from "@/lib/data"
-import type { Asset } from "@/lib/data"
+import { assets, locations } from "@/lib/data"
+import { categories, statusOptions, conditionOptions } from "@/lib/constants"
+import type { Asset } from "@/types"
 
 const quickFilters = [
   { label: "Semua Aset Aktif", status: "aktif", condition: "" },

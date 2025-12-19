@@ -1,0 +1,26 @@
+name: Feature Request
+description: Usulkan ide atau fitur baru untuk SIMANIS
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Deskripsi Fitur
+      description: Jelaskan fitur yang Anda usulkan secara mendalam.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Masalah yang ingin Anda selesaikan?
+      description: Apakah ada kesulitan atau kegunaan yang kurang dari sistem saat ini?
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solusi yang Diusulkan
+      description: Bagaimana Anda membayangkan fitur ini bekerja?
+  - type: textarea
+    id: additional
+    attributes:
+      label: Informasi Tambahan
+      description: Lampirkan contoh, mockup, atau referensi lainnya.

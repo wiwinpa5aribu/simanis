@@ -1,75 +1,13 @@
-// Data dummy untuk sistem manajemen aset sekolah
+import {
+  Asset,
+  Location,
+  Mutation,
+  StockOpname,
+  User,
+  AuditLog,
+  Activity,
+} from "@/types"
 
-export interface Asset {
-  id: string
-  name: string
-  category: string
-  location: string
-  status: "aktif" | "tidak-aktif" | "maintenance" | "dihapuskan"
-  condition: "baik" | "cukup" | "kurang" | "rusak"
-  purchaseDate: string
-  purchasePrice: number
-  description: string
-}
-
-export interface Location {
-  id: string
-  name: string
-  type: "gedung" | "lantai" | "ruangan"
-  parentId: string | null
-  assetCount: number
-}
-
-export interface Mutation {
-  id: string
-  assetId: string
-  assetName: string
-  fromLocation: string
-  toLocation: string
-  date: string
-  reason: string
-  status: "pending" | "approved" | "rejected"
-  createdBy: string
-}
-
-export interface StockOpname {
-  id: string
-  date: string
-  location: string
-  status: "sedang-berlangsung" | "selesai"
-  foundCount: number
-  notFoundCount: number
-  totalAssets: number
-}
-
-export interface User {
-  id: string
-  name: string
-  email: string
-  role: "admin" | "manager" | "staff" | "viewer"
-  status: "aktif" | "tidak-aktif"
-  avatar: string
-}
-
-export interface AuditLog {
-  id: string
-  timestamp: string
-  user: string
-  action: string
-  module: string
-  details: string
-}
-
-export interface Activity {
-  id: string
-  type: "registrasi" | "mutasi" | "status" | "opname"
-  title: string
-  description: string
-  timestamp: string
-  user: string
-}
-
-// Data dummy
 export const assets: Asset[] = [
   {
     id: "AST-001",
@@ -349,29 +287,4 @@ export const recentActivities: Activity[] = [
     timestamp: "1 hari yang lalu",
     user: "Ahmad Subari",
   },
-]
-
-export const categories = [
-  "Elektronik",
-  "Furnitur",
-  "Perlengkapan",
-  "Kendaraan",
-  "Bangunan",
-  "Alat Laboratorium",
-  "Alat Olahraga",
-  "Lainnya",
-]
-
-export const statusOptions = [
-  { value: "aktif", label: "Aktif", color: "bg-success" },
-  { value: "tidak-aktif", label: "Tidak Aktif", color: "bg-muted-foreground" },
-  { value: "maintenance", label: "Maintenance", color: "bg-warning" },
-  { value: "dihapuskan", label: "Dihapuskan", color: "bg-destructive" },
-]
-
-export const conditionOptions = [
-  { value: "baik", label: "Baik", color: "bg-success" },
-  { value: "cukup", label: "Cukup", color: "bg-info" },
-  { value: "kurang", label: "Kurang", color: "bg-warning" },
-  { value: "rusak", label: "Rusak", color: "bg-destructive" },
 ]

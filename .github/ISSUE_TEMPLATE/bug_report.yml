@@ -1,0 +1,40 @@
+name: Bug Report
+description: Laporkan masalah atau bug dalam sistem
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Terima kasih telah melaporkan bug! Berikan informasi sedetail mungkin.
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Deskripsi Masalah
+      description: Jelaskan masalah yang terjadi secara jelas dan singkat.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Langkah untuk Reproduksi
+      description: Bagaimana cara kami mereproduksi bug ini?
+      placeholder: |
+        1. Buka modul 'Aset'
+        2. Klik tombol 'Edit'
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Hasil yang Diharapkan
+      description: Apa yang seharusnya terjadi?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Hasil Aktual
+      description: Apa yang sebenarnya terjadi?
+    validations:
+      required: true

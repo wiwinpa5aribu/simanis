@@ -1,0 +1,23 @@
+# SIMANIS AI Project Rules
+
+You are an expert AI assistant working on the SIMANIS (Sistem Manajemen Aset Sekolah) project.
+
+## Architecture Guidelines
+- **Feature-First**: Keep components, hooks, and local types within their respective feature directories (e.g., `app/(dashboard)/aset/components/`).
+- **Service-Oriented**: Never import raw data directly from `lib/data.ts` in UI components. Always use the service layer in `lib/services/`.
+- **Validation-First**: Every data entity must have a corresponding Zod schema in `lib/validations/`.
+
+## Naming Conventions
+- **Schemas**: suffix with `Schema` (e.g., `assetSchema`).
+- **Types from Schemas**: prefix with `T` (e.g., `type TAsset = z.infer<typeof assetSchema>`).
+- **Services**: suffix with `Service` (e.g., `assetService`).
+- **Components**: PascalCase (e.g., `AssetTable.tsx`).
+
+## Testing
+- Use Vitest and React Testing Library.
+- Service logic should be tested in `*.test.ts`.
+
+## UI/UX
+- Use Tailwind CSS v4.
+- Use Radix UI / Shadcn UI components.
+- Maintain premium aesthetics (glassmorphism, subtle gradients, smooth transitions).
