@@ -8,5 +8,3 @@ export default async function AuditPage() {
 
   return <AuditContent initialLogs={auditLogs} users={users} />
 }
-
-

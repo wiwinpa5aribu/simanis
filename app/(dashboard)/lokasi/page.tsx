@@ -14,7 +14,6 @@ export default async function LocationPage() {
           <p className="text-muted-foreground">Kelola hierarki lokasi aset</p>
         </div>
         <LocationForm locations={locations} />
-
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -39,4 +38,3 @@ export default async function LocationPage() {
     </div>
   )
 }
-

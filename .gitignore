@@ -34,15 +34,13 @@ yarn-error.log*
 next-env.d.ts
 
 # documentation
-*.md
 !README.md
 !CONTRIBUTING.md
-.github/PULL_REQUEST_TEMPLATE.md
+
 
 # File temporer atau yang benar-benar tidak relevan
-.cursorrules
 
-.kiro/
+
 .gemini/
 .antigravity/
 /lib/generated/prisma

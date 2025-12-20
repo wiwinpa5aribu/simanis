@@ -23,7 +23,15 @@ export function AssetByStatusChart({ data }: AssetByStatusChartProps) {
         <div className="h-[280px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={data} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={4} dataKey="value">
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={90}
+                paddingAngle={4}
+                dataKey="value"
+              >
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
@@ -48,4 +56,3 @@ export function AssetByStatusChart({ data }: AssetByStatusChartProps) {
     </Card>
   )
 }
-

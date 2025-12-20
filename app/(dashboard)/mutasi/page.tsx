@@ -10,5 +10,3 @@ export default async function MutationPage() {
 
   return <MutationContent initialMutations={mutations} assets={assets} locations={locations} />
 }
-
-

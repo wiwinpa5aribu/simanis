@@ -8,23 +8,39 @@ import { prisma } from "@/lib/db"
 export default async function DashboardPage() {
   // Fetch data for Asset By Status Chart
   const statusCounts = await prisma.asset.groupBy({
-    by: ['status'],
+    by: ["status"],
     _count: {
-      status: true
-    }
+      status: true,
+    },
   })
 
   const statusData = [
-    { name: "Aktif", value: statusCounts.find(s => s.status === 'aktif')?._count.status || 0, color: "var(--chart-1)" },
-    { name: "Maintenance", value: statusCounts.find(s => s.status === 'maintenance')?._count.status || 0, color: "var(--chart-3)" },
-    { name: "Tidak Aktif", value: statusCounts.find(s => s.status === 'tidak_aktif')?._count.status || 0, color: "var(--chart-2)" },
-    { name: "Dihapuskan", value: statusCounts.find(s => s.status === 'dihapuskan')?._count.status || 0, color: "var(--chart-4)" },
+    {
+      name: "Aktif",
+      value: statusCounts.find((s) => s.status === "aktif")?._count.status || 0,
+      color: "var(--chart-1)",
+    },
+    {
+      name: "Maintenance",
+      value: statusCounts.find((s) => s.status === "maintenance")?._count.status || 0,
+      color: "var(--chart-3)",
+    },
+    {
+      name: "Tidak Aktif",
+      value: statusCounts.find((s) => s.status === "tidak_aktif")?._count.status || 0,
+      color: "var(--chart-2)",
+    },
+    {
+      name: "Dihapuskan",
+      value: statusCounts.find((s) => s.status === "dihapuskan")?._count.status || 0,
+      color: "var(--chart-4)",
+    },
   ]
 
   // Fetch recent audit logs to map as activities
   const recentLogs = await prisma.auditLog.findMany({
     take: 5,
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: "desc" },
   })
 
   type ActivityType = "registrasi" | "mutasi" | "status" | "opname"
@@ -41,7 +57,7 @@ export default async function DashboardPage() {
       description: log.details,
       user: log.user,
       timestamp: log.timestamp,
-      type: type
+      type: type,
     }
   })
 
@@ -84,4 +100,3 @@ export default async function DashboardPage() {
     </div>
   )
 }
-

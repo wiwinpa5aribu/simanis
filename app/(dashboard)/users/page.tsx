@@ -6,4 +6,3 @@ export default async function UsersPage() {
 
   return <UserContent initialUsers={users} />
 }
-

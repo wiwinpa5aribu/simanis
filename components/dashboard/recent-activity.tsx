@@ -22,7 +22,10 @@ const typeIcons: Record<string, LucideIcon> = {
   opname: ClipboardCheck,
 }
 
-const typeBadges: Record<string, { label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
+const typeBadges: Record<
+  string,
+  { label: string; variant: "default" | "secondary" | "outline" | "destructive" }
+> = {
   registrasi: { label: "Registrasi", variant: "default" },
   mutasi: { label: "Mutasi", variant: "secondary" },
   status: { label: "Status", variant: "outline" },
@@ -69,4 +72,3 @@ export function RecentActivity({ activities }: RecentActivityProps) {
     </Card>
   )
 }
-

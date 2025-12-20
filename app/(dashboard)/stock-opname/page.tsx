@@ -8,7 +8,7 @@ export default async function StockOpnamePage() {
   const assets = await assetService.getAll()
   const locations = await locationService.getAll()
 
-  return <StockOpnameContent initialStockOpnames={stockOpnames} assets={assets} locations={locations} />
+  return (
+    <StockOpnameContent initialStockOpnames={stockOpnames} assets={assets} locations={locations} />
+  )
 }
-
-

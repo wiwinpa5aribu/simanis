@@ -30,7 +30,9 @@
       },
       "disabled": false,
       "autoApprove": [
-        "store_memory"
+        "store_memory",
+        "retrieve_memory",
+        "retrieve_memory"
       ]
     },
     "github": {
@@ -43,7 +45,10 @@
         "GITHUB_PERSONAL_ACCESS_TOKEN": ""
       },
       "disabled": false,
-      "autoApprove": []
+      "autoApprove": [
+        "list_commits",
+        "search_repositories"
+      ]
     },
     "mysql": {
       "command": "npx",

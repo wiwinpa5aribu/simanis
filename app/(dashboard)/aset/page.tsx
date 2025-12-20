@@ -8,5 +8,3 @@ export default async function AssetPage() {
 
   return <AssetContent initialAssets={assetList} locations={locations} />
 }
-
-

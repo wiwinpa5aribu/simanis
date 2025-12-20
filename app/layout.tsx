@@ -9,7 +9,8 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "SIMASET - Sistem Manajemen Aset Sekolah",
-  description: "Sistem informasi manajemen aset dan inventaris sekolah yang modern dan terintegrasi",
+  description:
+    "Sistem informasi manajemen aset dan inventaris sekolah yang modern dan terintegrasi",
   generator: "v0.app",
   icons: {
     icon: [

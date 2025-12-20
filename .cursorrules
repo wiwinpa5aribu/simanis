@@ -1,0 +1,38 @@
+# SIMANIS Cursor Rules
+
+## Tech Stack
+- **Runtime & PM**: **Bun** (Wajib)
+- **Framework**: Next.js 16+ (App Router, Turbopack)
+- **Database**: MySQL via Prisma ORM
+- **Validation**: Zod (Automated via zod-prisma-types)
+- **Styling**: Tailwind CSS v4, Radix UI (Shadcn)
+- **Testing**: Vitest
+
+## Bahasa Komunikasi
+- Selalu berkomunikasi dan menulis dokumentasi dalam Bahasa Indonesia.
+
+## Architecture Guidelines
+- **Feature-First**: Simpan komponen dan logic lokal di dalam direktori fitur (contoh: app/(dashboard)/aset/components/).
+- **Service-Oriented**: Gunakan Service Layer (lib/services/) untuk akses data. UI dilarang memanggil database (prisma) secara langsung.
+- **Validation-First**: Setiap entitas data wajib memiliki skema Zod.
+    - Gunakan skema otomatis di lib/generated/zod/index.ts untuk CRUD dasar.
+    - Extends skema tersebut jika butuh validasi tambahan di lib/validations/.
+
+## CI/CD & Build Rules
+- **Environment**: Pastikan DATABASE_URL tersedia di env saat proses build.
+- **Rendering**: Gunakan export const dynamic = 'force-dynamic' pada layout utama dashboard.
+- **Dependencies**: Gunakan bun untuk semua perintah CLI (misal: bun x prisma generate).
+
+## Quality Standards
+- **Formatting**: Ikuti aturan Prettier yang sudah dikonfigurasi.
+- **TypeScript**: Gunakan mode strict. Hindari any.
+- **Logging**: Cek terminal untuk Prisma Query Log saat development.
+
+## Naming Conventions
+- **Schemas**: Akhiri dengan Schema (misal: UserSchema).
+- **Interfaces**: Gunakan PascalCase.
+- **Zod Types**: Awali dengan T (misal: type TUser).
+
+## UI/UX Standards
+- Gunakan estetika premium (Glassmorphism, Gradients, Smooth Transitions).
+- Pastikan semua elemen interaktif memiliki loading state (shimmer/skeleton).
