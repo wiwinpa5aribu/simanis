@@ -129,7 +129,13 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
   describe("Requirement 2.1: Location Creation Flow", () => {
     it("should complete full location creation flow with valid data", async () => {
       const locationInput = { name: "Gedung Utama", type: "gedung" as const, parentId: undefined }
-      const createdLocation = { id: "LOC-001", name: locationInput.name, type: locationInput.type, parentId: null, assetCount: 0 }
+      const createdLocation = {
+        id: "LOC-001",
+        name: locationInput.name,
+        type: locationInput.type,
+        parentId: null,
+        assetCount: 0,
+      }
 
       vi.mocked(locationService.create).mockResolvedValue(createdLocation as any)
       vi.mocked(auditService.create).mockResolvedValue({} as any)
@@ -154,7 +160,9 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
       const result = await createLocation(locationInput)
 
       expect(result.success).toBe(true)
-      expect(locationService.create).toHaveBeenCalledWith(expect.objectContaining({ parentId: "LOC-001" }))
+      expect(locationService.create).toHaveBeenCalledWith(
+        expect.objectContaining({ parentId: "LOC-001" }),
+      )
     })
 
     it("should reject location creation with empty name", async () => {
@@ -178,7 +186,12 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
         notes: "Pemindahan untuk kebutuhan pembelajaran",
       }
       const mockAsset = { id: "AST-0001", name: "Laptop Dell" }
-      const createdMutation = { id: "MUT-001", ...mutationInput, assetName: mockAsset.name, status: "diproses" }
+      const createdMutation = {
+        id: "MUT-001",
+        ...mutationInput,
+        assetName: mockAsset.name,
+        status: "diproses",
+      }
 
       vi.mocked(assetService.getById).mockResolvedValue(mockAsset as any)
       vi.mocked(mutationService.create).mockResolvedValue(createdMutation as any)
@@ -230,8 +243,19 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
 
   describe("Requirement 4.1: User Creation Flow", () => {
     it("should complete full user creation flow with valid data", async () => {
-      const userInput = { name: "Ahmad Wijaya", email: "ahmad.wijaya@sekolah.id", password: "securePassword123", role: "staff" as const }
-      const createdUser = { id: "USR-001", name: userInput.name, email: userInput.email, role: userInput.role, status: "aktif" }
+      const userInput = {
+        name: "Ahmad Wijaya",
+        email: "ahmad.wijaya@sekolah.id",
+        password: "securePassword123",
+        role: "staff" as const,
+      }
+      const createdUser = {
+        id: "USR-001",
+        name: userInput.name,
+        email: userInput.email,
+        role: userInput.role,
+        status: "aktif",
+      }
 
       vi.mocked(userService.checkEmailExists).mockResolvedValue(false)
       vi.mocked(userService.create).mockResolvedValue(createdUser as any)
@@ -245,7 +269,12 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
     })
 
     it("should reject user creation with duplicate email (Requirement 4.6)", async () => {
-      const userInput = { name: "Test User", email: "existing@sekolah.id", password: "password123", role: "staff" as const }
+      const userInput = {
+        name: "Test User",
+        email: "existing@sekolah.id",
+        password: "password123",
+        role: "staff" as const,
+      }
 
       vi.mocked(userService.checkEmailExists).mockResolvedValue(true)
 
@@ -257,7 +286,12 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
     })
 
     it("should reject user creation with invalid email format", async () => {
-      const invalidInput = { name: "Test User", email: "invalid-email-format", password: "password123", role: "staff" as const }
+      const invalidInput = {
+        name: "Test User",
+        email: "invalid-email-format",
+        password: "password123",
+        role: "staff" as const,
+      }
 
       const result = await createUser(invalidInput)
 
@@ -266,7 +300,12 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
     })
 
     it("should reject user creation with short password", async () => {
-      const invalidInput = { name: "Test User", email: "test@sekolah.id", password: "123", role: "staff" as const }
+      const invalidInput = {
+        name: "Test User",
+        email: "test@sekolah.id",
+        password: "123",
+        role: "staff" as const,
+      }
 
       const result = await createUser(invalidInput)
 
@@ -283,9 +322,21 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
       vi.mocked(userService.create).mockResolvedValue({ id: "USR-001", name: "Test" } as any)
       vi.mocked(auditService.create).mockResolvedValue({} as any)
 
-      await createAsset({ name: "Test Asset", category: "Elektronik", location: "Ruang A", purchaseDate: "2024-01-15", purchasePrice: 1000000, description: "" })
+      await createAsset({
+        name: "Test Asset",
+        category: "Elektronik",
+        location: "Ruang A",
+        purchaseDate: "2024-01-15",
+        purchasePrice: 1000000,
+        description: "",
+      })
       await createLocation({ name: "Test Location", type: "gedung" })
-      await createUser({ name: "Test User", email: "test@example.com", password: "password123", role: "staff" })
+      await createUser({
+        name: "Test User",
+        email: "test@example.com",
+        password: "password123",
+        role: "staff",
+      })
 
       expect(auditService.create).toHaveBeenCalledTimes(3)
     })
@@ -293,7 +344,14 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
     it("should NOT create audit logs for failed operations", async () => {
       vi.mocked(auditService.create).mockClear()
 
-      await createAsset({ name: "", category: "", location: "", purchaseDate: "", purchasePrice: 0, description: "" })
+      await createAsset({
+        name: "",
+        category: "",
+        location: "",
+        purchaseDate: "",
+        purchasePrice: 0,
+        description: "",
+      })
       await createLocation({ name: "", type: "gedung" })
       await createUser({ name: "", email: "invalid", password: "123", role: "staff" })
 
@@ -306,14 +364,24 @@ describe("Feature: form-crud-implementation, Task 7: Integration Tests", () => {
       vi.mocked(assetService.create).mockResolvedValue({ id: "AST-0006", name: "New Asset" } as any)
       vi.mocked(auditService.create).mockResolvedValue({} as any)
 
-      const result = await createAsset({ name: "New Asset", category: "Elektronik", location: "Ruang A", purchaseDate: "2024-01-15", purchasePrice: 1000000, description: "" })
+      const result = await createAsset({
+        name: "New Asset",
+        category: "Elektronik",
+        location: "Ruang A",
+        purchaseDate: "2024-01-15",
+        purchasePrice: 1000000,
+        description: "",
+      })
 
       expect(result.success).toBe(true)
       expect(result.data).toBe("AST-0006")
     })
 
     it("should return generated ID from service for locations (LOC-XXX)", async () => {
-      vi.mocked(locationService.create).mockResolvedValue({ id: "LOC-011", name: "New Location" } as any)
+      vi.mocked(locationService.create).mockResolvedValue({
+        id: "LOC-011",
+        name: "New Location",
+      } as any)
       vi.mocked(auditService.create).mockResolvedValue({} as any)
 
       const result = await createLocation({ name: "New Location", type: "ruangan" })

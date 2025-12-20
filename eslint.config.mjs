@@ -16,7 +16,14 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   {
-    ignores: [".next/*", "node_modules/*", "dist/*", "public/*"],
+    ignores: [
+      ".next/*",
+      "node_modules/*",
+      "dist/*",
+      "public/*",
+      "next-env.d.ts",
+      "lib/validations/generated/*",
+    ],
   },
   ...compat.extends("next/core-web-vitals"),
   ...storybook.configs["flat/recommended"],
