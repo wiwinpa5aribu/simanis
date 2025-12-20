@@ -2,33 +2,22 @@
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": [
-        "@anthropic/mcp-server-playwright"
-      ]
+      "args": ["@anthropic/mcp-server-playwright"]
     },
     "memory": {
       "command": "python",
-      "args": [
-        "-m",
-        "mcp_memory_service.server"
-      ],
+      "args": ["-m", "mcp_memory_service.server"],
       "env": {
         "MCP_MEMORY_STORAGE_BACKEND": "sqlite_vec"
       }
     },
     "github": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ]
+      "args": ["-y", "@modelcontextprotocol/server-github"]
     },
     "mysql": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@liangshanli/mcp-server-mysql"
-      ],
+      "args": ["-y", "@liangshanli/mcp-server-mysql"],
       "env": {
         "MYSQL_HOST": "127.0.0.1",
         "MYSQL_PORT": "3306",
@@ -39,10 +28,7 @@
     },
     "next-devtools": {
       "command": "npx",
-      "args": [
-        "-y",
-        "next-devtools-mcp@latest"
-      ]
+      "args": ["-y", "next-devtools-mcp@latest"]
     }
   },
   "general": {
