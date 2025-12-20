@@ -1,10 +1,10 @@
-name: SIMANIS CI # Cleaned and synced version
+name: SIMANIS CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -15,34 +15,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 10
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
+          bun-version: latest
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
       - name: Prisma Generate
-        run: pnpm exec prisma generate
+        run: bun x prisma generate
         env:
           PRISMA_CLIENT_ENGINE_TYPE: library
 
       - name: Run Lint
-        run: pnpm run lint
+        run: bun run lint
 
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: bun x playwright install --with-deps chromium
 
       - name: Run Tests
-        run: pnpm exec vitest run
+        run: bun x vitest run
 
       - name: Build
-        run: pnpm run build
+        run: bun run build
