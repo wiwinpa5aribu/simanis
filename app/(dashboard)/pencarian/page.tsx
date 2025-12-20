@@ -8,4 +8,3 @@ export default async function SearchPage() {
 
   return <SearchContent initialAssets={assets} locations={locations} />
 }
-

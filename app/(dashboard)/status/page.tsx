@@ -6,4 +6,3 @@ export default async function StatusPage() {
 
   return <StatusContent initialAssets={assets} />
 }
-
