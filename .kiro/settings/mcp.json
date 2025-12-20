@@ -1,0 +1,77 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "browser_navigate",
+        "browser_click",
+        "browser_type",
+        "browser_snapshot",
+        "browser_console_messages",
+        "browser_network_requests",
+        "browser_close"
+      ]
+    },
+    "memory": {
+      "command": "python",
+      "args": [
+        "-m",
+        "mcp_memory_service.server"
+      ],
+      "env": {
+        "MCP_MEMORY_STORAGE_BACKEND": "sqlite_vec",
+        "HF_HOME": "C:\\Users\\24riz\\.cache\\huggingface",
+        "TRANSFORMERS_CACHE": "C:\\Users\\24riz\\.cache\\huggingface\\transformers"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "store_memory"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
+      },
+      "disabled": false,
+      "autoApprove": []
+    },
+    "mysql": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@liangshanli/mcp-server-mysql"
+      ],
+      "env": {
+        "MYSQL_HOST": "127.0.0.1",
+        "MYSQL_PORT": "3306",
+        "MYSQL_USER": "root",
+        "MYSQL_PASSWORD": "",
+        "MYSQL_DATABASE": "simanis"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get_database_info",
+        "sql_query"
+      ]
+    },
+    "next-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "next-devtools-mcp@latest"
+      ],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
