@@ -1,5 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Package, MapPin, ArrowLeftRight, ClipboardCheck, TrendingUp, TrendingDown } from "lucide-react"
+import {
+  Package,
+  MapPin,
+  ArrowLeftRight,
+  ClipboardCheck,
+  TrendingUp,
+  TrendingDown,
+} from "lucide-react"
 import { prisma } from "@/lib/db"
 
 export async function SummaryCards() {
@@ -7,7 +14,7 @@ export async function SummaryCards() {
   const locationCount = await prisma.location.count()
   const mutationCount = await prisma.mutation.count()
   const stockOpnameCount = await prisma.stockOpnameSession.count({
-    where: { status: "sedang_berlangsung" }
+    where: { status: "sedang_berlangsung" },
   })
 
   const summaryData = [
@@ -50,7 +57,9 @@ export async function SummaryCards() {
       {summaryData.map((item) => (
         <Card key={item.title} className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">{item.title}</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {item.title}
+            </CardTitle>
             <div className="rounded-lg bg-primary/10 p-2">
               <item.icon className="h-4 w-4 text-primary" />
             </div>
@@ -73,4 +82,3 @@ export async function SummaryCards() {
     </div>
   )
 }
-

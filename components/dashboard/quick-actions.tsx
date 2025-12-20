@@ -5,9 +5,24 @@ import Link from "next/link"
 
 const actions = [
   { title: "Tambah Aset", icon: Plus, href: "/aset", color: "bg-primary hover:bg-primary/90" },
-  { title: "Catat Mutasi", icon: ArrowLeftRight, href: "/mutasi", color: "bg-secondary hover:bg-secondary/90" },
-  { title: "Stock Opname", icon: ClipboardCheck, href: "/stock-opname", color: "bg-secondary hover:bg-secondary/90" },
-  { title: "Buat Laporan", icon: FileText, href: "/laporan", color: "bg-secondary hover:bg-secondary/90" },
+  {
+    title: "Catat Mutasi",
+    icon: ArrowLeftRight,
+    href: "/mutasi",
+    color: "bg-secondary hover:bg-secondary/90",
+  },
+  {
+    title: "Stock Opname",
+    icon: ClipboardCheck,
+    href: "/stock-opname",
+    color: "bg-secondary hover:bg-secondary/90",
+  },
+  {
+    title: "Buat Laporan",
+    icon: FileText,
+    href: "/laporan",
+    color: "bg-secondary hover:bg-secondary/90",
+  },
 ]
 
 export function QuickActions() {

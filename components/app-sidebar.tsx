@@ -81,7 +81,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton asChild isActive={pathname === item.href} className="transition-colors">
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === item.href}
+                    className="transition-colors"
+                  >
                     <Link href={item.href}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
@@ -103,7 +107,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {adminItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton asChild isActive={pathname === item.href} className="transition-colors">
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === item.href}
+                    className="transition-colors"
+                  >
                     <Link href={item.href}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
