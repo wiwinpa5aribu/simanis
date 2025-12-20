@@ -1,27 +1,32 @@
 import { z } from "zod"
+import {
+  AssetSchema as GeneratedAssetSchema,
+  AssetStatusSchema,
+  ConditionSchema,
+} from "./generated"
 
-export const assetSchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    category: z.string(),
-    status: z.enum(["aktif", "tidak-aktif", "maintenance", "dihapuskan"]),
-    location: z.string(),
-    purchaseDate: z.string(),
-    purchasePrice: z.number(),
-    condition: z.enum(["baik", "cukup", "kurang", "rusak"]),
-    description: z.string(),
+// Override generated schema to use flexible ID (AST-XXXX format, not CUID)
+export const assetSchema = GeneratedAssetSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  id: z.string(),
 })
 
 export type TAsset = z.infer<typeof assetSchema>
 
-// Input schema for creating new asset
+// Re-export enums for convenience
+export { AssetStatusSchema, ConditionSchema }
+
+// Input schema for creating new asset (form validation)
 export const createAssetSchema = z.object({
-    name: z.string().min(1, "Nama aset wajib diisi"),
-    category: z.string().min(1, "Kategori wajib dipilih"),
-    location: z.string().min(1, "Lokasi wajib dipilih"),
-    purchaseDate: z.string().min(1, "Tanggal pembelian wajib diisi"),
-    purchasePrice: z.coerce.number().min(0, "Harga harus positif"),
-    description: z.string().default(""),
+  name: z.string().min(1, "Nama aset wajib diisi"),
+  category: z.string().min(1, "Kategori wajib dipilih"),
+  location: z.string().min(1, "Lokasi wajib dipilih"),
+  purchaseDate: z.string().min(1, "Tanggal pembelian wajib diisi"),
+  purchasePrice: z.coerce.number().min(0, "Harga harus positif"),
+  description: z.string().default(""),
 })
 
 export type CreateAssetInput = z.infer<typeof createAssetSchema>
