@@ -1,12 +1,4 @@
-import {
-  Asset,
-  Location,
-  Mutation,
-  StockOpname,
-  User,
-  AuditLog,
-  Activity,
-} from "@/types"
+import { Asset, Location, Mutation, StockOpname, User, AuditLog, Activity } from "@/types"
 
 export const assets: Asset[] = [
   {

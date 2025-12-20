@@ -11,16 +11,16 @@ export async function createUser(data: CreateUserInput): Promise<ActionResult<st
   try {
     // Validate input
     const validated = createUserSchema.parse(data)
-    
+
     // Check email uniqueness
     const emailExists = await userService.checkEmailExists(validated.email)
     if (emailExists) {
       return { success: false, error: "Email sudah terdaftar" }
     }
-    
+
     // Create user
     const user = await userService.create(validated)
-    
+
     // Create audit log
     await auditService.create({
       user: "System", // TODO: Get from session
@@ -28,17 +28,17 @@ export async function createUser(data: CreateUserInput): Promise<ActionResult<st
       module: "Users",
       details: `Menambahkan user baru: ${user.name} (${user.id})`,
     })
-    
+
     // Revalidate paths
     revalidatePath("/users")
     revalidatePath("/audit")
-    
+
     return { success: true, data: user.id }
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        error: error.errors.map(e => e.message).join(", ")
+        error: error.errors.map((e) => e.message).join(", "),
       }
     }
     console.error("Create user error:", error)

@@ -11,10 +11,10 @@ export async function createAsset(data: CreateAssetInput): Promise<ActionResult<
   try {
     // Validate input
     const validated = createAssetSchema.parse(data)
-    
+
     // Create asset
     const asset = await assetService.create(validated)
-    
+
     // Create audit log
     await auditService.create({
       user: "System", // TODO: Get from session
@@ -22,17 +22,17 @@ export async function createAsset(data: CreateAssetInput): Promise<ActionResult<
       module: "Aset",
       details: `Menambahkan aset baru: ${asset.name} (${asset.id})`,
     })
-    
+
     // Revalidate paths
     revalidatePath("/aset")
     revalidatePath("/audit")
-    
+
     return { success: true, data: asset.id }
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        error: error.errors.map(e => e.message).join(", ")
+        error: error.errors.map((e) => e.message).join(", "),
       }
     }
     console.error("Create asset error:", error)
